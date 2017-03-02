@@ -1,7 +1,7 @@
 Package: Trumpet
 Type: Package
 Title: Transcriptome-guided quality assessment of methylated RNA immunoprecipitation sequencing data
-Version: 0.99.0
+Version: 0.99.1
 Date: 2017-2-27
 Author: Teng Zhang
 Maintainer: Teng Zhang <2573552960@qq.com>
