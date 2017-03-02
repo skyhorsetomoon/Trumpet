@@ -21,7 +21,8 @@ Trumpet_report(IP_BAM,
                UCSC_TABLE_NAME = "knownGene",
                get_read=FALSE,
                INPUT_DIR=NA,
-               OUTPUT_DIR=NA)
+               OUTPUT_DIR=NA
+	      )
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -98,14 +99,14 @@ f2=system.file("extdata", "treated_Input1.bam", package="Trumpet")
 contrast_Input_BAM=c(f2)
 GENE_ANNO_GTF <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
 # Generate the assessment report
-trumpet_report<-Trumpet_report(IP_BAM,
+trumpet_report <- Trumpet_report(IP_BAM,
                                Input_BAM,
                                contrast_IP_BAM,
                                contrast_Input_BAM,
                                condition1="untreated",
                                condition2="treated",
                                GENE_ANNO_GTF=GENE_ANNO_GTF
-                               )
+			      )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
