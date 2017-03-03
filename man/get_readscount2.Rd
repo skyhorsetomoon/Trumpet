@@ -8,7 +8,19 @@ GetReadsCount2
 This function is to get the mRNA readscount.
 }
 \usage{
-get_readscount2(IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM, condition1, condition2, GENE_ANNO_GTF = NA, GENOME = NA, UCSC_TABLE_NAME = "knownGene", TXDB = NA,  sample_size = NA,  output_dir = NA)
+get_readscount2(IP_BAM, 
+		Input_BAM, 
+		contrast_IP_BAM, 
+		contrast_Input_BAM, 
+		condition1, 
+		condition2,
+		GENE_ANNO_GTF = NA, 
+		GENOME = NA,
+		UCSC_TABLE_NAME = "knownGene",
+		TXDB = NA, 
+		sample_size = NA,  
+		output_dir = NA
+	       )
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -87,7 +99,8 @@ result<-get_readscount2(IP_BAM,
                          contrast_Input_BAM,
                          condition1 = "untreated",
                          condition2 = "treated",
-                         GENE_ANNO_GTF)
+                         GENE_ANNO_GTF = GENE_ANNO_GTF 
+		       )
 # You can also use sample method that you can set sample_size=10^7.
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
