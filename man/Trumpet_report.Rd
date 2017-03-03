@@ -103,9 +103,9 @@ trumpet_report <- Trumpet_report(IP_BAM,
                                Input_BAM,
                                contrast_IP_BAM,
                                contrast_Input_BAM,
-                               condition1="untreated",
-                               condition2="treated",
-                               GENE_ANNO_GTF=GENE_ANNO_GTF
+                               condition1 = "untreated",
+                               condition2 = "treated",
+                               GENE_ANNO_GTF = GENE_ANNO_GTF
 			      )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
