@@ -43,7 +43,7 @@ In this vignette, we will work with toy data, but we intensively recommend you a
 
 # Generate the assessment report
 
-The main function **Trumpet\_report** in the *Trumpet* R-package is to generate the MeRIP-seq quality assessment report in HTML format. In this vignette, we will use four \textbf{control\_IP} replicates and three \textbf{control\_Input} replicates under \textbf{"untreated-condition"}. We will use one \textbf{treated\_IP} replicate and one \textbf{treated\_Input} as a contrast group. After input the BAM files, calling the **Trumpet\_report** function will generate the assessment report.
+The main function **Trumpet\_report** in the *Trumpet* R-package is to generate the MeRIP-seq quality assessment report in HTML format. In this vignette, we will use four **control\_IP** replicates and three **control\_Input** replicates under **untreated-condition**. We will use one **treated\_IP** replicate and one **treated\_Input** as a contrast group. After input the BAM files, calling the **Trumpet\_report** function will generate the assessment report.
 
 In order to learn about the main function **Trumpet\_report**, you can call the R commond '?Trumpet\_report'. From the help page, you can know how to use this function and every parameter that you may need in detail. Now let us firstly load the package and get the toy data (came with the package) ready and show you how to generate the MeRIP-seq quality assessment report in HTML format.
 
