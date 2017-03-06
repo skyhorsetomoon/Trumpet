@@ -74,5 +74,5 @@ trumpet_report<-Trumpet_report(IP_BAM,
                                OUTPUT_DIR=OUTPUT_DIR)
 ```
 
-If \textbf{OUTPUT\_DIR=NA}, the generated result of asseessment report will be saved in current path. As an exmaple, you can look at the result in \textbf{"doc"} folder of the *Trumpet* R-package.
+If **OUTPUT\_DIR=NA**, the generated result of asseessment report will be saved in current path. As an exmaple, you can look at the result in *doc* folder of the `Trumpet` R-package.
 
