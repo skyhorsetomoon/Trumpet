@@ -16,23 +16,19 @@ MeRIP-seq can be considered as the marriage of the methylation of DNA immunizati
 
 In MeRIP-seq - as in all other NGS applications - quality control is essential. However, to our knowledge, no metrics or software are used to assess the MeRIP-seq expriement data recently. So, we develop a R package that has some metrics to assess the MeRIP-seq data quality easily and visualize the assessment result. `Trumpet`, the R package for quality assessment of MeRIP-seq data,is integrated in Bioconductor. 
 
-`Trumpet` contains basic modules to evaluate sequence quality such as, statistics reads count and read alignment summary, the reads coverage distribution. The specific modules are used to evaluate the enrichment signal strength using SES arithmetic and c-test method. The last modules are mainly used to show the similarity of IP and Input biological replicates and identify some outlier samples applying the methods of hierarchical cluster and mean-sd relationship. The quality assessment report will be shown in the form of tables and beautiful pictures.
+`Trumpet` contains basic modules to evaluate sequence quality such as, statistics reads count and read alignment summary, the reads coverage distribution. The specific modules are used to evaluate the enrichment signal strength using SES arithmetic and c-test method. The last modules are mainly used to show the similarity of IP and Input biological replicates and identify some outlier samples applying the methods of hierarchical cluster and mean-SD relationship. The quality assessment report will be shown in the form of tables and beautiful pictures.
 
 # Getting started using Trumpet
 
 ## Input data for quality assessment
 
-The MeRIP-seq data for quality assessment should include IP(the methylated RNA immunoprecipitation samples) biological replicates and Input(RNA-seq data samples) control biological replicates in one or two condition, which means that you can evaluate the IP, Input samples or IP, Input and reference IP, reference Input samples. This samples should be bam format files with your alignment reads.
+The MeRIP-seq data for quality assessment should include IP(the methylated RNA immunoprecipitation samples) biological replicates and Input(RNA-seq data samples) control biological replicates in one or two condition, which means that you can evaluate the IP, Input samples or IP, Input and contrast IP, contrast Input samples. This samples should be BAM format  with your alignment reads. The reads count and other useful parameter have been gained from the function of **get\_readscount2** firstly. User should load the **Input_Infor.Rdata** that the need to assess.
 
 ```{r loadLibrary,message=FALSE,warning=FALSE,echo=FALSE}
 library(Trumpet)
 setwd(INPUT_DIR)
 load("Input_Infor.Rdata")
 ```
-
-## Trumpet demo data
-
-In this package, we include two group MeRIP-seq data for quality assessment that are IP samples, Input control samples(e.g. under FTO condition) and reference IP samples, reference Input control samples(e.g. under WT condition). This package can assessment each group of theses samples and can also compare two groups or two conditions. 
 
 
 # 3 Basic quality assessment module using Trumpet package
