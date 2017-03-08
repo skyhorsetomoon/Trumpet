@@ -17,7 +17,7 @@ MeRIP-seq can be considered as the marriage of the methylation of DNA immunizati
 
 In MeRIP-seq - as in all other NGS applications - quality control is essential. However, to our knowledge, no metrics or software are used to assess the MeRIP-seq expriement data recently. So, we develop a R package that has some metrics to assess the MeRIP-seq data quality easily and visualize the assessment result. `Trumpet`, the R package for quality assessment of MeRIP-seq data,is integrated in Bioconductor. 
 
-`Trumpet` contains basic modules to evaluate sequence quality such as, statistics reads count and read alignment summary, the reads coverage distribution. The specific modules are used to evaluate the enrichment signal strength using SES arithmetic and c-test method. The last modules are mainly used to show the similarity of IP and Input biological replicates and identify some outlier samples applying the methods of hierarchical cluster and mean-sd relationship. The quality assessment report will be shown in the form of tables and beautiful pictures.
+`Trumpet` contains basic modules to evaluate sequence quality such as, statistics reads count and read alignment summary, the reads coverage distribution. The specific modules are used to evaluate the enrichment signal strength using SES arithmetic and c-test method. The last modules are mainly used to show the similarity of IP and Input biological replicates and identify some outlier samples applying the methods of hierarchical cluster and mean-sd relationship. The quality assessment report will be shown in the form of tables and figures.
 
 # 2 Getting started using Trumpet
 
