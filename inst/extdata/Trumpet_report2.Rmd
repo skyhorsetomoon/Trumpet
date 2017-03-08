@@ -102,7 +102,7 @@ read_coverage<-read_distribute(result,condition1,condition2)
 
 ## 4.1 Evaluate enrichment signal strength using SES method
 
-This module will evaluate the IP biological replicates enrichment signal strength to identify potentially failed experiments. This function works with reads count that has been normalized in IP and Input samples. SES method that is based on order statistics estimates the percentage of the IP data enriched signal by comparing the Input data. It can also detect abnormal Input control sample. The assessment result will return a figure and tables.
+This module will evaluate the IP biological replicates enrichment signal strength to identify potentially failed experiments. This function works with reads count that has been normalized in IP and Input samples. SES method that is based on order statistics estimates the percentage of the IP data enriched signal by comparing the Input data. It can also detect abnormal Input control sample. The assessment result will return figures and tables.
 
 ```{r  eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 # Graphical summary of IP enrichment and the difference between Input samples using SES method
@@ -133,9 +133,9 @@ In order to identify the difference within one group of  the IP biological repli
 hcluster<-hcluster(result)
 ```
 
-## 5.2 Plot the relationship between mean and sd figures
+## 5.2 Plot the relationship between mean and SD figures
 
-In this work, the observed sd is tightly relate to the mean in each condition. The relationship should be similarity within biological replicates in one condition. Using this strategy, we can identify some abnormal samples.
+In this work, the observed SD is tightly relate to the mean in each condition. The relationship should be similarity within biological replicates in one condition. Using this strategy, we can identify some abnormal samples.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 out_ms<-ms_relation(result,condition1,condition2)
@@ -143,7 +143,7 @@ out_ms<-ms_relation(result,condition1,condition2)
 
 # 6 Compare the difference of two groups biological replicates.
 
-This module is to identify the difference of mean and sd relationship between two condition. The IP or Input biological replicates' reads count between two condition should be normalized before identify this difference. Conveniently, this module can normalized the reads count between biological replicates automatically.
+This module is to identify the difference of mean and SD relationship between two conditions. The IP or Input biological replicates' reads count between two conditions should be normalized before identify this difference. Conveniently, this module can normalized the reads count between biological replicates automatically.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 two_ms<-two_cond_ms(result,condition1,condition2)
