@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # 1 Introduction to Trumpet
+
 MeRIP-seq can be considered as the marriage of the methylation of DNA immunization coprecipitation(MeDIP) technique, RNA binding protein immunization coprecipitation(RIP) and RNA sequencing technique. It has the high precision to detect RNA-methylation within the scope of whole genome.
 
 In MeRIP-seq - as in all other NGS applications - quality control is essential. However, to our knowledge, no metrics or software are used to assess the MeRIP-seq expriement data recently. So, we develop a R package that has some metrics to assess the MeRIP-seq data quality easily and visualize the assessment result. `Trumpet`, the R package for quality assessment of MeRIP-seq data,is integrated in Bioconductor. 
@@ -50,12 +51,12 @@ p_trans<-stats_result[[3]]
 pt_trans<-stats_result[[4]]
 p_bin<-stats_result[[5]]
 pt_bin<-stats_result[[6]]
-kable(transform_table,caption='Input BAM information',tfoot='Table One')
-kable(reads_summary,caption='Read summary information',tfoot='Table Two')
+kable(transform_table,caption='Input BAM information',align = 'c')
+kable(reads_summary,caption='Read summary information',align = 'c')
 kable(p_trans,caption='Different readscounts percentage in IP transcript',align = 'c')
 kable(pt_trans,caption='Different readscounts percentage in Input transcript',align = 'c')
-kable(p_bin,caption='Different readscounts percentage in IP  bin',align='c')
-kable(pt_bin,caption='Different readscounts percentage in Input  bin',align='c')
+kable(p_bin,caption='Different readscounts percentage in IP bin',align='c')
+kable(pt_bin,caption='Different readscounts percentage in Input bin',align='c')
 ```
 
 **Note: The explanation of the column information in each table.**
@@ -120,7 +121,7 @@ kable(out_SES[[2]])
 
 ## 4.2 Evaluate enrichment signal strength using c-test method
 
-C-test is used to compare two poisson means in IP and Input samples for peak calling in exomePeak R package. `ctest_evluate` can calculate the percentages of enrichment signal using c-test method at different fold-change in IP samples compared with unified Input samples and calculate the percentages of enrichment signal in unified IP samples compared with different Input samples. It will plot beautiful pictures to show the assessment result and identify problem biological replicates.
+C-test is used to compare two poisson means in IP and Input samples for peak calling in exomePeak R package. `ctest_evluate` can calculate the percentages of enrichment signal using c-test method at different fold-change in IP samples compared with unified Input samples and calculate the percentages of enrichment signal in unified IP samples compared with different Input samples. It will plot some figures to show the assessment result and identify problem biological replicates.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 # Show the figures of c-test result
@@ -131,15 +132,15 @@ out_chest<-ctest_evluate(result,condition1,condition2)
 
 ## 5.1 Show the difference within one group biological replicates using hcluster
 
-In order to identify the difference within one group of  the IP biological replicates and the Input biological replicates, we can use the hierachical cluster method after reads count having been normalized between samples.
+In order to identify the difference within one group of the IP biological replicates and the Input biological replicates, we can use the hierachical cluster method after reads count having been normalized between samples.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 hcluster<-hcluster(result)
 ```
 
-## 5.2 Plot the relationship between mean and sd figures
+## 5.2 Plot the relationship between mean and SD figures
 
-In this work, the observed sd is tightly relate to the mean in each condition. The relationship should be similarity within biological replicates in one condition. Using this strategy, we can identify some abnormal samples.
+In this work, the observed SD is tightly relate to the mean in each condition. The relationship should be similarity within biological replicates in one condition. Using this strategy, we can identify some abnormal samples.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 out_ms<-ms_relation(result,condition1,condition2)
@@ -147,7 +148,7 @@ out_ms<-ms_relation(result,condition1,condition2)
 
 # 6 Compare the difference of two groups biological replicates.
 
-This module is to identify the difference of mean and sd relationship between two condition. The IP or Input biological replicates' reads count between two condition should be normalized before identify this difference. Conveniently, this module can normalized the reads count between biological replicates automatically.
+This module is to identify the difference of mean and SD relationship between two conditions. The IP or Input biological replicates' reads count between two condition should be normalized before identify this difference. Conveniently, this module can normalized the reads count between biological replicates automatically.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 two_ms<-two_cond_ms(result,condition1,condition2)
