@@ -1,6 +1,5 @@
 \name{get_readscount2}
 \alias{get_readscount2}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 GetReadsCount2
 }
@@ -20,9 +19,8 @@ get_readscount2(IP_BAM,
 		TXDB = NA, 
 		sample_size = NA,  
 		output_dir = NA
-	       )
+	  )
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{IP_BAM}{
 a vector of file names or the concrete paths, which specifies a number of IP samples in bam format
@@ -58,7 +56,7 @@ a string, which specifies the gene annotation used from UCSC, default: "knownGen
 an optional TxDb object for gene annotation information used in the analysis, default: NA. Please refere to "GenomicFeatures" package for more details about the "TxDb" object.
 }
   \item{sample_size}{
-If you want the biological replicates readscount to be closer, you can set this parameter. eg:sample_size=10^8. Defult: sample_size=NA.
+If you want the biological replicates readscount to be closer, you can set this parameter. e.g. sample_size=10^8. Defult: sample_size=NA.
 }
   \item{output_dir}{
 a string, which specifies the output directory of the saving the reads count and other input parameter. If the output_dir=NA, the output result will save in the current directory. Otherwise, it will save the result to the directory of user specified.
@@ -74,9 +72,9 @@ This function will return a list that include two data frame having the read ali
 Teng Zhang <2573552960@qq.com>
 }
 \examples{
-#This function can help user get the readscount in each bin from the input BAM files and extract the read alignment summary. This function will save the result and some input paramter in Rdata format.
+#This function can help user get the reads count in each bin from the input BAM files and extract the reads alignment summary. This function will save the result and some input paramter in Rdata format.
 #This function is the basic module to assess Methylated RNA immunoprecipitation sequencing data.
-# get two group BAM files and without sample eg:sample_size=NA by defult
+# Get two group BAM files and without sample. Defult:sample_size=NA 
 
 f1=system.file("extdata", "IP1.bam", package="Trumpet")
 f2=system.file("extdata", "IP2.bam", package="Trumpet")
@@ -100,10 +98,6 @@ result<-get_readscount2(IP_BAM,
                          condition1 = "untreated",
                          condition2 = "treated",
                          GENE_ANNO_GTF = GENE_ANNO_GTF 
-		       )
+		                     )
 # You can also use sample method that you can set sample_size=10^7.
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
