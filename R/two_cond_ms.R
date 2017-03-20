@@ -1,4 +1,4 @@
-two_cond_ms<-function(result,condition1,condition2)
+.two_cond_ms<-function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM, condition1, condition2)
 {
   sample_name<-.get.sampleid(IP_BAM, Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
   if(length(sample_name)==2)
@@ -27,57 +27,36 @@ two_cond_ms<-function(result,condition1,condition2)
   sa<-s[,-(1:2)]
   con_ms_f<-function(group1,group2,cond_name1,cond_name2)
   {
-    f<-function(bam)
-    {
-      w<-bam[se]
-      for (i in 2:length(ind))
-      {
-        se <- seq(i, n, len)
-        w<- cbind(w, bam[se])
-      }
-      w<-as.matrix(w)
-      w<-sapply(t(w),unlist)
-      return(w)
-    }
     com_bam<-function(group)
     {
       v<-vector()
-      for(i in 1:ncol(group))
+      for(i in seq_len(ncol(group)))
       {
         m<-vector()
-        m<-f(group[,i])
+        m<-.trans_readsvector(group[,i], se, len, n)
         v<-rbind(v,m)
       }
       return(v)
     }
-    p1<-com_bam(group_IP)
-    p2<-com_bam(ref_group_IP)
-    size1<-rowSums(p1)
-    size_factor1 <- size1/exp(mean(log(size1)))
-    p1<-apply(p1,2,function(x,a)x/a,a=size_factor1)
-    size2 <- rowSums(p2)
-    size_factor2<- size2/exp(mean(log(size2)))
-    p2<-apply(p2,2,function(x,a)x/a,a=size_factor2)
-    Mean<-apply(p1,2,mean)
-    Sd<-apply(p1,2,sd)
-    com1<-cbind(Mean,Sd)
-    com1<-as.data.frame(com1)
-    z<-which(com1$Mean==0)
-    com1<-com1[-z,]
-    Mean<-log10(com1$Mean)
-    Sd<-log10(com1$Sd)
-    com1<-cbind(Mean,Sd)
-    com1<-as.data.frame(com1)
-    Mean<-apply(p2,2,mean)
-    Sd<-apply(p2,2,sd)
-    com2<-cbind(Mean,Sd)
-    com2<-as.data.frame(com2)
-    z<-which(com2$Mean==0)
-    com2<-com2[-z,]
-    Mean<-log10(com2$Mean)
-    Sd<-log10(com2$Sd)
-    com2<-cbind(Mean,Sd)
-    com2<-as.data.frame(com2)
+    meanSDrel<-function(group){
+      p<-com_bam(group)
+      size<-rowSums(p)
+      size_factor <- size/exp(mean(log(size)))
+      q<-apply(p,2,function(x,a)x/a,a=size_factor)
+      Mean<-apply(q,2,mean)
+      SD<-apply(q,2,sd)
+      com<-cbind(Mean,SD)
+      com<-as.data.frame(com)
+      z<-which(com$Mean==0)
+      com<-com[-z,]
+      Mean<-log10(com$Mean)
+      SD<-log10(com$SD)
+      com<-cbind(Mean,SD)
+      com<-as.data.frame(com)
+      return(com)
+    }
+    com1<-meanSDrel(group1)
+    com2<-meanSDrel(group2)
     com<-rbind(com1,com2)
     com<-as.data.frame(com)
     ID<-rep(c(cond_name1,cond_name2),c(length(com1$Mean),length(com2$Mean)))
@@ -102,20 +81,27 @@ two_cond_ms<-function(result,condition1,condition2)
     ref_group_Input<-ref_group[,-(1:length(reference_IP_groupname))]
     ref_group_Input<-as.matrix(ref_group_Input)
     m_com1<-con_ms_f(group_IP,ref_group_IP,paste("IP group in",condition1,"condition"),paste("IP group under",condition2,"condition"))
-    m_com2<-con_ms_f(ref_group_IP,ref_group_Input,paste("Input group in",condition1,"condition"),paste("Input group under",condition2,"condition"))
-    lp1<-
-      ggplot(m_com1,aes(Mean,Sd,colour=ID))+
+    m_com2<-con_ms_f(group_Input,ref_group_Input,paste("Input group in",condition1,"condition"),paste("Input group under",condition2,"condition"))
+    m_com1<-as.data.frame(m_com1)
+    Mean<-m_com1$Mean
+    SD<-m_com1$SD
+    ID<-m_com1$ID
+     lp1<-
+      ggplot(m_com1,aes(Mean,SD,colour=ID))+
       geom_smooth(aes(group =ID),span = 0.5)+
       geom_point(alpha = I(1 /200),size=0.002)+
       theme(title= element_text(size=14,color="black"))+
-      labs(title=paste(" IP group's Mean-variance relationship within two condition"))
-    lp2<-
-      ggplot(m_com2,aes(Mean,Sd,colour=ID))+
+      labs(title=paste(" IP group's Mean-SD relationship within two condition"))
+     m_com2<-as.data.frame(m_com2)
+     Mean<-m_com2$Mean
+     SD<-m_com2$SD
+     ID<-m_com2$ID
+     lp2<-
+      ggplot(m_com2,aes(Mean,SD,colour=ID))+
       geom_smooth(aes(group =ID),span = 0.5)+
       geom_point(alpha = I(1 /200),size=0.002)+
       theme(title= element_text(size=14,color="black"))+
-      labs(title=paste("Input group's Mean-variance relationship within two condition"))
+      labs(title=paste("Input group's Mean-SD relationship within two condition"))
     .multiplot(lp1,lp2,cols = 2)
   }
 }
-
