@@ -1,6 +1,5 @@
 \name{Trumpet_report}
 \alias{Trumpet_report}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Transcriptome-guided quality assessment of methylated RNA immunoprecipitation sequencing data
 }
@@ -24,7 +23,6 @@ Trumpet_report(IP_BAM,
                OUTPUT_DIR=NA
 	      )
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{IP_BAM}{
  a vector of file names or the concrete paths, which specifies a number of IP samples in bam format
@@ -106,9 +104,5 @@ trumpet_report <- Trumpet_report(IP_BAM,
                                condition1 = "untreated",
                                condition2 = "treated",
                                GENE_ANNO_GTF = GENE_ANNO_GTF
-			      )
+			                          )
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
