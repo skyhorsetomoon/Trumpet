@@ -1,4 +1,4 @@
-read_distribute<-function(result,condition1,condition2)
+.read_distribute<-function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM, condition1, condition2)
 {
   s<-result[[1]]
   ind<-unique(s$pos)
@@ -21,16 +21,7 @@ read_distribute<-function(result,condition1,condition2)
     reference_IP_groupname<-sample_name[[3]]
     reference_Input_groupname<-sample_name[[4]]
   }
-  sgl_read<-function(bam)
-  {
-    w<-bam[se]
-    for (i in 2:length(ind))
-    {
-      se <- seq(i, n, len)
-      w<- cbind(w, bam[se])
-    }
-    return(w)
-  }
+  
   unit_reads<-function(group,group_name)
   {
     
@@ -40,7 +31,7 @@ read_distribute<-function(result,condition1,condition2)
     for(i in 1:ncol(group))##modify
     {
       
-      m<-sgl_read(group[,i])
+      m<-.singleBAMreads(group[,i],se, len, n)
       v<-m+v
     }
     v<-v/length(group_name)
@@ -57,7 +48,7 @@ read_distribute<-function(result,condition1,condition2)
     z<-which(row.sum>10)#set parameter?
     s2<-read_count[z,]
     row.mean<-apply(s2,1,mean)
-    for(i in 1:length(row.mean))
+    for(i in seq_len(length(row.mean)))
     {
       if(row.mean[i]<2)
         row.mean[i]<-2#set parameter?
@@ -67,7 +58,7 @@ read_distribute<-function(result,condition1,condition2)
     b<-vector(mode="numeric",length=0)
     c<-vector(mode="numeric",length=0)
     d<-vector(mode="numeric",length=0)
-    for(i in 1:length(ind))
+    for(i in seq_len(length(ind)))
     {
       b[i]<-quantile(s3[,i],0.25)
       c[i]<-quantile(s3[,i],0.5)
@@ -91,7 +82,7 @@ read_distribute<-function(result,condition1,condition2)
     group<-as.matrix(group)
     for(i in 1:ncol(group))
     {
-      d<-sgl_read(group[,i])
+      d<-.singleBAMreads(group[,i],se, len, n)
       p<-read_cover(d)
       q<-rbind(q,p)
     }
@@ -116,6 +107,9 @@ read_distribute<-function(result,condition1,condition2)
     df2<-rbind(Group_Input,unified_IP)
     df2<-cbind(df2,ID2)
     df2<-as.data.frame(df2)
+    pos<-df1$pos
+    value<-df1$value
+    variable<-df1$variable
     p1 <- ggplot(df1, aes(pos, value, colour = variable))+
       geom_line()+ 
       facet_wrap(~ID1)+
@@ -131,6 +125,10 @@ read_distribute<-function(result,condition1,condition2)
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, alpha = .99, colour = "black") +
       xlim(0,3)+
       theme(legend.position="right")
+    
+    pos<-df2$pos
+    value<-df2$value
+    variable<-df2$variable
     p2<- ggplot(df2, aes(pos, value, colour = variable))+
       geom_line()+facet_wrap(~ID2)+
       theme(title= element_text(size=10,color="black"))+
@@ -156,7 +154,7 @@ read_distribute<-function(result,condition1,condition2)
     group_one<-as.matrix(group_one)
     for(i in 1:ncol(group_one))
     {
-      q<-sgl_read(group_one[,i])
+      q<-.singleBAMreads(group_one[,i],se, len, n)
       p1<-read_cover(q)
       q1<-rbind(q1,p1)
     }
@@ -168,7 +166,7 @@ read_distribute<-function(result,condition1,condition2)
     group_two<-as.matrix(group_two)
     for(i in 1:ncol(group_two))
     {
-      p<-sgl_read(group_two[,i])
+      p<-.singleBAMreads(group_two[,i],se, len, n)
       p2<-read_cover(p)
       q2<-rbind(q2,p2)
     }
@@ -210,10 +208,14 @@ read_distribute<-function(result,condition1,condition2)
     Df2<-rbind(refer_Group_Input,refer_unified_IP)
     Df2<-cbind(Df2,refer_ID2)
     Df2<-as.data.frame(Df2)
+    
+    pos<-df1$pos
+    value<-df1$value
+    variable<-df1$variable
     p1 <- ggplot(df1, aes(pos, value, colour = variable))+
       geom_line()+
       facet_wrap(~ID1)+
-     theme(title= element_text(size=10,color="black"))+
+      theme(title= element_text(size=10,color="black"))+
       labs(title=paste("IP and Unified Input Reads Coverage within",condition1,"condition"))+
       ylab("normalized readscount")+
       annotate("text", x = 0.5, y = -0.4, label = "5'UTR",size=4) +
@@ -225,10 +227,14 @@ read_distribute<-function(result,condition1,condition2)
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, alpha = .99, colour = "black") +
       xlim(0,3)+
       theme(legend.position="right")
+    
+    pos<-df2$pos
+    value<-df2$value
+    variable<-df2$variable
     p2<- ggplot(df2, aes(pos, value, colour = variable))+
       geom_line()+
       facet_wrap(~ID2)+
-    theme(title= element_text(size=10,color="black"))+
+      theme(title= element_text(size=10,color="black"))+
       labs(title=paste("Input and Unified IP Reads Coverage within",condition1,"condition"))+
       ylab("normalized readscount")+
       annotate("text", x = 0.5, y = -0.4, label = "5'UTR",size=4) +
@@ -240,6 +246,10 @@ read_distribute<-function(result,condition1,condition2)
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, alpha = .99, colour = "black") +
       xlim(0,3)+
       theme(legend.position="right") 
+    
+    pos<-Df1$pos
+    value<-Df1$value
+    variable<-Df1$variable
     p3 <- ggplot(Df1, aes(pos, value, colour = variable))+
       geom_line()+
       facet_wrap(~refer_ID1)+
@@ -255,6 +265,10 @@ read_distribute<-function(result,condition1,condition2)
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, alpha = .99, colour = "black") +
       xlim(0,3)+
       theme(legend.position="right")
+    
+    pos<-Df2$pos
+    value<-Df2$value
+    variable<-Df2$variable
     p4<- ggplot(Df2, aes(pos, value, colour = variable))+
       geom_line()+facet_wrap(~refer_ID2)+
       theme(title= element_text(size=10,color="black"))+
