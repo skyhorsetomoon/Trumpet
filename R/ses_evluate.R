@@ -1,4 +1,4 @@
-ses_evluate<-function(result,condition1,condition2)
+.ses_evluate<-function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM, condition1, condition2)
 {
   s<-result[[1]]
   ind<-unique(s$pos)
@@ -23,18 +23,12 @@ ses_evluate<-function(result,condition1,condition2)
   }
   Norm_bam<-function(bam)
   {
-    s1 <- bam[se]
-    for (i in 2:length(ind))
-    {
-      se <- seq(i, n, len)
-      s1 <- cbind(s1,bam[se])
-      
-    }
+    s1<-.singleBAMreads(bam, se, len, n)
     row.sum<-apply(s1,1,sum)
     z<-which(row.sum>10)
     s2<-s1[z,]
     row.mean<-apply(s2,1,mean)
-    for(i in 1:length(row.mean))
+    for(i in seq_len(length(row.mean)))
     {
       if(row.mean[i]<2)
         row.mean[i]<-2
@@ -47,31 +41,21 @@ ses_evluate<-function(result,condition1,condition2)
   }##get IP
   Unit_bam<-function(group)
   {
-    f1<-function(bam)
-    {
-      w<-bam[se]
-      for (i in 2:length(ind))
-      {
-        se <- seq(i, n, len)
-        w<- cbind(w, bam[se])
-      }
-      return(w)
-    }
     m<-matrix(nrow=length(se),ncol = length(ind))
     v<-matrix(data=0,nrow=length(se),ncol = length(ind))
     group<-as.matrix(group)
     for(i in 1:ncol(group))
     {
       
-      m<-f1(group[,i])
+      m<-.singleBAMreads(group[,i],se, len, n)
       v<-m+v
     }
     v<-v/length(Input_groupname)
     row.sum<-apply(v,1,sum)
     z<-which(row.sum>10)
     Input1<-v[z,]
-    row.mean<-apply( Input1,1,mean)
-    for(i in 1:length(row.mean))
+    row.mean<-apply(Input1,1,mean)
+    for(i in seq_len(length(row.mean)))
     {
       if(row.mean[i]<2)
         row.mean[i]<-2
@@ -89,7 +73,7 @@ ses_evluate<-function(result,condition1,condition2)
     b<-vector(mode="numeric",length=0)
     z<-vector(mode="numeric",length=0)
     ID<-vector()
-    for(i in 1:length(IP_group_name))
+    for(i in seq_len(length(IP_group_name)))
     {
       
       bam<-vector(mode="numeric",length=0)
@@ -135,7 +119,7 @@ ses_evluate<-function(result,condition1,condition2)
     Scale_factor<-z
     Scale_factor<-round(Scale_factor,2)
     p<-vector()
-    for(i in 1:length(IP_group_name))
+    for(i in seq_len(length(IP_group_name)))
     {
       
       p[i]<-paste(round((1-a[i])*100,2),"%")
@@ -150,7 +134,7 @@ ses_evluate<-function(result,condition1,condition2)
   SES_Input<-function(group_Input,unit_IP,Input_group_name)
   {
     new<-data.frame()
-    for(i in 1:length(Input_group_name))
+    for(i in seq_len(length(Input_group_name)))
     {
       bam<-vector(mode="numeric",length=0)
       bam<-Norm_bam(group_Input[,i])
@@ -198,12 +182,21 @@ ses_evluate<-function(result,condition1,condition2)
     Enrich_table<-out[[3]]
     new1<-SES_Input(Group_Input,Unit_IP,Input_groupname)
     vline<-data.frame(ID=IP_groupname,pos=a)
+    
+    newa<-as.data.frame(newa)
+    pos<-newa$pos
+    pro<-newa$pro
+    variable<-newa$variable
     p1<-ggplot(data=newa,aes(x=pos,y=pro,colour=variable))+
       geom_line()+facet_wrap(~ID)+
       geom_vline(aes(xintercept = pos),vline)+
       theme(title= element_text(size=10,color="black"))+
       labs(x="Percentage of bins",y="Percentage of tags",title = paste("IP cumulative percentage enrichment within",condition1,"condition"))
-
+    
+    new1<-as.data.frame(new1)
+    pos<-new1$pos
+    pro<-new1$pro
+    variable<-new1$variable
     p2<-
       ggplot(data=new1,aes(x=pos,y=pro,colour=variable))+
       geom_line()+
@@ -239,6 +232,11 @@ ses_evluate<-function(result,condition1,condition2)
     new1<-SES_Input(group_Input,Unit_IP,Input_groupname)
     new2<-SES_Input(ref_group_Input,ref_unit_IP,reference_Input_groupname)
     vline1<-data.frame(ID=IP_groupname,pos=a)
+    
+    newa<-as.data.frame(newa)
+    pos<-newa$pos
+    pro<-newa$pro
+    variable<-newa$variable
     p1<-
       ggplot(data=newa,aes(x=pos,y=pro,colour=variable))+
       geom_line()+facet_wrap(~ID)+
@@ -246,11 +244,20 @@ ses_evluate<-function(result,condition1,condition2)
       theme(title= element_text(size=10,color="black"))+
       labs(x="Percentage of bins",y="Percentage of tags",title = paste("IP cumulative percentage enrichment within",condition1,"condition"))
     
+    new1<-as.data.frame(new1)
+    pos<-new1$pos
+    pro<-new1$pro
+    variable<-new1$variable
     p2<-
       ggplot(data=new1,aes(x=pos,y=pro,colour=variable))+geom_line()+
       theme(title= element_text(size=10,color="black"))+
       labs(x="Percentage of bins",y="Percentage of tags",title = paste("Input cumulative percentage enrichment within",condition1,"condition"))
     vline2<-data.frame(ID=reference_IP_groupname,pos=b)
+    
+    newb<-as.data.frame(newb)
+    pos<-newb$pos
+    pro<-newb$pro
+    variable<-newb$variable
     p3<-
       ggplot(data=newb,aes(x=pos,y=pro,colour=variable))+
       geom_line()+facet_wrap(~ID)+
@@ -258,6 +265,10 @@ ses_evluate<-function(result,condition1,condition2)
       theme(title= element_text(size=10,color="black"))+
       labs(x="Percentage of bins",y="Percentage of tags",title = paste("refer_IP cumulative percentage enrichment within",condition2,"condition"))
     
+    new2<-as.data.frame(new2)
+    pos<-new2$pos
+    pro<-new2$pro
+    variable<-new2$variable
     p4<-
       ggplot(data=new2,aes(x=pos,y=pro,colour=variable))+geom_line()+
       theme(title= element_text(size=10,color="black"))+
