@@ -1,4 +1,4 @@
-hcluster<-function(result)
+.hcluster<-function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM)
 {
   s<-result[[1]]
   ind<-unique(s$pos)
@@ -23,25 +23,13 @@ hcluster<-function(result)
   }
   hc<-function(group_bam,group_name)
   {
-    tr_vec<-function(bam)
-    {
-      w<-bam[se]
-      for (i in 2:length(ind))
-      {
-        se <- seq(i, n, len)
-        w<- cbind(w, bam[se])
-      }
-      w<-as.matrix(w)
-      w<-sapply(t(w),unlist)
-      return(w)
-    }
     m<-vector()
     v<-vector()
     group_bam<-as.matrix(group_bam)
-    for(i in 1:ncol(group_bam))
+    for(i in seq_len(ncol(group_bam)))
     {
       
-      m<-tr_vec(group_bam[,i])
+      m<-.trans_readsvector(group_bam[,i], se, len, n)
       v<-rbind(m,v)
     }
     rownames(v)<-group_name
