@@ -1,4 +1,4 @@
-ctest_evluate<-function(result,condition1,condition2)
+.ctest_evluate<-function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM, condition1, condition2)
 {
   s<-result[[1]]
   ind<-unique(s$pos)
@@ -21,29 +21,16 @@ ctest_evluate<-function(result,condition1,condition2)
     reference_IP_groupname<-sample_name[[3]]
     reference_Input_groupname<-sample_name[[4]]
   }
-  tr_vec<-function(bam)#bam=group_IP[,1]
-  {
-    w<-bam[se]
-    for (i in 2:length(ind))
-    {
-      se <- seq(i, n, len)
-      w<- cbind(w, bam[se])
-    }
-    w<-as.matrix(w)
-    w<-sapply(t(w),unlist)
-    return(w)
-  }
-  
   ct_unit_bam<-function(group)
   {
     
     m<-vector()
     group<-as.matrix(group)
-    v<-rep(0,length(tr_vec(group[,1])))
-    for(i in 1:ncol(group))
+    v<-rep(0,length(tr_ve<-.trans_readsvector(group[,1], se, len, n)))
+    for(i in seq_len(ncol(group)))
     {
       
-      m<-tr_vec(group[,i])
+      m<-.trans_readsvector(group[,i], se, len, n)
       v<-m+v
       
     }
@@ -51,7 +38,7 @@ ctest_evluate<-function(result,condition1,condition2)
     return(v)
   }
   ##
-  Ct_ev<-function(bam1,bam_name,bam2)
+  Ct_ev<-function(bam1,bam_name,bam2,maxfold)
   {
     
     if(ncol(bam1)>1)#bam1=group_IP
@@ -61,10 +48,10 @@ ctest_evluate<-function(result,condition1,condition2)
       percent<-vector(mode="numeric",length=0)
       for(i in 1:length(bam_name))
       {
-        bam<-tr_vec(bam1[,i])
+        bam<-.trans_readsvector(bam1[,i], se, len, n)
         total_IP<-sum(bam)
         total_Input<-sum(bam2)
-        for(i in 1:10)
+        for(i in seq_len(maxfold))
         {
           Ctest<-ctest(bam,bam2,total_IP,total_Input,FOLD = i,minimal_counts_in_fdr = 10)
           cest<-as.data.frame(Ctest)
@@ -76,7 +63,7 @@ ctest_evluate<-function(result,condition1,condition2)
       }
       colnames(percent)<-bam_name
       percent<-as.data.frame(percent)
-      fold<-c(1:10)
+      fold<-seq_len(maxfold)
       com<-cbind(fold,percent)
       com<-as.data.frame(com)
       out<-list(com,percent)
@@ -86,13 +73,13 @@ ctest_evluate<-function(result,condition1,condition2)
     {
       per<-vector(mode="numeric",length=0)
       percent<-vector(mode="numeric",length=0)
-      for(i in 1:length(bam_name))
+      for(i in seq_len(length(bam_name)))
       {
-        bam<-tr_vec(bam2[,i])
+        bam<-.trans_readsvector(bam2[,i], se, len, n)
         total_IP<-sum(bam1)
         total_Input<-sum(bam)
         per<-vector(mode="numeric",length=0)
-        for(i in 1:10)
+        for(i in seq_len(maxfold))
         {
           Ctest<-ctest(bam1,bam,total_IP,total_Input,FOLD = i,minimal_counts_in_fdr = 10)
           cest<-as.data.frame(Ctest)
@@ -104,7 +91,7 @@ ctest_evluate<-function(result,condition1,condition2)
       }
       colnames(percent)<-bam_name
       percent<-as.data.frame(percent)
-      fold<-c(1:10)
+      fold<-seq_len(maxfold)
       com<-cbind(fold,percent)
       com<-as.data.frame(com)
       out<-list(com,percent)
@@ -120,17 +107,20 @@ ctest_evluate<-function(result,condition1,condition2)
     Group_Input<-as.matrix(Group_Input)
     Unit_Input<-ct_unit_bam(Group_Input)
     Unit_IP<-ct_unit_bam(Group_IP)
-    foldchange<-c("fold=1","fold=2","fold=3","fold=4","fold=5","fold=6","fold=7","fold=8","fold=9","fold=10")
     ##IP
-    out1<-suppressWarnings(Ct_ev(Group_IP,IP_groupname,Unit_Input))
+    out1<-suppressWarnings(Ct_ev(Group_IP,IP_groupname,Unit_Input,maxfold = 10))
     com1<-out1[[1]]
     percent1<-out1[2]
     com1<-melt(data=com1,id="fold",measure.vars=c(2:(ncol(Group_IP)+1)))
     ##Input
-    out2<-suppressWarnings(Ct_ev(Unit_IP,Input_groupname,Group_Input))
+    out2<-suppressWarnings(Ct_ev(Unit_IP,Input_groupname,Group_Input,maxfold = 10))
     com2<-out2[[1]]
     percent2<-out2[[2]]
     com2<-melt(data=com2,id="fold",measure.vars=c(2:(ncol(Group_Input)+1)))
+    com1<-as.data.frame(com1)
+    fold<-com1$fold
+    value<-com1$value
+    variable<-com1$variable
     c_p1<-
       ggplot(data=com1,aes(x=fold,y=value,colour=variable))+
       geom_point(aes(shape=variable))+
@@ -138,6 +128,10 @@ ctest_evluate<-function(result,condition1,condition2)
       ylab("Percentgae of bins")+
       xlab("foldchange")+
       labs(title=paste("IP's foldchange under unified Input within",condition1,"condition"))
+    com2<-as.data.frame(com2)
+    fold<-com2$fold
+    value<-com2$value
+    variable<-com2$variable
     c_p2<-
       ggplot(data=com2,aes(x=fold,y=value,colour=variable))+
       geom_point(aes(shape=variable))+
@@ -163,27 +157,30 @@ ctest_evluate<-function(result,condition1,condition2)
     Unit_IP<-ct_unit_bam(group_IP)
     ref_unit_Input<-ct_unit_bam(ref_group_Input)
     ref_unit_IP<-ct_unit_bam(ref_group_IP)
-    foldchange<-c("fold=1","fold=2","fold=3","fold=4","fold=5","fold=6","fold=7","fold=8","fold=9","fold=10")
     ##IP
-    out1<-suppressWarnings(Ct_ev(group_IP,IP_groupname,Unit_Input))
+    out1<-suppressWarnings(Ct_ev(group_IP,IP_groupname,Unit_Input,maxfold = 10))
     com1<-out1[[1]]
     percent1<-out1[[2]]
     com<-melt(data=com1,id="fold",measure.vars=c(2:(ncol(group_IP)+1)))
     ##Input
-    out2<-suppressWarnings(Ct_ev(Unit_IP,Input_groupname,group_Input))
+    out2<-suppressWarnings(Ct_ev(Unit_IP,Input_groupname,group_Input,maxfold = 10))
     com2<-out2[[1]]
     percent2<-out2[[2]]
     com2<-melt(data=com2,id="fold",measure.vars=c(2:(ncol(group_Input)+1)))
     ##refer_IP
-    refer_out1<-suppressWarnings(Ct_ev(ref_group_IP,reference_IP_groupname,ref_unit_Input))
+    refer_out1<-suppressWarnings(Ct_ev(ref_group_IP,reference_IP_groupname,ref_unit_Input,maxfold = 10))
     refer_com1<-refer_out1[[1]]
     refer_percent1<-refer_out1[[2]]
     refer_com1<-melt(data=refer_com1,id="fold",measure.vars=c(2:(ncol(ref_group_IP)+1)))
     ##refer_Input
-    refer_out2<-suppressWarnings(Ct_ev(ref_unit_IP,reference_Input_groupname,ref_group_Input))
+    refer_out2<-suppressWarnings(Ct_ev(ref_unit_IP,reference_Input_groupname,ref_group_Input,maxfold = 10))
     refer_com2<-refer_out2[[1]]
     refer_percent2<-refer_out2[[2]]
     refer_com2<-melt(data=refer_com2,id="fold",measure.vars=c(2:(ncol(ref_group_Input)+1)))
+    com<-as.data.frame(com)
+    fold<-com$fold
+    value<-com$value
+    variable<-com$variable
     c_p1<-
       ggplot(data=com,aes(x=fold,y=value,colour=variable))+
       geom_point(aes(shape=variable))+
@@ -191,6 +188,10 @@ ctest_evluate<-function(result,condition1,condition2)
       ylab("Percentgae of bins")+
       xlab("foldchange")+
       labs(title=paste("IP's foldchange under unified Input within",condition1,"condition"))
+    com2<-as.data.frame(com2)
+    fold<-com2$fold
+    value<-com2$value
+    variable<-com2$variable
     c_p2<-
       ggplot(data=com2,aes(x=fold,y=value,colour=variable))+
       geom_point(aes(shape=variable))+
@@ -198,6 +199,10 @@ ctest_evluate<-function(result,condition1,condition2)
       ylab("Percentgae of bins")+
       xlab("foldchange")+
       labs(title=paste("unified IP's foldchange under different Input within ",condition1,"condition"))
+    refer_com1<-as.data.frame(refer_com1)
+    fold<-refer_com1$fold
+    value<-refer_com1$value
+    variable<-refer_com1$variable
     refer_p1<-
       ggplot(data=refer_com1,aes(x=fold,y=value,colour=variable))+
       geom_point(aes(shape=variable))+
@@ -205,6 +210,10 @@ ctest_evluate<-function(result,condition1,condition2)
       ylab("Percentgae of bins")+
       xlab("foldchange")+
       labs(title=paste("refer_IP's foldchange under unified Input within" ,condition2,"condition"))
+    refer_com2<-as.data.frame(refer_com2)
+    fold<-refer_com2$fold
+    value<-refer_com2$value
+    variable<-refer_com2$variable
     refer_p2<-ggplot(refer_com2,aes(x=fold,y=value,colour=variable))+
       geom_point(aes(shape=variable))+
       geom_line()+
