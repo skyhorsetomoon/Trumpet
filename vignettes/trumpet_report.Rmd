@@ -38,7 +38,7 @@ The `Trumpet` package has the following metrics to evlate the MeRIP-seq data:
 
 * Show the similarity of IP and Input biological replicates and identify some outlier samples applying the methods of hierarchical cluster and mean-SD relationship.
 
-* Compare the difference between two condition (e.\,g., treated and untreated) using mean-SD relationship.
+* Compare the difference between two conditions (e.\,g., treated and untreated) using mean-SD relationship.
 
 # Input data
 
