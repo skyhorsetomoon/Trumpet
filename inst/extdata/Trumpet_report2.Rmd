@@ -39,7 +39,7 @@ load("Input_Infor.Rdata")
 In this module, we can get the read alignment summary information and check the percentages of partial reads count of every sample in in each transcript and each bin. This metric can detect the sequencing depth and show the state of RNA transcription abundance. The result can return six tables.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
-stats_result<-stats_readscount(result)
+stats_result<-.stats_readscount(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
 transform_table<-stats_result[[1]]
 reads_summary<-stats_result[[2]]
 p_trans<-stats_result[[3]]
@@ -95,7 +95,7 @@ kable(pt_bin,caption='Different readscounts percentage in Input bin',align='c')
 This part will show the reads coverage distribution of the fraction of reads mapped to coding exons, 5'UTR region, 3'UTR region in statistics. This module roughly reflects the preference distribution of IP samples in each gene comparing the Input samples at different transcription abundance. Such as the m6A is highly enrichment near the stop codon and 3'UTR.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
-read_coverage<-read_distribute(result,condition1,condition2)
+read_coverage<-.read_distribute(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
 ```
 
 # 4 Enrichment signal strength for quality assessment
@@ -106,7 +106,7 @@ This module will evaluate the IP biological replicates enrichment signal strengt
 
 ```{r  eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 # Graphical summary of IP enrichment and the difference between Input samples using SES method
-out_SES<-ses_evluate(result,condition1,condition2)
+out_SES<-.ses_evluate(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
 ## Tables show enrichment signal strength
 kable(out_SES[[1]])
 kable(out_SES[[2]])
@@ -120,7 +120,7 @@ C-test is used to compare two poisson means in IP and Input samples for peak cal
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 # Show the figures of c-test result
-out_chest<-ctest_evluate(result,condition1,condition2)
+out_chest<-.ctest_evluate(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
 ```
 
 # 5 Show the difference within biological replicates
@@ -130,7 +130,7 @@ out_chest<-ctest_evluate(result,condition1,condition2)
 In order to identify the difference within one group of  the IP biological replicates and the Input biological replicates, we can use the hierachical cluster method after reads count having been normalized between samples.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
-hcluster<-hcluster(result)
+hcluster<-.hcluster(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
 ```
 
 ## 5.2 Plot the relationship between mean and SD figures
@@ -138,7 +138,7 @@ hcluster<-hcluster(result)
 In this work, the observed SD is tightly relate to the mean in each condition. The relationship should be similarity within biological replicates in one condition. Using this strategy, we can identify some abnormal samples.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
-out_ms<-ms_relation(result,condition1,condition2)
+out_ms<-.ms_relation(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
 ```
 
 # 6 Compare the difference of two groups biological replicates.
@@ -146,5 +146,5 @@ out_ms<-ms_relation(result,condition1,condition2)
 This module is to identify the difference of mean and SD relationship between two conditions. The IP or Input biological replicates' reads count between two conditions should be normalized before identify this difference. Conveniently, this module can normalized the reads count between biological replicates automatically.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
-two_ms<-two_cond_ms(result,condition1,condition2)
+two_ms<-.two_cond_ms(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
 ```
