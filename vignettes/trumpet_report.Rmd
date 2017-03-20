@@ -27,12 +27,12 @@ BiocStyle::markdown()
 # Introduction to Trumpet
 
 MeRIP-seq can be considered as the marriage of the methylation of DNA immunization coprecipitation(MeDIP) technique, RNA binding protein immunization coprecipitation(RIP) and RNA sequencing technique. It has the high precision to detect RNA-methylation within the scope of whole genome.
-In MeRIP-seq - as in all other NGS applications - quality control is essential. However, to our knowledge, no metrics or software are used to assess the MeRIP-seq expriement data recently. So, we develop a R package `Trumpet` that has some metrics to assess the MeRIP-seq data quality easily and visualizes the assessment result. 
-The `Trumpet` package has the following metrics to evlate the MeRIP-seq data:
+In MeRIP-seq - as in all other NGS applications - quality control is essential. However, to our knowledge, no metrics or software are used to assess the MeRIP-seq experiment data recently. So, we develop the R package `Trumpet` that has some metrics to assess the MeRIP-seq data quality easily and visualizes the assessment result. 
+The `Trumpet` package has the following metrics to evaluate the MeRIP-seq data:
 
 * Gain the statistics reads count and read alignment summary.
 
-* Plot the the reads coverage distribution.
+* Plot the reads coverage distribution.
 
 * Evaluate the enrichment signal strength using SES arithmetic and c-test method.
 
@@ -42,15 +42,15 @@ The `Trumpet` package has the following metrics to evlate the MeRIP-seq data:
 
 # Input data
 
-The MeRIP-seq data for quality assessment should include IP(the methylated RNA immunoprecipitation samples) biological replicates and Input(RNA-seq data samples) control biological replicates in one or two condition, which means that you can evaluate the IP, Input samples or IP, Input and contrast IP, contrast Input samples. This samples should be bam format files with your alignment reads. After input the bam file to assessment, you can call the main function **Trumpet\_report** to generate the assessment report.
+The MeRIP-seq data for quality assessment should include IP(the methylated RNA immunoprecipitation samples) biological replicates and Input(RNA-seq data samples) control biological replicates in one or two condition, which means that you can evaluate the IP, Input samples or IP, Input and contrast IP, contrast Input samples. These samples should be in bam format files with your alignment reads. After input the bam file to assessment, you can call the main function **Trumpet\_report** to generate the assessment report.
 
-In this vignette, we will work with toy data, but we intensively recommend you assess the real MeRIP-seq data using our package that can gain the better result. If your Linux system can't generate HTML file directly, you can call the function 'get\_readscount2' to get the reads count from BAM files firstly. You can use the help commond of '?get\_readscount2' to learn how to use this function in detail. Then you can call the main function **Trumpet\_report** to generate the assessment report under Windows or Mac OS system. 
+In this vignette, we will work with toy data, but we intensively recommend you assess the real MeRIP-seq data using our package that can gain the better result. If your Linux system can't generate HTML file directly, you can call the function 'get\_readscount2' to get the reads count from BAM files firstly. You can use the help command of '?get\_readscount2' to learn how to use this function in detail. Then you can call the main function **Trumpet\_report** to generate the assessment report under Windows or Mac OS system. 
 
 # Generate the assessment report
 
 The main function **Trumpet\_report** in the *Trumpet* R-package is to generate the MeRIP-seq quality assessment report in HTML format. In this vignette, we will use four **control\_IP** replicates and three **control\_Input** replicates under **untreated-condition**. We will use one **treated\_IP** replicate and one **treated\_Input** as a contrast group. After input the BAM files, calling the **Trumpet\_report** function will generate the assessment report.
 
-In order to learn about the main function **Trumpet\_report**, you can call the R commond '?Trumpet\_report'. From the help page, you can know how to use this function and every parameter that you may need in detail. Now let us firstly load the package and get the toy data (came with the package) ready and show you how to generate the MeRIP-seq quality assessment report in HTML format.
+In order to learn about the main function **Trumpet\_report**, you can call the R command '?Trumpet\_report'. From the help page, you can know how to use this function and every parameter that you may need in detail. Now let us firstly load the package and get the toy data (came with the package) ready and show you how to generate the MeRIP-seq quality assessment report in HTML format.
 
 ```{r loadLibrary,message=FALSE,warning=FALSE,echo=TRUE,eval=FALSE}
 library(Trumpet)
