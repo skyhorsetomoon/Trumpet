@@ -11,6 +11,11 @@ output:
 % \VignetteIndexEntry{Using Trumpet}
 -->
 
+# Installation
+```{r}
+source("http://bioconductor.org/biocLite.R")
+biocLite("Trumpet")
+```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
