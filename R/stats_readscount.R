@@ -1,4 +1,4 @@
-stats_readscount<-function(result)
+.stats_readscount<-function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM)
 {
   s<-result[[1]]
   ind<-unique(s$pos)
@@ -23,17 +23,9 @@ stats_readscount<-function(result)
     reference_Input_groupname<-sample_name[[4]]
   }
   
-  
-  
-  
   f<-function(bam)
   {
-    s1 <-bam[se]
-    for (i in 2:length(ind))
-    {
-      se <- seq(i, n, len)
-      s1 <- cbind(s1,bam[se])
-    }
+    s1<-.singleBAMreads(bam, se, len, n)
     vbam<-sapply(s1,unlist)
     r<-apply(s1,1,sum)
     genzero<-vector(mode="numeric",length=0)
@@ -42,38 +34,38 @@ stats_readscount<-function(result)
     {
       if(max( vbam)>=k[i-1])
       {
-      z<-which(vbam<k[i]&vbam>=k[i-1])
-      perzero[i]<-length(z)/length(vbam)
+        z<-which(vbam<k[i]&vbam>=k[i-1])
+        perzero[i]<-length(z)/length(vbam)
       }
       if(max( vbam)<k[i-1])
-        {
+      {
         perzero[i]<-0
       }
       if(max(r)>=k[i-1])
       {
-      z1<-which(r<k[i]&r>=k[i-1])
-      if(length(z1)!=0)
-      {
-        if(length(z1)==1)
+        z1<-which(r<k[i]&r>=k[i-1])
+        if(length(z1)!=0)
         {
-          gbam<-s1[(z1),]
-          gbam<-t(as.matrix(gbam))
-          genzero[i]<-nrow(gbam)/nrow(s1)
+          if(length(z1)==1)
+          {
+            gbam<-s1[(z1),]
+            gbam<-t(as.matrix(gbam))
+            genzero[i]<-nrow(gbam)/nrow(s1)
+          }
+          else
+          {
+            gbam<-s1[(z1),]
+            gbam<-as.matrix(gbam)
+            genzero[i]<-nrow(gbam)/nrow(s1)
+          }
         }
-        else
+        if(length(z1)==0)
         {
-      gbam<-s1[(z1),]
-      gbam<-as.matrix(gbam)
-      genzero[i]<-nrow(gbam)/nrow(s1)
+          genzero[i]<-0
         }
-      }
-      if(length(z1)==0)
-      {
-        genzero[i]<-0
-      }
       }
       if(max( vbam)<k[i-1])
-        {
+      {
         genzero[i]<-0
       }
     }
@@ -85,7 +77,7 @@ stats_readscount<-function(result)
   
   p<-list()
   q<-list()
-  for(i in 1:ncol(sa))
+  for(i in seq_len(ncol(sa)))
   {
     p<-f(sa[,i])
     q<-c(q,p)
@@ -94,13 +86,13 @@ stats_readscount<-function(result)
   bin_p<-data.frame()
   trans_z<-data.frame()
   se1<-seq(1,length(q),2)
-  for(i in 1:length(se1))
+  for(i in seq_len(length(se1)))
   {
     geom_z<-t(q[[se1[i]]])
     trans_z<-rbind(trans_z,geom_z)
   }
   se2<-seq(2,length(q),2)
-  for(i in 1:length(se2))
+  for(i in seq_len(length(se2)))
   {
     bin_z<-t(q[[se2[i]]])
     bin_p<-rbind(bin_p,bin_z)
@@ -117,12 +109,12 @@ stats_readscount<-function(result)
   Input_geom<-trans_z[Input_name,]
   Input_bin<-bin_p[Input_name,]
   p_geom<-vector()
-  for(i in 1:nrow(IP_geom))
+  for(i in seq_len(nrow(IP_geom)))
   {
     p_geom<-rbind(p_geom,paste(round(IP_geom[i,]*100,3),"%"))
   }
   p_bin<-vector()
-  for(i in 1:nrow(IP_bin))
+  for(i in seq_len(nrow(IP_bin)))
   {
     p_bin<-rbind(p_bin,paste(round(IP_bin[i,]*100,3),"%"))
   }
@@ -132,7 +124,7 @@ stats_readscount<-function(result)
   colnames(p_bin)<-c("0","1~10","10~100","100~1000","1000~10000","10000~100000")
   
   pt_geom<-vector()
-  for(i in 1:nrow(Input_geom))
+  for(i in seq_len(nrow(Input_geom)))
   {
     pt_geom<-rbind(pt_geom,paste(round(Input_geom[i,]*100,3),"%"))
   }
@@ -140,7 +132,7 @@ stats_readscount<-function(result)
   colnames(pt_geom)<-c("0","1~10","10~100","100~1000","1000~10000","10000~100000")
   
   pt_bin<-vector()
-  for(i in 1:nrow(Input_bin))
+  for(i in seq_len(nrow(Input_bin)))
   {
     pt_bin<-rbind(pt_bin,paste(round(Input_bin[i,]*100,3),"%"))
   }
