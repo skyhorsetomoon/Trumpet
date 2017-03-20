@@ -50,19 +50,19 @@ get_readscount2<-function(IP_BAM,
   # get reads count
   result2<- gc_info
   noFiles <- length(file)
-  total_reads <- vector()
-  exon_reads <- vector()
-  intron_reads <- vector()
-  percent_intron <- vector()
-  UTR5_reads <- vector()
-  CDS_reads <- vector()
-  UTR3_reads <- vector()
-  percent_UTR5 <- vector()
-  percent_CDS <- vector()
-  percent_UTR3 <- vector()
+  total_reads <- vector(length = noFiles)
+  exon_reads <- vector(length = noFiles)
+  intron_reads <- vector(length = noFiles)
+  percent_intron <- vector(length = noFiles)
+  UTR5_reads <- vector(length = noFiles)
+  CDS_reads <- vector(length = noFiles)
+  UTR3_reads <- vector(length = noFiles)
+  percent_UTR5 <- vector(length = noFiles)
+  percent_CDS <- vector(length = noFiles)
+  percent_UTR3 <- vector(length = noFiles)
   if(is.na(sample_size))
   {
-    for (i in 1:noFiles) {
+    for (i in seq_len(noFiles)) {
       print(paste("working on the ",i,"-th bam file ...",sep=""))
       bam <- readGAlignments(file[i])
       total_reads[i] <- paste(round(length(bam)/10^7,2), "M")
@@ -94,7 +94,7 @@ get_readscount2<-function(IP_BAM,
   }
   if(!is.na(sample_size)){
     sample_size<-as.numeric(sample_size)
-    for (i in 1:noFiles) {
+    for (i in seq_len(noFiles)) {
       print(paste("working on the ",i,"-th bam file ...",sep=""))
       bam <- readGAlignments(file[i])
       noR <- length(bam)
@@ -145,7 +145,7 @@ get_readscount2<-function(IP_BAM,
   t0<-rbind(t2,t3,t4)
   s<-data.frame()
   s<-aggregate(cbind(t0[,6])~pos+txid,t0,mean)
-  for(i in 7:length(t0))
+  for(i in (length(t0)-noFiles+2):length(t0))
   {
     
     w<-aggregate(cbind(t0[,i])~pos+txid,t0,mean)
