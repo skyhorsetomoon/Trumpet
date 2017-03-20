@@ -1,11 +1,10 @@
-get_readscount<-function(IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,GENE_ANNO_GTF=NA, GENOME = NA,UCSC_TABLE_NAME = "knownGene",TXDB = NA,sample_size=NA)
+.get_readscount<-function(IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,GENE_ANNO_GTF=NA, GENOME = NA,UCSC_TABLE_NAME = "knownGene",TXDB = NA,sample_size=NA)
 {
   
   # download the annotation
   if ( suppressWarnings((!is.na(GENOME)) & (!is.na(UCSC_TABLE_NAME))& is.na(TXDB)&is.na(GENE_ANNO_GTF))) {
     op <- options(warn = (-1))
-    txdb =makeTxDbFromUCSC(genome=GENOME,
-                           tablename=UCSC_TABLE_NAME)
+    txdb =makeTxDbFromUCSC(genome=GENOME,tablename=UCSC_TABLE_NAME)
     options(op)
   }
   if (suppressWarnings(!is.na(GENE_ANNO_GTF) & is.na(TXDB)) ) {
@@ -39,19 +38,19 @@ get_readscount<-function(IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,GEN
   # get reads count
   result2<- gc_info
   noFiles <- length(file)
-  total_reads <- vector()
-  exon_reads <- vector()
-  intron_reads <- vector()
-  percent_intron <- vector()
-  UTR5_reads <- vector()
-  CDS_reads <- vector()
-  UTR3_reads <- vector()
-  percent_UTR5 <- vector()
-  percent_CDS <- vector()
-  percent_UTR3 <- vector()
+  total_reads <- vector(length = noFiles)
+  exon_reads <- vector(length = noFiles)
+  intron_reads <- vector(length = noFiles)
+  percent_intron <- vector(length = noFiles)
+  UTR5_reads <- vector(length = noFiles)
+  CDS_reads <- vector(length = noFiles)
+  UTR3_reads <- vector(length = noFiles)
+  percent_UTR5 <- vector(length = noFiles)
+  percent_CDS <- vector(length = noFiles)
+  percent_UTR3 <- vector(length = noFiles)
   if(is.na(sample_size))
   {
-    for (i in 1:noFiles) {
+    for (i in seq_len(noFiles)) {
       print(paste("working on the ",i,"-th bam file ...",sep=""))
       bam <- readGAlignments(file[i])
       total_reads[i] <- paste(round(length(bam)/10^7,2), "M")
@@ -83,7 +82,7 @@ get_readscount<-function(IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,GEN
   }
   if(!is.na(sample_size)){
     sample_size<-as.numeric(sample_size)
-    for (i in 1:noFiles) {
+    for (i in seq_len(noFiles)) {
       print(paste("working on the ",i,"-th bam file ...",sep=""))
       bam <- readGAlignments(file[i])
       noR <- length(bam)
@@ -134,7 +133,7 @@ get_readscount<-function(IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,GEN
   t0<-rbind(t2,t3,t4)
   s<-data.frame()
   s<-aggregate(cbind(t0[,6])~pos+txid,t0,mean)
-  for(i in 7:length(t0))
+  for(i in (length(t0)-noFiles+2):length(t0))
   {
     
     w<-aggregate(cbind(t0[,i])~pos+txid,t0,mean)
