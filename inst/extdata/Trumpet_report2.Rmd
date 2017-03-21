@@ -15,15 +15,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 MeRIP-seq can be considered as the marriage of the methylation of DNA immunization coprecipitation(MeDIP) technique, RNA binding protein immunization coprecipitation(RIP) and RNA sequencing technique. It has the high precision to detect RNA-methylation within the scope of whole genome.
 
-In MeRIP-seq - as in all other NGS applications - quality control is essential. However, to our knowledge, no metrics or software are used to assess the MeRIP-seq expriement data recently. So, we develop a R package that has some metrics to assess the MeRIP-seq data quality easily and visualize the assessment result. `Trumpet`, the R package for quality assessment of MeRIP-seq data,is integrated in Bioconductor. 
+In MeRIP-seq - as in all other NGS applications - quality control is essential. However, to our knowledge, no metrics or software are used to assess the MeRIP-seq experiment data recently. So, we develop a R package that has some metrics to assess the MeRIP-seq data quality easily and visualize the assessment result. `Trumpet`, the R package for quality assessment of MeRIP-seq data,is integrated in Bioconductor. 
 
-`Trumpet` contains basic modules to evaluate sequence quality such as, statistics reads count and read alignment summary, the reads coverage distribution. The specific modules are used to evaluate the enrichment signal strength using SES arithmetic and c-test method. The last modules are mainly used to show the similarity of IP and Input biological replicates and identify some outlier samples applying the methods of hierarchical cluster and mean-SD relationship. The quality assessment report will be shown in the form of tables and figures.
+`Trumpet` contains basic modules to evaluate sequence quality such as, statistics reads count and read alignment summary, the reads coverage distribution. The specific modules are used to evaluate the enrichment signal strength using SES arithmetic and c-test method. The last modules are mainly used to show the similarity of IP and Input biological replicates and identify some outlier samples applying the methods of hierarchical clustering and mean-SD relationship. The quality assessment report will be shown in the form of tables and figures.
 
 # 2 Getting started using Trumpet
 
 ## 2.1 Input data for quality assessment
 
-The MeRIP-seq data for quality assessment should include IP(the methylated RNA immunoprecipitation samples) biological replicates and Input(RNA-seq data samples) control biological replicates in one or two condition, which means that you can evaluate the IP, Input samples or IP, Input and contrast IP, contrast Input samples. This samples should be BAM format  with your alignment reads. The reads count and other useful parameter have been gained from the function of **get\_readscount2** firstly. User should load the **Input_Infor.Rdata** that they need to assess.
+The MeRIP-seq data for quality assessment should include IP(the methylated RNA immunoprecipitation samples) biological replicates and Input(RNA-seq data samples) control biological replicates in one or two conditions, which means that you can evaluate the IP, Input samples or IP, Input and contrast IP, contrast Input samples. These samples should be BAM format  with your alignment reads. The reads count and other useful parameters have been gained from the function of **get\_readscount2** firstly. User should load the **Input_Infor.Rdata** that they need to assess.
 
 ```{r loadLibrary,message=FALSE,warning=FALSE,echo=FALSE}
 library(Trumpet)
@@ -36,7 +36,7 @@ load("Input_Infor.Rdata")
 
 ## 3.1 Read alignment summary and partial reads count statistics
 
-In this module, we can get the read alignment summary information and check the percentages of partial reads count of every sample in in each transcript and each bin. This metric can detect the sequencing depth and show the state of RNA transcription abundance. The result can return six tables.
+In this module, we can get the reads alignment summary information and check the percentage of partial reads count of every sample in in each transcript and each bin. This metric can detect the sequencing depth and show the state of RNA transcription abundance. The result can return six tables.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
 stats_result<-.stats_readscount(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
@@ -58,25 +58,25 @@ kable(pt_bin,caption='Different readscounts percentage in Input bin',align='c')
 
 **1. Table Input BAM Information**
 
-* **file** : The path of input BAM files 
+* **file** : The path of input BAM file 
 
 * **sample_name** : The name of input BAM files to evaluate
 
 **2. Table Read Summary Information**
 
-* **total_reads** : Total number of alignment reads in each BAM files
+* **total_reads** : Total number of alignment reads in each BAM file
 
-* **exon_reads** : The number of reads mapping to exon region in each BAM files
+* **exon_reads** : The number of reads mapping to exon region in each BAM file
 
-* **intron_reads** : The number of reads mapping to intron region in each BAM files
+* **intron_reads** : The number of reads mapping to intron region in each BAM file
 
 * **percent_intron** : The percentage of reads count in intron was calculated by dividing the sum reads count of exon and intron.
 
-* **UTR5_reads** :  The number of reads mapping to UTR5 region in each BAM files
+* **UTR5_reads** :  The number of reads mapping to UTR5 region in each BAM file
 
-* **CDS_reads** : The number of reads mapping to CDS region in each BAM files
+* **CDS_reads** : The number of reads mapping to CDS region in each BAM file
 
-* **UTR3_reads** : The number of reads mapping to UTR3 region in each BAM files
+* **UTR3_reads** : The number of reads mapping to UTR3 region in each BAM file
 
 * **percent_UTR5** : The percentage of reads count in UTR5 was calculated by dividing the sum reads count of UTR5, CDS and UTR3.
 
@@ -116,7 +116,7 @@ kable(out_SES[[2]])
 
 ## 4.2 Evaluate enrichment signal strength using c-test method
 
-C-test is used to compare two poisson means in IP and Input samples for peak calling in exomePeak R package. `ctest_evluate` can calculate the percentages of enrichment signal using c-test method at different fold-change in IP samples compared with unified Input samples and calculate the percentages of enrichment signal in unified IP samples compared with different Input samples. It will plot beautiful pictures to show the assessment result and identify problem biological replicates.
+C-test is used to compare two poisson means in IP and Input samples for peak calling in exomePeak R package. `ctest_evluate` can calculate the percentage of enrichment signal using c-test method at different fold-change in IP samples compared with unified Input samples and calculate the percentages of enrichment signal in unified IP samples compared with different Input samples. It will plot beautiful pictures to show the assessment result and identify problem biological replicates.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 # Show the figures of c-test result
@@ -127,7 +127,7 @@ out_chest<-.ctest_evluate(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input
 
 ## 5.1 Show the difference within one group biological replicates using hcluster
 
-In order to identify the difference within one group of  the IP biological replicates and the Input biological replicates, we can use the hierachical cluster method after reads count having been normalized between samples.
+In order to identify the difference within one group of  the IP biological replicates and the Input biological replicates, we can use the hierachical clustering method after reads count having been normalized between samples.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 hcluster<-.hcluster(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
