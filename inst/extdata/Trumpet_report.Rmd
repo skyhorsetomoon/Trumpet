@@ -31,7 +31,7 @@ The following code will extract the reads alignment summary and reads count from
 
 ```{r loadLibrary,message=FALSE,warning=FALSE,echo=FALSE}
 library(Trumpet)
-setwd(OUTPUT_DIR)
+setwd(outparam_dir)
 load("parameter.Rdata")
 result<-.get_readscount(IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,GENE_ANNO_GTF, GENOME,UCSC_TABLE_NAME,TXDB,sample_size)
 
