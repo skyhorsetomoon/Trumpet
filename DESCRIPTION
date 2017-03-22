@@ -9,7 +9,7 @@ Description: The package is designed for visualization of quality assessment of 
 License: GPL-2
 VignetteBuilder: knitr
 BuildVignettes: yes
-Depends:  Guitar,  ggplot2, reshape2,  exomePeak, xtable, knitr, rmarkdown, 
+Depends:  Guitar,  ggplot2, reshape2,  exomePeak, xtable, knitr, rmarkdown, graphics, stats, grid,
           GenomicFeatures, GenomicRanges, AnnotationDbi, GenomicAlignments,S4Vectors
 Suggests: BiocStyle
 biocViews: Sequencing, SplicedAlignment, Alignment, DataImport,
