@@ -11,6 +11,10 @@ get_readscount2<-function(IP_BAM,
                          sample_size=NA,
                          output_dir=NA)
 {
+    if(suppressWarnings(is.na(GENOME)&is.na(TXDB)&is.na(GENE_ANNO_GTF))){
+    
+    stop("Please give the annotation gene in GTF format or TXDB file or download the knownGene from the UCSC")
+  }
   
   # download the annotation
   if ( suppressWarnings((!is.na(GENOME)) & (!is.na(UCSC_TABLE_NAME))& is.na(TXDB)&is.na(GENE_ANNO_GTF))) {
