@@ -19,6 +19,10 @@ Trumpet_report<-function(IP_BAM,
     if (is.na(OUTPUT_DIR)) {
       OUTPUT_DIR<-getwd()
       trumpet<-system.file("extdata", "Trumpet_report.Rmd", package="Trumpet")
+      if(suppressWarnings(is.na(GENOME)&is.na(TXDB)&is.na(GENE_ANNO_GTF))){
+        
+        stop("Please give the annotation gene in GTF format or TXDB file or download the knownGene from the UCSC")
+      }
       if ( suppressWarnings((!is.na(GENOME)) & (!is.na(UCSC_TABLE_NAME))& is.na(TXDB)&is.na(GENE_ANNO_GTF))) {
         if(is.na(sample_size))
         {
