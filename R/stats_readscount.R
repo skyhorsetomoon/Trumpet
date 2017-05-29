@@ -27,7 +27,7 @@
   {
     s1<-.singleBAMreads(bam, se, len, n)
     vbam<-sapply(s1,unlist)
-    r<-apply(s1,1,sum)
+    r<-rowSums(s1)
     genzero<-vector(mode="numeric",length=0)
     perzero<-vector(mode="numeric",length=0)
     for(i in 2:length(k))
