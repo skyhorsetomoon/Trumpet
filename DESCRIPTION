@@ -1,8 +1,8 @@
 Package: Trumpet
 Type: Package
 Title: Transcriptome-guided quality assessment of methylated RNA immunoprecipitation sequencing data
-Version: 0.99.8
-Date: 2017-3-20
+Version: 0.99.0
+Date: 2017-5-20
 Author: Teng Zhang
 Maintainer: Teng Zhang <2573552960@qq.com>
 Description: The package is designed for visualization of quality assessment of methylated RNA immunoprecipitation sequencing data.
@@ -15,5 +15,5 @@ Suggests: BiocStyle
 biocViews: Sequencing, SplicedAlignment, Alignment, DataImport,
     RNASeq,MethylSeq, QualityControl, Transcription, Coverage
 NeedsCompilation: no
-Packaged: 2017-3-20 17:30:05 UTC; bioinfo
+Packaged: 2017-5-20 17:30:05 UTC; bioinfo
 RoxygenNote: 5.0.0
