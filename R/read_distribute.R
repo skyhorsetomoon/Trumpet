@@ -65,8 +65,8 @@
     group_IP <- as.matrix(group_IP)
     group_pt <- group[, -(seq_len(ncol(group_IP)))]
     group_pt <- as.matrix(group_pt)
-    unit_IP <- .unified_sample(group_IP,se,len,n)
-    unit_Input <- .unified_sample(group_pt, se,len,n)
+    unit_IP <- .unified_sample(group_IP,se,ind,len,n)
+    unit_Input <- .unified_sample(group_pt, se,ind,len,n)
     unified_IP <- read_cover(unit_IP)
     unified_Input <- read_cover(unit_Input)
     id_name1 <- c(IP_groupname, "unified Input")
@@ -152,10 +152,10 @@
     group_two_IP <- group_two[, seq_len(length(reference_IP_groupname))]
     group_two_IP <- as.matrix(group_two_IP)
     group_two_pt <- group_two[, -(seq_len(ncol(group_two_IP)))]
-    unit_IP <- .unified_sample(group_one_IP, se,len,n)
-    unit_Input <- .unified_sample(group_one_pt, se,len,n)
-    refer_unit_IP <- .unified_sample(group_two_IP, se,len,n)
-    refer_unit_pt <- .unified_sample(group_two_pt, se,len,n)
+    unit_IP <- .unified_sample(group_one_IP, se,ind,len,n)
+    unit_Input <- .unified_sample(group_one_pt, se,ind,len,n)
+    refer_unit_IP <- .unified_sample(group_two_IP, se,ind,len,n)
+    refer_unit_pt <- .unified_sample(group_two_pt, se,ind,len,n)
     unified_IP <- read_cover(unit_IP)
     unified_Input <- read_cover(unit_Input)
     refer_unified_IP <- read_cover(refer_unit_IP)
