@@ -26,7 +26,7 @@
     return(bam)
   }  ##get IP
   Unit_bam <- function(group) {
-    v <- .unified_sample(group,se,len,n)
+    v <- .unified_sample(group,se,ind,len,n)
     Input1 <- .normalize_sample(v)
     Input <- sapply(t(Input1), unlist)
     return(Input)
