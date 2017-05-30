@@ -36,7 +36,7 @@
       IPa <- rbind(IPa, IPb)
       IP <- matrix()
     }
-    v <- .unified_sample(group2,se,len,n)
+    v <- .unified_sample(group2,se,ind,len,n)
     outb <- .getmeanSD(v)
     Mean <- outb[[1]]
     SD <- outb[[2]]
