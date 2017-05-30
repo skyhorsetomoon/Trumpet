@@ -3,7 +3,7 @@
   z<-which(row.sum>10)
   s2<-s1[z,]
   row.mean<-rowMeans(s2)
-  for(i in seq_len(lenth(row.mean))){
+  for(i in seq_len(length(row.mean))){
     if(row.mean[i]<2)
       row.mean[i]<-2
   }
