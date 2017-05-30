@@ -19,7 +19,7 @@ In MeRIP-seq - as in all other NGS applications - quality control is essential. 
 
 `Trumpet` contains basic modules to evaluate sequence quality such as, statistics reads count and read alignment summary, the reads coverage distribution. The specific modules are used to evaluate the enrichment signal strength using SES arithmetic and c-test method. The last modules are mainly used to show the similarity of IP and Input biological replicates and identify some outlier samples applying the methods of hierarchical clustering and mean-SD relationship. The quality assessment report will be shown in the form of tables and figures.
 
-# 2 Getting started using Trumpet
+# 2 Start using Trumpet
 
 ## 2.1 Input data for quality assessment
 
