@@ -1,4 +1,4 @@
-.unified_sample<-function(group,se,len,n)
+.unified_sample<-function(group,se,ind,len,n)
 {
   m<-matrix(nrow = length(se),ncol = length(ind))
   v<-matrix(data=0,nrow=length(se),ncol = length(ind))
