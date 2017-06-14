@@ -13,8 +13,7 @@ output:
 
 # Installation
 ```{r}
-source("http://bioconductor.org/biocLite.R")
-biocLite("Trumpet")
+devtools::install_github("skyhorsetomoon/Trumpet")
 ```
 
 ```{r setup, include=FALSE}
