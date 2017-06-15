@@ -1,3 +1,121 @@
+.Norm_bam <- function(bam, se, len, n) {
+  s1 <- .singleBAMreads(bam, se, len, n)
+  s3 <- .normalize_sample(s1)
+  bam <- sapply(t(s3), unlist)
+  return(bam)
+}  ##get IP
+
+
+.Unit_bam <- function(group,se,ind,len,n) {
+  v <- .unified_sample(group,se,ind,len,n)
+  Input1 <- .normalize_sample(v)
+  Input <- sapply(t(Input1), unlist)
+  return(Input)
+}
+
+.SES_IP <- function(group_bam, unit_bam, IP_group_name, se, len, n) {
+  new <- data.frame()
+  a <- vector(mode = "numeric", length = 0)
+  b <- vector(mode = "numeric", length = 0)
+  z <- vector(mode = "numeric", length = 0)
+  ID <- vector()
+  for (i in seq_len(length(IP_group_name))) {
+    
+    bam <- vector(mode = "numeric", length = 0)
+    bam <- .Norm_bam(group_bam[, i], se, len, n)
+    Input1 <- unit_bam
+    M <- max(length(bam), length(Input1))
+    zeroa1 <- rep(0, (M - length(bam)))
+    zeroa2 <- rep(0, (M - length(Input1)))
+    ip1 <- c(zeroa1, bam)
+    InPut1 <- c(zeroa2, Input1)
+    v1 <- sort(ip1)
+    v2 <- sort(InPut1)
+    x <- v1 - min(v1)
+    ip <- x/sum(x)
+    cum_bam <- vector(mode = "numeric", length = 0)
+    cum_bam <- cumsum(ip)
+    newpos <- 1:length(ip)
+    pos <- newpos/length(ip)
+    x1 <- v2 - min(v2)
+    Input <- x1/sum(x1)
+    unified_Input <- vector(mode = "numeric", length = 0)
+    unified_Input <- cumsum(Input)
+    c <- (unified_Input - cum_bam)
+    a[i] <- pos[which.max(c)]
+    z[i] <- max(c)
+    com <- cbind(pos, cum_bam, unified_Input)
+    com <- as.data.frame(com)
+    new1 <- melt(data = com, id = "pos", value.name = "pro")
+    new1 <- as.data.frame(new1)
+    var <- rep(c(IP_group_name[i], "unified_Input"), c(nrow(new1[(new1$variable) == 
+                                                                   "cum_bam", ]), nrow(new1[(new1$variable) == "unified_Input", 
+                                                                                            ])))
+    new1$variable <- var
+    b[i] <- length(new1$pos)
+    new2 <- new1
+    new1 <- data.frame()
+    new <- rbind(new, new2, new1)
+    ID1 <- rep(IP_group_name[i], b[i])
+    ID2 <- ID1
+    ID1 <- vector()
+    ID <- c(ID, ID2, ID1)
+  }
+  new <- cbind(new, ID)
+  new <- as.data.frame(new)
+  Scale_factor <- z
+  Scale_factor <- round(Scale_factor, 2)
+  p <- vector()
+  for (i in seq_len(length(IP_group_name))) {
+    
+    p[i] <- paste(round((1 - a[i]) * 100, 2), "%")
+  }
+  Sample <- IP_group_name
+  Enriched_percent <- p
+  Enrich_table <- cbind(Sample, Enriched_percent, Scale_factor)
+  Enrich_table <- as.data.frame(Enrich_table)
+  unit <- list(new, a, Enrich_table)
+  return(unit)
+}
+
+.SES_Input <- function(group_Input, unit_IP, Input_group_name,se,len,n) {
+  new <- data.frame()
+  for (i in seq_len(length(Input_group_name))) {
+    bam <- vector(mode = "numeric", length = 0)
+    bam <- .Norm_bam(group_Input[, i],se,len,n)
+    M <- max(length(bam), length(unit_IP))
+    zeroa1 <- rep(0, (M - length(bam)))
+    zeroa2 <- rep(0, (M - length(unit_IP)))
+    input1 <- c(zeroa1, bam)
+    IP1 <- c(zeroa2, unit_IP)
+    v1 <- sort(input1)
+    v2 <- sort(IP1)
+    x <- v1 - min(v1)
+    input <- x/sum(x)
+    cum_bam <- vector(mode = "numeric", length = 0)
+    cum_bam <- cumsum(input)
+    newpos <- 1:length(input)
+    pos <- newpos/length(input)
+    x1 <- v2 - min(v2)
+    IP <- x1/sum(x1)
+    unified_IP <- vector(mode = "numeric", length = 0)
+    unified_IP <- cumsum(IP)
+    com <- cbind(pos, cum_bam, unified_IP)
+    com <- as.data.frame(com)
+    new1 <- melt(data = com, id = "pos", value.name = "pro")
+    new1 <- as.data.frame(new1)
+    var <- rep(c(Input_group_name[i], "unified_IP"), c(nrow(new1[(new1$variable) == 
+                                                                   "cum_bam", ]), nrow(new1[(new1$variable) == "unified_IP", 
+                                                                                            ])))
+    new1$variable <- var
+    new2 <- new1
+    new1 <- data.frame()
+    new <- rbind(new, new2, new1)
+  }
+  new <- as.data.frame(new)
+  return(new)
+}
+
 .ses_evluate <- function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM, 
                          condition1, condition2) {
   s <- result[[1]]
@@ -19,132 +137,20 @@
     reference_IP_groupname <- sample_name[[3]]
     reference_Input_groupname <- sample_name[[4]]
   }
-  Norm_bam <- function(bam) {
-    s1 <- .singleBAMreads(bam, se, len, n)
-    s3 <- .normalize_sample(s1)
-    bam <- sapply(t(s3), unlist)
-    return(bam)
-  }  ##get IP
-  Unit_bam <- function(group) {
-    v <- .unified_sample(group,se,ind,len,n)
-    Input1 <- .normalize_sample(v)
-    Input <- sapply(t(Input1), unlist)
-    return(Input)
-  }
-  SES_IP <- function(group_bam, unit_bam, IP_group_name) {
-    new <- data.frame()
-    a <- vector(mode = "numeric", length = 0)
-    b <- vector(mode = "numeric", length = 0)
-    z <- vector(mode = "numeric", length = 0)
-    ID <- vector()
-    for (i in seq_len(length(IP_group_name))) {
-      
-      bam <- vector(mode = "numeric", length = 0)
-      bam <- Norm_bam(group_bam[, i])
-      Input1 <- unit_bam
-      M <- max(length(bam), length(Input1))
-      zeroa1 <- rep(0, (M - length(bam)))
-      zeroa2 <- rep(0, (M - length(Input1)))
-      ip1 <- c(zeroa1, bam)
-      InPut1 <- c(zeroa2, Input1)
-      v1 <- sort(ip1)
-      v2 <- sort(InPut1)
-      x <- v1 - min(v1)
-      ip <- x/sum(x)
-      cum_bam <- vector(mode = "numeric", length = 0)
-      cum_bam <- cumsum(ip)
-      newpos <- 1:length(ip)
-      pos <- newpos/length(ip)
-      x1 <- v2 - min(v2)
-      Input <- x1/sum(x1)
-      unified_Input <- vector(mode = "numeric", length = 0)
-      unified_Input <- cumsum(Input)
-      c <- (unified_Input - cum_bam)
-      a[i] <- pos[which.max(c)]
-      z[i] <- max(c)
-      com <- cbind(pos, cum_bam, unified_Input)
-      com <- as.data.frame(com)
-      new1 <- melt(data = com, id = "pos", value.name = "pro")
-      new1 <- as.data.frame(new1)
-      var <- rep(c(IP_group_name[i], "unified_Input"), c(nrow(new1[(new1$variable) == 
-                                                                     "cum_bam", ]), nrow(new1[(new1$variable) == "unified_Input", 
-                                                                                              ])))
-      new1$variable <- var
-      b[i] <- length(new1$pos)
-      new2 <- new1
-      new1 <- data.frame()
-      new <- rbind(new, new2, new1)
-      ID1 <- rep(IP_group_name[i], b[i])
-      ID2 <- ID1
-      ID1 <- vector()
-      ID <- c(ID, ID2, ID1)
-    }
-    new <- cbind(new, ID)
-    new <- as.data.frame(new)
-    Scale_factor <- z
-    Scale_factor <- round(Scale_factor, 2)
-    p <- vector()
-    for (i in seq_len(length(IP_group_name))) {
-      
-      p[i] <- paste(round((1 - a[i]) * 100, 2), "%")
-    }
-    Sample <- IP_group_name
-    Enriched_percent <- p
-    Enrich_table <- cbind(Sample, Enriched_percent, Scale_factor)
-    Enrich_table <- as.data.frame(Enrich_table)
-    unit <- list(new, a, Enrich_table)
-    return(unit)
-  }
-  SES_Input <- function(group_Input, unit_IP, Input_group_name) {
-    new <- data.frame()
-    for (i in seq_len(length(Input_group_name))) {
-      bam <- vector(mode = "numeric", length = 0)
-      bam <- Norm_bam(group_Input[, i])
-      M <- max(length(bam), length(unit_IP))
-      zeroa1 <- rep(0, (M - length(bam)))
-      zeroa2 <- rep(0, (M - length(unit_IP)))
-      input1 <- c(zeroa1, bam)
-      IP1 <- c(zeroa2, unit_IP)
-      v1 <- sort(input1)
-      v2 <- sort(IP1)
-      x <- v1 - min(v1)
-      input <- x/sum(x)
-      cum_bam <- vector(mode = "numeric", length = 0)
-      cum_bam <- cumsum(input)
-      newpos <- 1:length(input)
-      pos <- newpos/length(input)
-      x1 <- v2 - min(v2)
-      IP <- x1/sum(x1)
-      unified_IP <- vector(mode = "numeric", length = 0)
-      unified_IP <- cumsum(IP)
-      com <- cbind(pos, cum_bam, unified_IP)
-      com <- as.data.frame(com)
-      new1 <- melt(data = com, id = "pos", value.name = "pro")
-      new1 <- as.data.frame(new1)
-      var <- rep(c(Input_group_name[i], "unified_IP"), c(nrow(new1[(new1$variable) == 
-                                                                     "cum_bam", ]), nrow(new1[(new1$variable) == "unified_IP", 
-                                                                                              ])))
-      new1$variable <- var
-      new2 <- new1
-      new1 <- data.frame()
-      new <- rbind(new, new2, new1)
-    }
-    new <- as.data.frame(new)
-    return(new)
-  }
+  
   if ((length(reference_IP_groupname) == 0) & (length(reference_Input_groupname) == 
                                                0)) {
     Group_IP <- sa[, (seq_len(length(IP_groupname)))]
     Group_IP <- as.matrix(Group_IP)
     Group_Input <- sa[, -(seq_len(length(IP_groupname)))]
     Group_Input <- as.matrix(Group_Input)
-    Unit_Input <- Unit_bam(Group_Input)
-    Unit_IP <- Unit_bam(Group_IP)
-    out <- SES_IP(Group_IP, Unit_Input, IP_groupname)
+    Unit_Input <- .Unit_bam(Group_Input,se,ind,len,n)
+    Unit_IP <- .Unit_bam(Group_IP,se,ind,len,n)
+    out <- .SES_IP(Group_IP, Unit_Input, IP_groupname,se,len,n)
     newa <- out[[1]]
     a <- out[[2]]
     Enrich_table <- out[[3]]
-    new1 <- SES_Input(Group_Input, Unit_IP, Input_groupname)
+    new1 <- .SES_Input(Group_Input, Unit_IP, Input_groupname,se,len,n)
     vline <- data.frame(ID = IP_groupname, pos = a)
     
     newa <- as.data.frame(newa)
@@ -178,21 +184,21 @@
     ref_group_IP <- as.matrix(ref_group_IP)
     ref_group_Input <- ref_group[, -(seq_len(length(reference_IP_groupname)))]
     ref_group_Input <- as.matrix(ref_group_Input)
-    Unit_Input <- Unit_bam(group_Input)
-    Unit_IP <- Unit_bam(group_IP)
-    ref_unit_Input <- Unit_bam(ref_group_Input)
-    ref_unit_IP <- Unit_bam(ref_group_IP)
+    Unit_Input <- .Unit_bam(group_Input,se,ind,len,n)
+    Unit_IP <- .Unit_bam(group_IP,se,ind,len,n)
+    ref_unit_Input <- .Unit_bam(ref_group_Input,se,ind,len,n)
+    ref_unit_IP <- .Unit_bam(ref_group_IP,se,ind,len,n)
     
-    out <- SES_IP(group_IP, Unit_Input, IP_groupname)
-    refer_out <- SES_IP(ref_group_IP, ref_unit_Input, reference_IP_groupname)
+    out <- .SES_IP(group_IP, Unit_Input, IP_groupname,se,len,n)
+    refer_out <- .SES_IP(ref_group_IP, ref_unit_Input, reference_IP_groupname,se,len,n)
     newa <- out[[1]]
     a <- out[[2]]
     Enrich_table <- out[[3]]
     newb <- refer_out[[1]]
     b <- refer_out[[2]]
     refer_Enrich_table <- refer_out[[3]]
-    new1 <- SES_Input(group_Input, Unit_IP, Input_groupname)
-    new2 <- SES_Input(ref_group_Input, ref_unit_IP, reference_Input_groupname)
+    new1 <- .SES_Input(group_Input, Unit_IP, Input_groupname,se,len,n)
+    new2 <- .SES_Input(ref_group_Input, ref_unit_IP, reference_Input_groupname,se,len,n)
     vline1 <- data.frame(ID = IP_groupname, pos = a)
     
     newa <- as.data.frame(newa)
