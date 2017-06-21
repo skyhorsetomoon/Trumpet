@@ -6,7 +6,7 @@ Trumpet is designed for visualization of quality assessment of methylated RNA im
 User can dowload this package from Github by using the following method: Input the following commond in R or Rstudio
 >install.packages("devtools")
 
-library(devtools)
+>library(devtools)
 
 > devtools::install_github("skyhorsetomoon/Trumpet")
 
