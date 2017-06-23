@@ -117,7 +117,7 @@ kable(out_SES[[1]])
 kable(out_SES[[2]])
 ```
 
-**Note: points on the x-axis correspond to percentages of the IP sample's genome, and points on the y-axis correspond to percentages of the total number of reads. The point at which the distance between the IP and Input percentages is maximized is denoted by the black line; the greater the separation between IP and Input at this point, the better the IP enrichment at appropriate sequencing depth, which the parameter `Scale_factor` can stand for**
+**Note:The x-axis denotes the percentages of bins in the whole genome and the y-axis denotes percentages of the cumulative reads count after normalization. The black line divides the genome into two regions: the background region and the enrichment signal region. The point at which the distance between the IP and Input percentages is maximized shows the difference between IP and Input; the greater the separation between IP and Input at this point, the better the IP enrichment at appropriate sequencing depth, which the parameter `Scale_factor` can stand for**
 
 ## 4.2 Evaluate enrichment signal strength using c-test method
 
@@ -140,7 +140,7 @@ hcluster<-.hcluster(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
 
 ## 5.2 Plot the relationship between mean and SD figures
 
-In this work, the observed SD is tightly relate to the mean in each condition. The relationship should be similarity within biological replicates in one condition. Using this strategy, we can identify some abnormal samples.
+In this work, the observed SD is tightly relate to the mean in each condition. The relationship should be similarity within biological replicates in one condition. Using this strategy, we can identify some abnormal samples. The value of mean and SD have been taken the logarithm.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 out_ms<-.ms_relation(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
