@@ -148,3 +148,12 @@ This module is to identify the difference of mean and SD relationship between tw
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
 two_ms<-.two_cond_ms(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
 ```
+
+# 7 Compare IP samples' enrichment signal to knowing data set.
+
+In this part, we will compare the user's IP samples' enrichment signal to the our knowing experiment data set. We use the dot plot to show the distribution of IP samples' signal strength that was depicted by the percentage of enrichment region, the percentage of signal reads count and scale factor. The following plot will show the result.
+
+```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
+enrichmentdist <- .SES_enrich_DF(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM)
+```
+
