@@ -71,8 +71,8 @@
     p[i] <- paste(round((1 - a[i]) * 100, 2), "%")
   }
   Sample <- IP_group_name
-  Enriched_percent <- p
-  Enrich_table <- cbind(Sample, Enriched_percent, Scale_factor)
+  Enrichment_region <- p
+  Enrich_table <- cbind(Sample, Enrichment_region, Scale_factor)
   Enrich_table <- as.data.frame(Enrich_table)
   unit <- list(new, a, Enrich_table)
   return(unit)
