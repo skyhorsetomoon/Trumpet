@@ -1,4 +1,4 @@
-.read_cover <- function(read_count) {
+.read_cover <- function(read_count, ind) {
   r <- rowSums(read_count)
   read_count <- cbind(read_count, r)
   read_count <- as.data.frame(read_count)
@@ -54,7 +54,7 @@
     group <- as.matrix(group)
     for (i in seq_len(ncol(group))) {
       d <- .singleBAMreads(group[, i], se, len, n)
-      p <- .read_cover(d)
+      p <- .read_cover(d, ind)
       q <- rbind(q, p)
     }
     Group_IP <- q[seq_len(length(IP_groupname) * length(unique(q$pos)) * 
@@ -68,8 +68,8 @@
     group_pt <- as.matrix(group_pt)
     unit_IP <- .unified_sample(group_IP,se,ind,len,n)
     unit_Input <- .unified_sample(group_pt, se,ind,len,n)
-    unified_IP <- .read_cover(unit_IP)
-    unified_Input <- .read_cover(unit_Input)
+    unified_IP <- .read_cover(unit_IP, ind)
+    unified_Input <- .read_cover(unit_Input, ind)
     id_name1 <- c(IP_groupname, "unified Input")
     ID1 <- rep(id_name1, rep(fr_num, length(id_name1)))
     id_name2 <- c(Input_groupname, "unified IP")
@@ -123,7 +123,7 @@
     group_one <- as.matrix(group_one)
     for (i in seq_len(ncol(group_one))) {
       q <- .singleBAMreads(group_one[, i], se, len, n)
-      p1 <- .read_cover(q)
+      p1 <- .read_cover(q, ind)
       q1 <- rbind(q1, p1)
     }
     Group_IP <- q1[seq_len((length(IP_groupname) * length(unique(q1$pos)) * 
@@ -136,7 +136,7 @@
     group_two <- as.matrix(group_two)
     for (i in seq_len(ncol(group_two))) {
       p <- .singleBAMreads(group_two[, i], se, len, n)
-      p2 <- .read_cover(p)
+      p2 <- .read_cover(p, ind)
       q2 <- rbind(q2, p2)
     }
     refer_Group_IP <- q2[seq_len((length(reference_IP_groupname) * 
@@ -157,10 +157,10 @@
     unit_Input <- .unified_sample(group_one_pt, se,ind,len,n)
     refer_unit_IP <- .unified_sample(group_two_IP, se,ind,len,n)
     refer_unit_pt <- .unified_sample(group_two_pt, se,ind,len,n)
-    unified_IP <- .read_cover(unit_IP)
-    unified_Input <- .read_cover(unit_Input)
-    refer_unified_IP <- .read_cover(refer_unit_IP)
-    refer_unified_Input <- .read_cover(refer_unit_pt)
+    unified_IP <- .read_cover(unit_IP, ind)
+    unified_Input <- .read_cover(unit_Input, ind)
+    refer_unified_IP <- .read_cover(refer_unit_IP, ind)
+    refer_unified_Input <- .read_cover(refer_unit_pt, ind)
     id_name1 <- c(IP_groupname, "unified Input")
     ID1 <- rep(id_name1, rep(fr_num1, length(id_name1)))
     id_name2 <- c(Input_groupname, "unified IP")
