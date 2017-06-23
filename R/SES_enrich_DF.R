@@ -157,7 +157,7 @@
     labs(x="Percentage of signal reads count(%)",  title="The distribution of\n IP samples' signal reads count ")
   scalefactor <- enrichtable[, c(1,4)]
   p3 <- ggplot(scalefactor, aes(x=Scale_factor,fill=factor(IP_sample)))+
-    geom_dotplot(binwidth=0.2, stackgroups=TRUE, method="histodot",stackdir="up",dotsize=0.25)+
+    geom_dotplot(binwidth=0.05, stackgroups=TRUE, method="histodot",stackdir="up",dotsize=1)+
     labs(x="Scale factor",  title="The distribution of\n IP samples' scale factor")
   .multiplot(p1, p2, p3, cols = 2)
   
