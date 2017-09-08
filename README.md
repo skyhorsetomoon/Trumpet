@@ -56,6 +56,6 @@ The following commands code will show how to use this package and generate the a
                                condition2 = "treated",
                                GENE_ANNO_GTF = GENE_ANNO_GTF)
                                
-** Case two**: If user's Linux version can not generate HTML report directly, they can call the command **get\_readscount2.R** firstly to get the reads count saved as **.Rdata** format. Then, call the main function **Trumpet\_report.R** and set some parameters in Windows system. The following code show how to generate the report.
+**Case two**: If user's Linux version can not generate HTML report directly, they can call the command **get\_readscount2.R** firstly to get the reads count saved as **.Rdata** format. Then, call the main function **Trumpet\_report.R** and set some parameters in Windows system. The following code show how to generate the report.
  ### Not to run the following commond
  > 
