@@ -27,8 +27,7 @@ The MeRIP-seq data for quality assessment should include IP(the methylated RNA i
 
 ```{r loadLibrary,message=FALSE,warning=FALSE,echo=FALSE}
 library(Trumpet)
-setwd(INPUT_DIR)
-load("Input_Infor.Rdata")
+load(INPUT_DIR)
 ```
 
 
