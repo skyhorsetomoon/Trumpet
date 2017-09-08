@@ -154,11 +154,13 @@ This module is to identify the difference of mean and SD relationship between tw
 two_ms<-.two_cond_ms(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
 ```
 
-# 7 Compare IP samples' enrichment signal to knowing data set.
+# 7 Compare IP samples' enrichment signal to known data set.
 
-In this part, we will compare the user's IP samples' enrichment signal to the our knowing experiment data set. We use the dot plot to show the distribution of IP samples' signal strength that was depicted by the percentage of enrichment region, the percentage of signal reads count and scale factor. The following plot will show the result.
+In this part, we will compare the user's IP samples' enrichment signal to the our known experiment data set. We use the density plot to show the distribution of IP samples' signal strength that was depicted by the percentage of enrichment region, the percentage of signal reads count and scale factor.The three density distribution curve are our known experiment data. These vetical lines in each plot are user's sample(the data to be evaluated). The following plot will show the result.
 
-```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=14,fig.height=7}
+```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=10,fig.height=14}
 enrichmentdist <- .SES_enrich_DF(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM)
 ```
+
+**Note:The percentage of enrichment region of our known data is in the range of 15% to 20%. The percentage of signal reads count of our knowing data is in the range of 90% to 95%. The Scale_factor of our known data is in the range of 0.05 to 0.15 and 0.2 to 0.25. If the user's data has the high overlap to our knowing data, the enrihcment degree of user's degree is normal.**
 
