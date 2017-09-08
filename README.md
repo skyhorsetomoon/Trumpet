@@ -14,8 +14,11 @@ User can dowload this package from Github by using the following method: Input t
 # Usage Example
 The following commands code will show how to use this package and generate the assessment report in HTML format.
 
-**Case one**: Input the samples to be evaluated in BAM files and generate the HTML report directly.
-### Input the bam file to assessment
+##Case one
+
+### Input the samples to be evaluated in BAM files and generate the HTML report directly.
+
+#Input the bam file to assessment
 > f1=system.file("extdata", "IP1.bam", package="Trumpet")
 
 > f2=system.file("extdata", "IP2.bam", package="Trumpet")
@@ -42,11 +45,11 @@ The following commands code will show how to use this package and generate the a
 
 > contrast_Input_BAM=c(f2)
 
-### Input the annotation file
+#Input the annotation file
 
 > GENE_ANNO_GTF <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
 
-### Generate the assessment report to call the main function **Trumpet\_report.R**
+#Generate the assessment report to call the main function **Trumpet\_report.R**
 
 > trumpet_report <- Trumpet_report(IP_BAM,
                                Input_BAM,
@@ -56,10 +59,11 @@ The following commands code will show how to use this package and generate the a
                                condition2 = "treated",
                                GENE_ANNO_GTF = GENE_ANNO_GTF)
                                
-**Case two**: If user's Linux version can not generate HTML report directly, they can call the command **get\_readscount2.R** firstly to get the reads count saved as **.Rdata** format. Then, call the main function **Trumpet\_report.R** and set some parameters in Windows system. The following code show how to generate the report.
+##Case two
+### If user's Linux version can not generate HTML report directly, they can call the command **get\_readscount2.R** firstly to get the reads count saved as **.Rdata** format. Then, call the main function **Trumpet\_report.R** and set some parameters in Windows system. The following code show how to generate the report.
 
- ###Not to run the following commond
- #### Input the BAM files 
+ #### Not to run the following commond
+ #Input the BAM files 
  > f1=system.file("extdata", "IP1.bam", package="Trumpet")
 
 > f2=system.file("extdata", "IP2.bam", package="Trumpet")
@@ -85,11 +89,11 @@ The following commands code will show how to use this package and generate the a
 > f2=system.file("extdata", "treated_Input1.bam", package="Trumpet")
 
 > contrast_Input_BAM=c(f2)
-#### Input the annotation file 
+#Input the annotation file 
  
 > GENE_ANNO_GTF <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
 
-#### Get the reads count
+#Get the reads count
 
 > result <- get_readscount2(IP_BAM,
                          Input_BAM,
@@ -101,7 +105,7 @@ The following commands code will show how to use this package and generate the a
                          output_filename = "Example.Rdata",
                          output_dir = "C:/users/Trumpet_output" )
                          
-#### Generate the quality assessment report in HTML format
+#Generate the quality assessment report in HTML format
 
 > input_dir <- output_dir
 
