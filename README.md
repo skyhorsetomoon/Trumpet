@@ -14,10 +14,8 @@ User can dowload this package from Github by using the following method: Input t
 # Usage Example
 The following commands code will show how to use this package and generate the assessment report in HTML format.
 
-##Case one
-
+## Case one
 ### Input the samples to be evaluated in BAM files and generate the HTML report directly.
-
 #Input the bam file to assessment
 > f1=system.file("extdata", "IP1.bam", package="Trumpet")
 
@@ -59,7 +57,7 @@ The following commands code will show how to use this package and generate the a
                                condition2 = "treated",
                                GENE_ANNO_GTF = GENE_ANNO_GTF)
                                
-##Case two
+## Case two
 ### If user's Linux version can not generate HTML report directly, they can call the command **get\_readscount2.R** firstly to get the reads count saved as **.Rdata** format. Then, call the main function **Trumpet\_report.R** and set some parameters in Windows system. The following code show how to generate the report.
 
  #### Not to run the following commond
