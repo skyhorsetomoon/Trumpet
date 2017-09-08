@@ -11,10 +11,10 @@ User can dowload this package from Github by using the following method: Input t
 > devtools::install_github("skyhorsetomoon/Trumpet")
 
 > library(Trumpet)
-## Usage Example
+# Usage Example
 The following commands code will show how to use this package and generate the assessment report in HTML format:
 Case one: input the samples to be evaluated in BAM files and generate the HTML report directly.
-# Input the bam file to assessment
+### Input the bam file to assessment
 > f1=system.file("extdata", "IP1.bam", package="Trumpet")
 > f2=system.file("extdata", "IP2.bam", package="Trumpet")
 > f3=system.file("extdata", "IP3.bam", package="Trumpet")
