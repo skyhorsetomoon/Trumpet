@@ -1,7 +1,5 @@
 ---
 title: "Trumpet Report"
-author: "Teng Zhang"
-date: "Feb 20, 2017"
 output: 
   html_document: 
     toc: yes
