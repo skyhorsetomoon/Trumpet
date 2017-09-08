@@ -58,7 +58,7 @@
   backgroundread <- round(bknuread/(bknuread+signuread)* 100, 2) 
   Signal_readcount <- round(signuread/(bknuread+signuread)* 100, 2)
   Scale_factor <- z
-  Scale_factor <- round(Scale_factor, 2)
+  Scale_factor <- round(Scale_factor, 3)
   p <- vector()
   for (i in seq_len(length(IP_group_name))) {
     p[i] <- round((1 - a[i])* 100 , 2)
@@ -99,24 +99,9 @@
     Group_Input <- sa[, -(seq_len(length(IP_groupname)))]
     Group_Input <- as.matrix(Group_Input)
     Unit_Input <- .Unit_bam(Group_Input, se,ind,len,n)
+    ##get the user enrich data
     Enrichtable <- .SES_IPenrich(Group_IP, Unit_Input, IP_groupname, se, len, n)
-    dircs<-system.file("extdata", "experiment_data.Rdata", package="Trumpet")
-    load(dircs)
-    enrichtable <- rbind(enrichtable, Enrichtable )
-    old_sample <- rep("knowing data set",34)
-    new_sample <- IP_groupname
-    IP_sample <- c(old_sample, new_sample)
-    enrichtable  <- cbind(IP_sample,enrichtable)
-    enrich_region <- enrichtable[,1:2]
-    enrich_region <- as.data.frame(enrich_region)
-    p1 <- ggplot(enrich_region, aes(x=Enrichment_region,fill=factor(IP_sample)))+geom_dotplot(binwidth=2, stackgroups=TRUE, method="histodot",stackdir="up",dotsize=1)+labs(x="Percentage of enrichment region(%)",  title="The distribution of IP samples' enrichment region ")
-    signalread <- enrichtable[,c(1,3)]
-    signalread <- as.data.frame(signalread)
-    p2 <- ggplot(signalread, aes(x=Signal_readcount,fill=factor(IP_sample)))+geom_dotplot(binwidth=2, stackgroups=TRUE, method="histodot",stackdir="up",dotsize=1)+labs(x="Percentage of signal reads count(%)",  title="The distribution of IP samples' signal reads count ")
-    scalefactor <- enrichtable[, c(1,4)]
-    p3 <- ggplot(scalefactor, aes(x=Signal_readcount,fill=factor(IP_sample)))+geom_dotplot(binwidth=2, stackgroups=TRUE, method="histodot",stackdir="up",dotsize=1)+labs(x="Scale factor",  title="The distribution of IP samples' scale factor")
-    .multiplot(p1, p2, p3, cols = 1)
-    
+    new_sample <- c(IP_groupname)
     
   } else if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                       0)) {
@@ -135,30 +120,40 @@
     
     EnrichTable <- .SES_IPenrich (group_IP, Unit_Input, IP_groupname, se, len, n)
     refer_Enrichtable <- .SES_IPenrich (ref_group_IP, ref_unit_Input, reference_IP_groupname, se, len, n)
+    ##get the user enrich data
     Enrichtable <- rbind(EnrichTable, refer_Enrichtable)
-    dircs<-system.file("extdata", "experiment_data.Rdata", package="Trumpet")
-    load(dircs)
-    enrichtable <- rbind(enrichtable, Enrichtable )
-    
+    new_sample <- c(IP_groupname, reference_IP_groupname)
   }
-  old_sample <- rep("knowing data set",34)
-  new_sample <- c(IP_groupname, reference_IP_groupname)
+  dircs<-system.file("extdata", "experiment_data.Rdata", package="Trumpet")
+  load(dircs)
+  enrichtable <- experiment_data
+  old_sample <- rep("known data set",61)
   IP_sample <- c(old_sample, new_sample)
-  enrichtable  <- cbind(IP_sample,enrichtable)
+  enrichtable  <- cbind(old_sample,enrichtable)
   enrich_region <- enrichtable[,1:2]
   enrich_region <- as.data.frame(enrich_region)
-  p1 <- ggplot(enrich_region, aes(x=Enrichment_region,fill=factor(IP_sample)))+
-    geom_dotplot(binwidth=1.5, stackgroups=TRUE, method="histodot",stackdir="up",dotsize=1)+
-    labs(x="Percentage of enrichment region(%)",  title="The distribution of\n IP samples' enrichment region ")
+  
+  p1 <- ggplot(enrich_region, aes(x=Enrichment_region,fill=old_sample))+
+    geom_density(alpha = 0.6,adjust=1)+
+    geom_vline(data=Enrichtable, aes(xintercept=Enrichment_region,colour=new_sample), show.legend = TRUE, size=0.75)+
+    labs(x="Percentage of enrichment region(%)",  title="The distribution of\n IP samples' enrichment region ")+
+    theme(axis.title.x =element_text(size=14), axis.title.y=element_text(size=14),legend.text = element_text(size = 14),title=element_text(size=14))
+  
   signalread <- enrichtable[,c(1,3)]
   signalread <- as.data.frame(signalread)
-  p2 <- ggplot(signalread, aes(x=Signal_readcount,fill=factor(IP_sample)))+
-    geom_dotplot(binwidth=3, stackgroups=TRUE, method="histodot",stackdir="up",dotsize=1)+
-    labs(x="Percentage of signal reads count(%)",  title="The distribution of\n IP samples' signal reads count ")
+  p2 <- ggplot(signalread, aes(x=Signal_readcount,fill=old_sample))+
+    geom_density(alpha = 0.6,adjust=1)+
+    geom_vline(data=Enrichtable, aes(xintercept=Signal_readcount,colour=new_sample), show.legend = TRUE, size=0.5)+
+    labs(x="Percentage of signal reads count(%)",  title="The distribution of\n IP samples' signal reads count ")+
+    theme(axis.title.x =element_text(size=14), axis.title.y=element_text(size=14),legend.text = element_text(size = 14),title=element_text(size=14))
+  
   scalefactor <- enrichtable[, c(1,4)]
-  p3 <- ggplot(scalefactor, aes(x=Scale_factor,fill=factor(IP_sample)))+
-    geom_dotplot(binwidth=0.05, stackgroups=TRUE, method="histodot",stackdir="up",dotsize=1)+
-    labs(x="Scale factor",  title="The distribution of\n IP samples' scale factor")
-  .multiplot(p1, p2, p3, cols = 2)
+  p3 <- ggplot(scalefactor, aes(x=Scale_factor,fill=old_sample))+
+    geom_density(alpha = 0.6,adjust=1)+
+    geom_vline(data=Enrichtable, aes(xintercept=Scale_factor,colour=new_sample), show.legend = TRUE, size=0.5)+
+    labs(x="Scale factor",  title="The distribution of\n IP samples' scale factor")+
+    theme(axis.title.x =element_text(size=14), axis.title.y=element_text(size=14),legend.text = element_text(size = 14),title=element_text(size=14))
+   
+  .multiplot(p1, p2, p3, cols = 3)
   
 }
