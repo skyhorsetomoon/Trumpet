@@ -13,7 +13,7 @@ User can dowload this package from Github by using the following method: Input t
 > library(Trumpet)
 # Usage Example
 The following commands code will show how to use this package and generate the assessment report in HTML format:
-**Case one:** Input the samples to be evaluated in BAM files and generate the HTML report directly.
+**Case one**: Input the samples to be evaluated in BAM files and generate the HTML report directly.
 ### Input the bam file to assessment
 > f1=system.file("extdata", "IP1.bam", package="Trumpet")
 
