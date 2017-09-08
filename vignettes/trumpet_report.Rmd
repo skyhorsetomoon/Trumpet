@@ -12,15 +12,10 @@ output:
 -->
 
 # Installation
-```{r}
+```{r, echo=TRUE,eval=FALSE}
+install.packages("devtolls")
+library(devtools)
 devtools::install_github("skyhorsetomoon/Trumpet")
-```
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-```{r style,echo=FALSE,results='asis'}
-BiocStyle::markdown()
 ```
 
 # Introduction to Trumpet
