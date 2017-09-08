@@ -68,8 +68,7 @@ trumpet_report<-Trumpet_report(IP_BAM,
                                contrast_Input_BAM,
                                condition1="untreated",
                                condition2="treated",
-                               GENE_ANNO_GTF=GENE_ANNO_GTF
-                               )
+                               GENE_ANNO_GTF=GENE_ANNO_GTF)
 ```
 
 If **OUTPUT\_DIR=NA** by default, the generated result of assessment report will be saved in current path. Otherwise, you can set this parameter and the result will output the path you want.
