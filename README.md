@@ -16,21 +16,34 @@ The following commands code will show how to use this package and generate the a
 Case one: input the samples to be evaluated in BAM files and generate the HTML report directly.
 ### Input the bam file to assessment
 > f1=system.file("extdata", "IP1.bam", package="Trumpet")
+
 > f2=system.file("extdata", "IP2.bam", package="Trumpet")
+
 > f3=system.file("extdata", "IP3.bam", package="Trumpet")
+
 > f4=system.file("extdata", "IP4.bam", package="Trumpet")
+
 > IP_BAM=c(f1,f2,f3,f4)
+
 > f1=system.file("extdata", "Input1.bam", package="Trumpet")
+
 > f2=system.file("extdata", "Input2.bam", package="Trumpet")
+
 > f3=system.file("extdata", "Input3.bam", package="Trumpet")
+
 > Input_BAM=c(f1,f2,f3)
+
 > f1=system.file("extdata", "treated_IP1.bam", package="Trumpet")
+
 > contrast_IP_BAM=c(f1)
+
 > f2=system.file("extdata", "treated_Input1.bam", package="Trumpet")
+
 > contrast_Input_BAM=c(f2)
-# Input the annotation file
+
+### Input the annotation file
 > GENE_ANNO_GTF <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
-# Generate the assessment report to call the main function **Trumpet\_report.R**
+### Generate the assessment report to call the main function **Trumpet\_report.R**
 > trumpet_report <- Trumpet_report(IP_BAM,
                                Input_BAM,
                                contrast_IP_BAM,
@@ -39,5 +52,5 @@ Case one: input the samples to be evaluated in BAM files and generate the HTML r
                                condition2 = "treated",
                                GENE_ANNO_GTF = GENE_ANNO_GTF)
  Case two: If user's Linux version can not generate HTML report directly, they can call the command **get\_readscount2.R** firstly to get the reads count saved as **.Rdata** format. Then, call the main function **Trumpet\_report.R** and set some parameters in Windows system. The following code show how to generate the report.
- # Not to run the following commond
+ ### Not to run the following commond
  > 
