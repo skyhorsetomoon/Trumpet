@@ -104,7 +104,12 @@ The following commands code will show how to use this package and generate the a
 #### Generate the quality assessment report in HTML format
 
 > input_dir <- output_dir
+
 > Input_file <- paste(output_dir, output_filename, sep = "/")
+
+> INPUT_DIR <- Input_file 
+
+> trumpet_report <- Trumpet_report(get_read = TRUE, INPUT_DIR = INPUT_DIR, OUTPUT_DIR = input_dir)
 
  
  
