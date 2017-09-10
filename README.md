@@ -87,6 +87,7 @@ The following commands code will show how to use this package and generate the a
 > f2=system.file("extdata", "treated_Input1.bam", package="Trumpet")
 
 > contrast_Input_BAM=c(f2)
+
 #Input the annotation file 
  
 > GENE_ANNO_GTF <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
