@@ -153,25 +153,39 @@
     new1 <- .SES_Input(Group_Input, Unit_IP, Input_groupname,se,len,n)
     vline <- data.frame(ID = IP_groupname, pos = a)
     
-    newa <- as.data.frame(newa)
+    colnames(newa)<-c("pos","Sample","pro","ID")
     pos <- newa$pos
     pro <- newa$pro
-    variable <- newa$variable
-    p1 <- ggplot(data = newa, aes(x = pos, y = pro, colour = variable)) + 
-      geom_line() + facet_wrap(~ID) + geom_vline(aes(xintercept = pos), 
-                                                 vline) + theme(title = element_text(size = 10, color = "black")) + 
-      labs(x = "Percentage of bins", y = "Percentage of tags", title = paste("IP cumulative percentage enrichment within", 
-                                                                             condition1, "condition"))
+    Sample <- newa$Sample
+    p1 <- ggplot(data = newa, aes(x = pos, y = pro, colour = Sample )) + 
+      geom_line() +
+      facet_wrap(~ID) +
+      geom_vline(aes(xintercept = pos), vline1) +
+      theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
+            title = element_text(size = 12),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=10),
+            legend.title=element_text(size=10))+ 
+      labs(x = "Percentage of Bins", y = "Percentage of Reads",title = paste("Cumulative percentage enrichment of IP within" , condition1))
     
+    colnames(new1)<-c("pos","Sample","pro")
     new1 <- as.data.frame(new1)
     pos <- new1$pos
     pro <- new1$pro
-    variable <- new1$variable
-    p2 <- ggplot(data = new1, aes(x = pos, y = pro, colour = variable)) + 
-      geom_line() + theme(title = element_text(size = 10, color = "black")) + 
-      labs(x = "Percentage of bins", y = "Percentage of tags", title = paste("Input cumulative percentage enrichment within", 
-                                                                             condition1, "condition"))
+    Sample <- new1$Sample
+    p2 <- ggplot(data = new1, aes(x = pos, y = pro, colour = Sample)) + 
+      geom_line() +
+      theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
+            title = element_text(size = 12),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=10),
+            legend.title=element_text(size=10))+ 
+      labs(x = "Percentage of Bins", y = "Percentage of Reads",title = paste("Cumulative percentage enrichment of Input within" , condition1))
+    
     .multiplot(p1, p2, Enrich_table, cols = 1)
+    
   } else if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                       0)) {
     group_IP <- sa[, (seq_len(length(IP_groupname)))]
@@ -200,48 +214,74 @@
     new1 <- .SES_Input(group_Input, Unit_IP, Input_groupname,se,len,n)
     new2 <- .SES_Input(ref_group_Input, ref_unit_IP, reference_Input_groupname,se,len,n)
     vline1 <- data.frame(ID = IP_groupname, pos = a)
+    vline2 <- data.frame(ID = reference_IP_groupname, pos = b)
     
-    newa <- as.data.frame(newa)
+    colnames(newa)<-c("pos","Sample","pro","ID")
     pos <- newa$pos
     pro <- newa$pro
-    variable <- newa$variable
-    p1 <- ggplot(data = newa, aes(x = pos, y = pro, colour = variable)) + 
-      geom_line() + facet_wrap(~ID) + geom_vline(aes(xintercept = pos), 
-                                                 vline1) + theme(title = element_text(size = 10, color = "black")) + 
-      labs(x = "Percentage of bins", y = "Percentage of tags", title = paste("IP cumulative percentage enrichment within", 
-                                                                             condition1, "condition"))
+    Sample <- newa$Sample
+    p1 <- ggplot(data = newa, aes(x = pos, y = pro, colour = Sample )) + 
+      geom_line() +
+      facet_grid(ID~.) +
+      geom_vline(aes(xintercept = pos), vline1) +
+      theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+            title = element_text(size = 9),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=9),
+            legend.title=element_text(size=9))+ 
+      labs(x = "Percentage of Bins", y = "Percentage of Reads",title = paste("Cumulative percentage enrichment of IP within" , condition1))
     
+    colnames(new1)<-c("pos","Sample","pro")
     new1 <- as.data.frame(new1)
     pos <- new1$pos
     pro <- new1$pro
-    variable <- new1$variable
-    p2 <- ggplot(data = new1, aes(x = pos, y = pro, colour = variable)) + 
-      geom_line() + theme(title = element_text(size = 10, color = "black")) + 
-      labs(x = "Percentage of bins", y = "Percentage of tags", title = paste("Input cumulative percentage enrichment within", 
-                                                                             condition1, "condition"))
-    vline2 <- data.frame(ID = reference_IP_groupname, pos = b)
+    Sample <- new1$Sample
+    p2 <- ggplot(data = new1, aes(x = pos, y = pro, colour = Sample)) + 
+          geom_line() +
+          theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                title = element_text(size = 9),
+                legend.key.height=unit(0.5,'cm'),
+                legend.key.width=unit(0.25,'cm'),
+                legend.text=element_text(size=9),
+                legend.title=element_text(size=9))+ 
+          labs(x = "Percentage of Bins", y = "Percentage of Reads",title = paste("Cumulative percentage enrichment of Input within" , condition1))
     
+    
+    colnames(newb)<-c("pos","Sample","pro","ID")
     newb <- as.data.frame(newb)
     pos <- newb$pos
     pro <- newb$pro
-    variable <- newb$variable
-    p3 <- ggplot(data = newb, aes(x = pos, y = pro, colour = variable)) + 
-      geom_line() + facet_wrap(~ID) + geom_vline(aes(xintercept = pos), 
-                                                 vline2) + theme(title = element_text(size = 10, color = "black")) + 
-      labs(x = "Percentage of bins", y = "Percentage of tags", title = paste("refer_IP cumulative percentage enrichment within", 
-                                                                             condition2, "condition"))
-    
+    Sample <- newb$Sample
+    p3 <- ggplot(data = newb, aes(x = pos, y = pro, colour = Sample)) + 
+          geom_line() + 
+          facet_grid(ID~.) + 
+          geom_vline(aes(xintercept = pos), vline2) + 
+          theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                 title = element_text(size = 9),
+                 legend.key.height=unit(0.5,'cm'),
+                 legend.key.width=unit(0.25,'cm'),
+                 legend.text=element_text(size=9),
+                 legend.title=element_text(size=9))+ 
+          labs(x = "Percentage of Bins", y = "Percentage of Reads", title = paste("Cumulative percentage enrichment of refer_IP within", 
+                                                                              condition2))
+    colnames(new2)<-c("pos","Sample","pro")
     new2 <- as.data.frame(new2)
     pos <- new2$pos
     pro <- new2$pro
-    variable <- new2$variable
-    p4 <- ggplot(data = new2, aes(x = pos, y = pro, colour = variable)) + 
-      geom_line() + theme(title = element_text(size = 10, color = "black")) + 
-      labs(x = "Percentage of bins", y = "Percentage of tags", title = paste("refer_Input cumulative percentage enrichment within", 
-                                                                             condition2, "condition"))
-    .multiplot(p1, p3, cols = 1)
-    .multiplot(p2, p4, cols = 1)
-    tab <- list(Enrich_table, refer_Enrich_table)
+    Sample <- new2$Sample
+    p4 <- ggplot(data = new2, aes(x = pos, y = pro, colour = Sample)) + 
+          geom_line() + 
+          theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                title = element_text(size = 9),
+                legend.key.height=unit(0.5,'cm'),
+                legend.key.width=unit(0.25,'cm'),
+                legend.text=element_text(size=9),
+                legend.title=element_text(size=9))+ 
+          labs(x = "Percentage of bins", y = "Percentage of tags", title = paste("Cumulative percentage enrichment of refer_Input within", condition2))
+    .multiplot(p1, p3, cols = 2)
+    .multiplot(p2, p4, cols = 2)
+    tab <- rbind(Enrich_table, refer_Enrich_table)
     return(tab)
   }
 }
