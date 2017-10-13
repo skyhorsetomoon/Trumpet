@@ -136,24 +136,37 @@
   p1 <- ggplot(enrich_region, aes(x=Enrichment_region,fill=old_sample))+
     geom_density(alpha = 0.6,adjust=1)+
     geom_vline(data=Enrichtable, aes(xintercept=Enrichment_region,colour=new_sample), show.legend = TRUE, size=0.75)+
-    labs(x="Percentage of enrichment region(%)",  title="The distribution of\n IP samples' enrichment region ")+
-    theme(axis.title.x =element_text(size=14), axis.title.y=element_text(size=14),legend.text = element_text(size = 14),title=element_text(size=14))
+    theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+          title = element_text(size = 9),
+          legend.key.height=unit(0.5,'cm'),
+          legend.key.width=unit(0.5,'cm'),
+          legend.text=element_text(size=9),
+          legend.title=element_text(size=9))+
+    labs(x="Percentage of enrichment region(%)",  title="The distribution of IP samples' enrichment region ")
   
   signalread <- enrichtable[,c(1,3)]
   signalread <- as.data.frame(signalread)
   p2 <- ggplot(signalread, aes(x=Signal_readcount,fill=old_sample))+
     geom_density(alpha = 0.6,adjust=1)+
     geom_vline(data=Enrichtable, aes(xintercept=Signal_readcount,colour=new_sample), show.legend = TRUE, size=0.5)+
-    labs(x="Percentage of signal reads count(%)",  title="The distribution of\n IP samples' signal reads count ")+
-    theme(axis.title.x =element_text(size=14), axis.title.y=element_text(size=14),legend.text = element_text(size = 14),title=element_text(size=14))
-  
+    theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+          title = element_text(size = 9),
+          legend.key.height=unit(0.5,'cm'),
+          legend.key.width=unit(0.5,'cm'),
+          legend.text=element_text(size=9),
+          legend.title=element_text(size=9))+
+    labs(x="Percentage of signal reads count(%)",  title="The distribution of IP samples' signal reads count ")
   scalefactor <- enrichtable[, c(1,4)]
   p3 <- ggplot(scalefactor, aes(x=Scale_factor,fill=old_sample))+
     geom_density(alpha = 0.6,adjust=1)+
     geom_vline(data=Enrichtable, aes(xintercept=Scale_factor,colour=new_sample), show.legend = TRUE, size=0.5)+
-    labs(x="Scale factor",  title="The distribution of\n IP samples' scale factor")+
-    theme(axis.title.x =element_text(size=14), axis.title.y=element_text(size=14),legend.text = element_text(size = 14),title=element_text(size=14))
-   
+    theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+          title = element_text(size = 9),
+          legend.key.height=unit(0.5,'cm'),
+          legend.key.width=unit(0.5,'cm'),
+          legend.text=element_text(size=9),
+          legend.title=element_text(size=9))+
+    labs(x="Scale factor",  title="The distribution of IP samples' scale factor")
   .multiplot(p1, p2, p3, cols = 3)
   
 }
