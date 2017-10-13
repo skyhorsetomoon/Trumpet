@@ -86,16 +86,32 @@
     Mean <- m_com1$Mean
     SD <- m_com1$SD
     ID <- m_com1$ID
-    lp1 <- ggplot(m_com1, aes(Mean, SD, colour = ID)) + geom_smooth(aes(group = ID), 
-                                                                    span = 0.5) + geom_point(alpha = I(1/200), size = 0.002) + 
-      theme(title = element_text(size = 14, color = "black")) + labs(title = paste(" IP group's Mean-SD relationship within two condition"))
+    lp1 <- ggplot(m_com1, aes(Mean, SD, colour = ID)) + 
+           geom_smooth(aes(group = ID), span = 0.5) + 
+           geom_point(alpha = I(1/200), size = 0.002) + 
+           theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                  title = element_text(size = 9),
+                  legend.key.height=unit(0.5,'cm'),
+                  legend.key.width=unit(0.5,'cm'),
+                  legend.text=element_text(size=9),
+                  legend.title=element_text(size=9))+
+    labs(x = "log10(Mean)", y = "log10(SD)", title = paste(" IP samples' Mean-SD relationship between\n", condition1, "and", condition2))
+    
     m_com2 <- as.data.frame(m_com2)
     Mean <- m_com2$Mean
     SD <- m_com2$SD
     ID <- m_com2$ID
-    lp2 <- ggplot(m_com2, aes(Mean, SD, colour = ID)) + geom_smooth(aes(group = ID), 
-                                                                    span = 0.5) + geom_point(alpha = I(1/200), size = 0.002) + 
-      theme(title = element_text(size = 14, color = "black")) + labs(title = paste("Input group's Mean-SD relationship within two condition"))
+    lp2 <- ggplot(m_com2, aes(Mean, SD, colour = ID)) + 
+      geom_smooth(aes(group = ID), span = 0.5) + 
+      geom_point(alpha = I(1/200), size = 0.002) + 
+      labs(x = "log10(Mean)", y = "log10(SD)", title = paste(" Input samples' Mean-SD relationship between", condition1, "and", condition2))+
+      theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+            title = element_text(size = 9),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.5,'cm'),
+            legend.text=element_text(size=9),
+            legend.title=element_text(size=9))
+    
     .multiplot(lp1, lp2, cols = 2)
   }
 }
