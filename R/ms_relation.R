@@ -65,22 +65,41 @@
     comb <- .ms(Group_Input, Group_IP, Input_groupname, "unified_IP", 
                paste(condition1, "condition"),se,ind,len,n)
     coma <- as.data.frame(coma)
+    colnames(coma) <- c("Mean","SD","Sample","Condition")
     Mean <- coma$Mean
     SD <- coma$SD
-    ID <- coma$ID
-    m_p1 <- ggplot(coma, aes(Mean, SD, colour = ID)) + facet_grid(~Condition) + 
-      geom_smooth(aes(group = ID), span = 0.5) + geom_point(alpha = I(1/150), 
-                                                            size = 0.2) + theme(title = element_text(size = 12, color = "black")) + 
-      labs(title = "Mean-SD relationship within IP group under one condition")
+    Sample <- coma$Sample
+    m_p1 <- ggplot(coma, aes(Mean, SD, colour = Sample)) + 
+            facet_grid(~Condition) + 
+            geom_smooth(aes(group = Sample), span = 0.5) + 
+            geom_point(alpha = I(1/150), size = 0.2) + 
+            theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
+                  title = element_text(size = 12),
+                  legend.key.height=unit(0.5,'cm'),
+                  legend.key.width=unit(0.5,'cm'),
+                  legend.text=element_text(size=10),
+                  legend.title=element_text(size=10))+
+      labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within IP samles compared unified Input")
+            
     comb <- as.data.frame(comb)
+    colnames(comb) <- c("Mean","SD","Sample","Condition")
     Mean <- comb$Mean
     SD <- comb$SD
-    ID <- comb$ID
-    m_p2 <- ggplot(comb, aes(Mean, SD, colour = ID)) + facet_grid(~Condition) + 
-      geom_smooth(aes(group = ID), span = 0.5) + geom_point(alpha = I(1/150), 
-                                                            size = 0.2) + theme(title = element_text(size = 12, color = "black")) + 
-      labs(title = "Mean-SD relationship within Input group under one condition")
+    Sample<- comb$Sample
+    m_p2 <- ggplot(comb, aes(Mean, SD, colour = Sample)) + 
+            facet_grid(~Condition) + 
+            geom_smooth(aes(group = Sample), span = 0.5) + 
+            geom_point(alpha = I(1/150), size = 0.2) + 
+            theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
+                   title = element_text(size = 12),
+                   legend.key.height=unit(0.5,'cm'),
+                   legend.key.width=unit(0.5,'cm'),
+                   legend.text=element_text(size=10),
+                   legend.title=element_text(size=10))+
+      labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within Input samles compared unified IP")
+            
     .multiplot(m_p1, m_p2, cols = 1)
+    
   } else if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                       0)) {
     group_IP <- sa[, (seq_len(length(IP_groupname)))]
@@ -103,23 +122,42 @@
                paste(condition1, "condition"),se,ind,len,n)
     com4 <- .ms(ref_group_Input, ref_group_IP, reference_Input_groupname, 
                "unified_IP", paste(condition2, "condition"),se,ind,len,n)
+    
     comb <- rbind(com3, com4)
     comb <- as.data.frame(comb)
+    
+    colnames(coma) <- c("Mean","SD","Sample","Condition")
     Mean <- coma$Mean
     SD <- coma$SD
-    ID <- coma$ID
-    m_p1 <- ggplot(coma, aes(Mean, SD, colour = ID)) + facet_grid(~Condition) + 
-      geom_smooth(aes(group = ID), span = 0.5) + geom_point(alpha = I(1/150), 
-                                                            size = 0.2) + theme(title = element_text(size = 12, color = "black")) + 
-      labs(title = "Mean-SD relationship within IP group under two condition")
+    Sample <- coma$Sample
+    m_p1 <- ggplot(coma, aes(Mean, SD, colour = Sample))+ 
+            geom_smooth(aes(group = Sample), span = 0.5) +
+            facet_grid(~Condition) + 
+            geom_smooth(aes(group = Sample), span = 0.5) + 
+            geom_point(alpha = I(1/150), size = 0.2) + 
+            theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                  title = element_text(size = 9),
+                  legend.key.height=unit(0.5,'cm'),
+                  legend.key.width=unit(0.5,'cm'),
+                  legend.text=element_text(size=9),
+                  legend.title=element_text(size=9))+
+          labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within IP samles compared unified Input")
+      
+    colnames(comb) <- c("Mean","SD","Sample","Condition")
     Mean <- comb$Mean
     SD <- comb$SD
-    ID <- comb$ID
-    m_p2 <- ggplot(comb, aes(Mean, SD, colour = ID)) + facet_grid(~Condition) + 
-      geom_smooth(aes(group = ID), span = 0.5) + geom_point(alpha = I(1/150), 
-                                                            size = 0.2) + theme(title = element_text(size = 12, color = "black")) + 
-      labs(title = "Mean-SD relationship within Input group under two condition")
+    Sample <- comb$Sample
+    m_p2 <- ggplot(comb, aes(Mean, SD, colour = Sample)) + 
+            facet_grid(~Condition) + 
+            geom_smooth(aes(group = Sample), span = 0.5) + 
+            geom_point(alpha = I(1/150), size = 0.2) +
+            theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                  title = element_text(size = 9),
+                  legend.key.height=unit(0.5,'cm'),
+                  legend.key.width=unit(0.5,'cm'),
+                  legend.text=element_text(size=9),
+                  legend.title=element_text(size=9))+
+      labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within Input samles compared unified IP")
     .multiplot(m_p1, m_p2, cols = 2)
   }
 }
-
