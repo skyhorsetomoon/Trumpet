@@ -114,22 +114,43 @@
     com2 <- melt(data = com2, id = "fold", measure.vars = c(2:(ncol(Group_Input) + 
                                                                  1)))
     com1 <- as.data.frame(com1)
+    colnames(com1) <- c("fold","Sample","value")
     fold <- com1$fold
     value <- com1$value
-    variable <- com1$variable
-    c_p1 <- ggplot(data = com1, aes(x = fold, y = value, colour = variable)) + 
-      geom_point(aes(shape = variable)) + geom_line() + ylab("Percentgae of bins") + 
-      xlab("foldchange") + labs(title = paste("IP's foldchange under unified Input within", 
-                                              condition1, "condition"))
+    Sample <- com1$Sample
+    c_p1 <- ggplot(data = com1, aes(x = fold, y = value, colour = Sample)) + 
+            geom_point(aes(shape = Sample)) + 
+            geom_line(size=1) + 
+            theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
+                  title = element_text(size = 12),
+                  legend.position = c(1,1),
+                  legend.justification = c(1,1),
+                  legend.key.height=unit(0.5,'cm'),
+                  legend.key.width=unit(0.25,'cm'),
+                  legend.text=element_text(size=10),
+                  legend.title=element_text(size=10))+
+            labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with unified Input under", condition1))
+    
     com2 <- as.data.frame(com2)
+    colnames(com2) <- c("fold","Sample","value")
     fold <- com2$fold
     value <- com2$value
-    variable <- com2$variable
-    c_p2 <- ggplot(data = com2, aes(x = fold, y = value, colour = variable)) + 
-      geom_point(aes(shape = variable)) + geom_line() + ylab("Percentgae of bins") + 
-      xlab("foldchange") + labs(title = paste("unified IP's foldchange under different Input within ", 
-                                              condition1, "condition"))
+    Sample <- com2$Sample
+    c_p2 <- ggplot(data = com2, aes(x = fold, y = value, colour = Sample)) + 
+      geom_point(aes(shape = Sample)) + 
+      geom_line(size=1) + 
+      theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
+            title = element_text(size = 12),
+            legend.position = c(1,1),
+            legend.justification = c(1,1),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=10),
+            legend.title=element_text(size=10))+
+      labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with unified IP under", condition1))
+    
     .multiplot(c_p1, c_p2, cols = 1)
+    
   } else if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                       0)) {
     group_IP <- sa[, (seq_len(length(IP_groupname)))]
@@ -174,39 +195,80 @@
     refer_percent2 <- refer_out2[[2]]
     refer_com2 <- melt(data = refer_com2, id = "fold", measure.vars = c(2:(ncol(ref_group_Input) + 
                                                                              1)))
+    
     com <- as.data.frame(com)
+    colnames(com) <- c("fold","Sample","value")
     fold <- com$fold
     value <- com$value
-    variable <- com$variable
-    c_p1 <- ggplot(data = com, aes(x = fold, y = value, colour = variable)) + 
-      geom_point(aes(shape = variable)) + geom_line() + ylab("Percentgae of bins") + 
-      xlab("foldchange") + labs(title = paste("IP's foldchange under unified Input within", 
-                                              condition1, "condition"))
+    Sample <- com$Sample
+    c_p1 <- ggplot(data = com, aes(x = fold, y = value, colour = Sample)) + 
+            geom_point(aes(shape = Sample)) + 
+            geom_line(size=1) + 
+            theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                  title = element_text(size = 9),
+                  legend.position = c(1,1),
+                  legend.justification = c(1,1),
+                  legend.key.height=unit(0.5,'cm'),
+                  legend.key.width=unit(0.25,'cm'),
+                  legend.text=element_text(size=9),
+                  legend.title=element_text(size=9))+
+           labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with unified Input under", condition1))
+    
     com2 <- as.data.frame(com2)
+    colnames(com2) <- c("fold","Sample","value")
     fold <- com2$fold
     value <- com2$value
-    variable <- com2$variable
-    c_p2 <- ggplot(data = com2, aes(x = fold, y = value, colour = variable)) + 
-      geom_point(aes(shape = variable)) + geom_line() + ylab("Percentgae of bins") + 
-      xlab("foldchange") + labs(title = paste("unified IP's foldchange under different Input within ", 
-                                              condition1, "condition"))
+    Sample <- com2$Sample
+    c_p2 <- ggplot(data = com2, aes(x = fold, y = value, colour = Sample)) + 
+            geom_point(aes(shape = Sample)) + 
+            geom_line(size=1) + 
+            theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                  title = element_text(size = 9),
+                  legend.position = c(1,1),
+                  legend.justification = c(1,1),
+                   legend.key.height=unit(0.5,'cm'),
+                   legend.key.width=unit(0.25,'cm'),
+                   legend.text=element_text(size=9),
+                   legend.title=element_text(size=9))+
+            labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with unified IP under", condition1))
+    
+    
     refer_com1 <- as.data.frame(refer_com1)
+    colnames(refer_com1) <- c("fold","Sample","value")
     fold <- refer_com1$fold
     value <- refer_com1$value
-    variable <- refer_com1$variable
-    refer_p1 <- ggplot(data = refer_com1, aes(x = fold, y = value, 
-                                              colour = variable)) + geom_point(aes(shape = variable)) + geom_line() + 
-      ylab("Percentgae of bins") + xlab("foldchange") + labs(title = paste("refer_IP's foldchange under unified Input within", 
-                                                                           condition2, "condition"))
+    Sample <- refer_com1$Sample
+    refer_p1 <- ggplot(data = refer_com1, aes(x = fold, y = value, colour = Sample)) +
+                geom_point(aes(shape =  Sample )) + 
+                geom_line(size=1) + 
+                theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                      title = element_text(size = 9),
+                      legend.position = c(1,1),
+                      legend.justification = c(1,1),
+                      legend.key.height=unit(0.5,'cm'),
+                      legend.key.width=unit(0.25,'cm'),
+                      legend.text=element_text(size=9),
+                      legend.title=element_text(size=9))+
+      labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with unified refer_Input under", condition2))
+    
     refer_com2 <- as.data.frame(refer_com2)
+    colnames(refer_com2) <- c("fold","Sample","value")
     fold <- refer_com2$fold
     value <- refer_com2$value
-    variable <- refer_com2$variable
-    refer_p2 <- ggplot(refer_com2, aes(x = fold, y = value, colour = variable)) + 
-      geom_point(aes(shape = variable)) + geom_line() + ylab("Percentgae of bins") + 
-      xlab("foldchange") + labs(title = paste("unified refer_IP's foldchange under different Input within", 
-                                              condition2, "condition"))
+    Sample <- refer_com2$Sample
+    refer_p2 <- ggplot(refer_com2, aes(x = fold, y = value, colour = Sample)) + 
+                geom_point(aes(shape = Sample)) +
+                geom_line(size=1) + 
+                theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+                      title = element_text(size = 9),
+                      legend.position = c(1,1),
+                      legend.justification = c(1,1),
+                      legend.key.height=unit(0.5,'cm'),
+                      legend.key.width=unit(0.25,'cm'),
+                      legend.text=element_text(size=9),
+                      legend.title=element_text(size=9))+
+                labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with unified refer_IP under", condition2))
+    
     .multiplot(c_p1, c_p2, refer_p1, refer_p2, cols = 2)
   }
 }
-
