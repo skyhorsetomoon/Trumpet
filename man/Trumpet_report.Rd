@@ -18,10 +18,7 @@ Trumpet_report(IP_BAM,
                sample_size=NA,
                GENOME = NA,
                UCSC_TABLE_NAME = "knownGene",
-               get_read=FALSE,
-               INPUT_DIR=NA,
-               OUTPUT_DIR=NA
-	      )
+               OUTPUT_DIR=NA)
 }
 \arguments{
   \item{IP_BAM}{
@@ -59,13 +56,6 @@ a string,such as "hg19" or "mm10", which specifies the genome assembly used. If 
 a string, which specifies the gene annotation used from UCSC, default: "knownGene". Please use function: supportedUCSCtables() to check available tables.
 	Some tables may not be available for all genomes, and the "refGene" table does not work correctly due to multiple occuences of the same transcript on the same chromosome.
 }
-  \item{get_read}{
-A logical variable, indicating whether to apply the function of get_readscount2 firstly. If it is TRUE, the commond of Trumpet_report will call the 'Trumpet_report2.Rmd' file and generate the quality assessment report in HTML format. If it is FALSE, this function will call the 'Trumpet_report.Rmd' file and generate the quality assessment report in HTML format. 
-}
-  \item{INPUT_DIR}{
-A string, which specifies the directory of the "Input_Infor.Rdata" file, default: INPUT_DIR=NA. If user have the  "Input_Infor.Rdata" file getted from \code{get_readscount2} function, they shoul give the path of the file to INPUT_DIR.
-After setting this parameter, user should \code{load(INPUT_DIR)} and then call the main function of \code{Trumpet_report}.
-}
   \item{OUTPUT_DIR}{
 A string, which specifies the output directory, default: OUTPUT_DIR=NA,the output result will save in the current directory. Otherwise, Trumpet will output the assessment result to the directory of user specified.
 }
@@ -82,27 +72,31 @@ Teng Zhang <2573552960@qq.com>
 }
 \examples{
 # Input the bam file to assessment
-f1=system.file("extdata", "IP1.bam", package="Trumpet")
-f2=system.file("extdata", "IP2.bam", package="Trumpet")
-f3=system.file("extdata", "IP3.bam", package="Trumpet")
-f4=system.file("extdata", "IP4.bam", package="Trumpet")
-IP_BAM=c(f1,f2,f3,f4)
-f1=system.file("extdata", "Input1.bam", package="Trumpet")
-f2=system.file("extdata", "Input2.bam", package="Trumpet")
-f3=system.file("extdata", "Input3.bam", package="Trumpet")
-Input_BAM=c(f1,f2,f3)
-f1=system.file("extdata", "treated_IP1.bam", package="Trumpet")
-contrast_IP_BAM=c(f1)
-f2=system.file("extdata", "treated_Input1.bam", package="Trumpet")
-contrast_Input_BAM=c(f2)
-GENE_ANNO_GTF <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
+f1 <- system.file("extdata", "IP1.bam", package="Trumpet")
+f2 <- system.file("extdata", "IP2.bam", package="Trumpet")
+f3 <- system.file("extdata", "IP3.bam", package="Trumpet")
+f4 <- system.file("extdata", "IP4.bam", package="Trumpet")
+f5 <- system.file("extdata", "Input1.bam", package="Trumpet")
+f6 <- system.file("extdata", "Input2.bam", package="Trumpet")
+f7 <- system.file("extdata", "Input3.bam", package="Trumpet")
+f8 <- system.file("extdata", "treated_IP1.bam", package="Trumpet")
+f9 <- system.file("extdata", "treated_Input1.bam", package="Trumpet")
+ip_bam <- c(f1,f2,f3,f4)
+input_bam <- c(f5,f6,f7)
+contrast_ip_bam <- c(f8)
+contrast_input_bam <- c(f9)
+# Give the annotation file
+gtf <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
 # Generate the assessment report
-trumpet_report <- Trumpet_report(IP_BAM,
-                               Input_BAM,
-                               contrast_IP_BAM,
-                               contrast_Input_BAM,
-                               condition1 = "untreated",
-                               condition2 = "treated",
-                               GENE_ANNO_GTF = GENE_ANNO_GTF
-			                          )
+# An HTML report will be generated under current working directory
+trumpet_report <- Trumpet_report(IP_BAM = ip_bam,
+                                   Input_BAM = input_bam,
+                                   contrast_IP_BAM = contrast_ip_bam,
+                                   contrast_Input_BAM = contrast_input_bam,
+                                   condition1 = "untreated",
+                                   condition2 = "treated",
+                                   GENE_ANNO_GTF = gtf)
+                               
+# Browse the report                               
+browseURL("Trumpet_report.html")                         
 }
