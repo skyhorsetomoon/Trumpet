@@ -49,26 +49,26 @@
     Group_Input <- as.matrix(Group_Input)
     if (length(IP_groupname) > 2 & length(Input_groupname) > 2) {
       hct_IP <- .hc(Group_IP, IP_groupname, se, len, n)
-      hcA <- hclust(dist(hct_IP), method = "complete")
+      hcA <- hclust(dist(hct_IP, method = "euclidean"), method = "complete")
       hct_Input <- .hc(Group_Input, Input_groupname, se, len, n)
-      hcB <- hclust(dist(hct_Input), method = "complete")
-      p1 <- plot(hcA, hang = -1, main = "IP group cluster")
-      p2 <- plot(hcB, hang = -1, main = "Input group cluster")
-      .multiplot(p1, p2, cols = 1)
+      hcB <- hclust(dist(hct_Input, method = "euclidean"), method = "complete")
+      nf <- layout(matrix(c(1,2),1,2,byrow = TRUE), c(1,1), c(1,1), TRUE)
+      par(mar = c(5,5,1,1))
+      plot(hcA, hang = -1, main = "IP group cluster")
+      par(mar = c(5,5,1,1))
+      plot(hcB, hang = -1, main = "Input group cluster")
     }
     if (length(IP_groupname) > 2 & length(Input_groupname) <= 2) {
       hct_IP <- .hc(Group_IP, IP_groupname, se, len, n)
       hcA <- hclust(dist(hct_IP), method = "complete")
       print("The number of Input_BAM are less three, so you can't get the Input group cluster")
-      p <- plot(hcA, hang = -1, main = "IP group cluster")
-      .multiplot(p, cols = 1)
+      plot(hcA, hang = -1, main = "IP group cluster")
     }
     if (length(IP_groupname) <= 2 & length(Input_groupname) > 2) {
       hct_Input <- .hc(Group_Input, Input_groupname, se, len, n)
       hcB <- hclust(dist(hct_Input), method = "complete")
       print("The number of IP_BAM are less three, so you can't get the IP group cluster")
-      p <- plot(hcB, hang = -1, main = "Input group cluster")
-      .multiplot(p, cols = 1)
+      plot(hcB, hang = -1, main = "Input group cluster")
     }
   } else if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                       0)) {
@@ -118,11 +118,13 @@
                2)) {
       hctA <- .hc(IP_group, group_IPname, se, len, n)
       hcA <- hclust(dist(hctA, method = "euclidean"), method = "complete")
-      p1 <- plot(hcA, hang = -1, main = "IP group cluster")
       hctB <- .hc(Input_group, group_Inputname, se, len, n)
-      hcB <- hclust(dist(hctB), method = "complete")
-      p2 <- plot(hcB, hang = -1, main = "Input group cluster")
-      .multiplot(p1, p2, cols = 1)
+      hcB <- hclust(dist(hctB, method = "euclidean"), method = "complete")
+      nf <- layout(matrix(c(1,2),1,2,byrow = TRUE), c(1,1), c(1,1), TRUE)
+      par(mar = c(5,5,1,1))
+      plot(hcA, hang = -1, main = "IP group cluster")
+      par(mar = c(5,5,1,1))
+      plot(hcB, hang = -1, main = "Input group cluster")
     }
     
   }
