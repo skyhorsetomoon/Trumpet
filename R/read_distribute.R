@@ -80,39 +80,51 @@
     df2 <- rbind(Group_Input, unified_IP)
     df2 <- cbind(df2, ID2)
     df2 <- as.data.frame(df2)
-    pos <- df1$pos
+    
+    colnames(df1)<-c("pos","Quantile","value","ID1")
+    pos <- df1$posample
     value <- df1$value
-    variable <- df1$variable
-    p1 <- ggplot(df1, aes(pos, value, colour = variable)) + geom_line() + 
-      facet_wrap(~ID1) + theme(title = element_text(size = 10, color = "black")) + 
-      labs(title = paste("IP and Unified Input Reads Coverage within", 
-                         condition1, "condition")) + ylab("normalized readscount") + 
+    Quantile <- df1$Quantile
+    p1 <- ggplot(df1, aes(pos, value, colour = Quantile)) + 
+      geom_line() + 
+      facet_wrap(~ID1) +  
       annotate("text", x = 0.5, y = -0.4, label = "5'UTR", size = 4) + 
       annotate("text", x = 1.5, y = -0.4, label = "CDS", size = 4) + 
       annotate("text", x = 2.5, y = -0.4, label = "3'UTR", size = 4) + 
-      geom_vline(xintercept = 1:2, linetype = "dotted") + annotate("rect", 
-                                                                   xmin = 0.025, xmax = 0.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, 
-                                                                   colour = "black") + annotate("rect", xmin = 1.025, xmax = 1.975, 
-                                                                                                ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
-      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, 
-               alpha = 0.99, colour = "black") + xlim(0, 3) + theme(legend.position = "right")
+      geom_vline(xintercept = 1:2, linetype = "dotted") + 
+      annotate("rect", xmin = 0.025, xmax = 0.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      annotate("rect", xmin = 1.025, xmax = 1.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
+            title = element_text(size = 12),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=10),
+            legend.title=element_text(size=10))+
+      labs(title = paste("IP and Unified Input Reads Coverage within", condition1), x = "mRNA", y = "Normalized Reads Density")
     
+    colnames(df2)<-c("pos","Quantile","value","ID2")
     pos <- df2$pos
     value <- df2$value
-    variable <- df2$variable
-    p2 <- ggplot(df2, aes(pos, value, colour = variable)) + geom_line() + 
-      facet_wrap(~ID2) + theme(title = element_text(size = 10, color = "black")) + 
-      labs(title = paste("Input and Unified IP Reads Coverage within", 
-                         condition1, "condition")) + ylab("normalized readscount") + 
+    Quantile <- df2$Quantile
+    p2 <- ggplot(df2, aes(pos, value, colour = Quantile)) +
+      geom_line() + 
+      facet_wrap(~ID2) +  
       annotate("text", x = 0.5, y = -0.4, label = "5'UTR", size = 4) + 
       annotate("text", x = 1.5, y = -0.4, label = "CDS", size = 4) + 
       annotate("text", x = 2.5, y = -0.4, label = "3'UTR", size = 4) + 
-      geom_vline(xintercept = 1:2, linetype = "dotted") + annotate("rect", 
-                                                                   xmin = 0.025, xmax = 0.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, 
-                                                                   colour = "black") + annotate("rect", xmin = 1.025, xmax = 1.975, 
-                                                                                                ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
-      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, 
-               alpha = 0.99, colour = "black") + xlim(0, 3) + theme(legend.position = "right")
+      geom_vline(xintercept = 1:2, linetype = "dotted") +
+      annotate("rect", xmin = 0.025, xmax = 0.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") +
+      annotate("rect", xmin = 1.025, xmax = 1.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12), 
+            title = element_text(size = 12),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=10),
+            legend.title=element_text(size=10))+
+      labs(title = paste("Input and Unified IP Reads Coverage within",condition1), x = "mRNA", y = "Normalized Reads Density") 
+    
     .multiplot(p1, p2, cols = 1)
   } else if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                       0)) {
@@ -182,73 +194,94 @@
     Df2 <- cbind(Df2, refer_ID2)
     Df2 <- as.data.frame(Df2)
     
-    pos <- df1$pos
+    colnames(df1)<-c("pos","Quantile","value","ID1")
+    pos <- df1$posample
     value <- df1$value
-    variable <- df1$variable
-    p1 <- ggplot(df1, aes(pos, value, colour = variable)) + geom_line() + 
-      facet_wrap(~ID1) + theme(title = element_text(size = 10, color = "black")) + 
-      labs(title = paste("IP and Unified Input Reads Coverage within", 
-                         condition1, "condition")) + ylab("normalized readscount") + 
-      annotate("text", x = 0.5, y = -0.4, label = "5'UTR", size = 4) + 
-      annotate("text", x = 1.5, y = -0.4, label = "CDS", size = 4) + 
-      annotate("text", x = 2.5, y = -0.4, label = "3'UTR", size = 4) + 
-      geom_vline(xintercept = 1:2, linetype = "dotted") + annotate("rect", 
-                                                                   xmin = 0.025, xmax = 0.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, 
-                                                                   colour = "black") + annotate("rect", xmin = 1.025, xmax = 1.975, 
-                                                                                                ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
-      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, 
-               alpha = 0.99, colour = "black") + xlim(0, 3) + theme(legend.position = "right")
+    Quantile <- df1$Quantile
+    p1 <- ggplot(df1, aes(pos, value, colour = Quantile)) + 
+      geom_line() + 
+      facet_grid(ID1~.) +  
+      annotate("text", x = 0.5, y = -0.6, label = "5'UTR", size = 3) + 
+      annotate("text", x = 1.5, y = -0.6, label = "CDS", size = 3) + 
+      annotate("text", x = 2.5, y = -0.6, label = "3'UTR", size = 3) + 
+      geom_vline(xintercept = 1:2, linetype = "dotted") + 
+      annotate("rect", xmin = 0.025, xmax = 0.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      annotate("rect", xmin = 1.025, xmax = 1.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+            title = element_text(size = 9),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=9),
+            legend.title=element_text(size=9))+
+      labs(title = paste("IP and Unified Input Reads Coverage within", condition1), x = "mRNA", y = "Normalized Reads Density") 
     
+    colnames(df2)<-c("pos","Quantile","value","ID2")
     pos <- df2$pos
     value <- df2$value
-    variable <- df2$variable
-    p2 <- ggplot(df2, aes(pos, value, colour = variable)) + geom_line() + 
-      facet_wrap(~ID2) + theme(title = element_text(size = 10, color = "black")) + 
-      labs(title = paste("Input and Unified IP Reads Coverage within", 
-                         condition1, "condition")) + ylab("normalized readscount") + 
-      annotate("text", x = 0.5, y = -0.4, label = "5'UTR", size = 4) + 
-      annotate("text", x = 1.5, y = -0.4, label = "CDS", size = 4) + 
-      annotate("text", x = 2.5, y = -0.4, label = "3'UTR", size = 4) + 
-      geom_vline(xintercept = 1:2, linetype = "dotted") + annotate("rect", 
-                                                                   xmin = 0.025, xmax = 0.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, 
-                                                                   colour = "black") + annotate("rect", xmin = 1.025, xmax = 1.975, 
-                                                                                                ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
-      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, 
-               alpha = 0.99, colour = "black") + xlim(0, 3) + theme(legend.position = "right")
+    Quantile <- df2$Quantile
+    p2 <- ggplot(df2, aes(pos, value, colour = Quantile)) +
+      geom_line() + 
+      facet_grid(ID2~.) +  
+      annotate("text", x = 0.5, y = -0.6, label = "5'UTR", size = 3) + 
+      annotate("text", x = 1.5, y = -0.6, label = "CDS", size = 3) + 
+      annotate("text", x = 2.5, y = -0.6, label = "3'UTR", size = 3) + 
+      geom_vline(xintercept = 1:2, linetype = "dotted") +
+      annotate("rect", xmin = 0.025, xmax = 0.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") +
+      annotate("rect", xmin = 1.025, xmax = 1.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+            title = element_text(size = 9),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=9),
+            legend.title=element_text(size=9))+
+      labs(title = paste("Input and Unified IP Reads Coverage within",condition1), x = "mRNA", y = "Normalized Reads Density") 
     
+    colnames(Df1)<-c("pos","Quantile","value","refer_ID1")
     pos <- Df1$pos
     value <- Df1$value
-    variable <- Df1$variable
-    p3 <- ggplot(Df1, aes(pos, value, colour = variable)) + geom_line() + 
-      facet_wrap(~refer_ID1) + theme(title = element_text(size = 10, 
-                                                          color = "black")) + labs(title = paste("refer_IP and Unified Input Reads Coverage within", 
-                                                                                                 condition2, "condition")) + ylab("normalized readscount") + 
-      annotate("text", x = 0.5, y = -0.4, label = "5'UTR", size = 4) + 
-      annotate("text", x = 1.5, y = -0.4, label = "CDS", size = 4) + 
-      annotate("text", x = 2.5, y = -0.4, label = "3'UTR", size = 4) + 
-      geom_vline(xintercept = 1:2, linetype = "dotted") + annotate("rect", 
-                                                                   xmin = 0.025, xmax = 0.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, 
-                                                                   colour = "black") + annotate("rect", xmin = 1.025, xmax = 1.975, 
-                                                                                                ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
-      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, 
-               alpha = 0.99, colour = "black") + xlim(0, 3) + theme(legend.position = "right")
+    Quantile <- Df1$Quantile
+    p3 <- ggplot(Df1, aes(pos, value, colour = Quantile)) + 
+      geom_line() + 
+      facet_grid(refer_ID1~.) + 
+      annotate("text", x = 0.5, y = -0.6, label = "5'UTR", size = 3) + 
+      annotate("text", x = 1.5, y = -0.6, label = "CDS", size = 3) + 
+      annotate("text", x = 2.5, y = -0.6, label = "3'UTR", size = 3) + 
+      geom_vline(xintercept = 1:2, linetype = "dotted") +
+      annotate("rect", xmin = 0.025, xmax = 0.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") +
+      annotate("rect", xmin = 1.025, xmax = 1.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") +
+      theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9), 
+            title = element_text(size = 9),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=9),
+            legend.title=element_text(size=9))+
+      labs(title = paste("refer_IP and Unified Input Reads Coverage within", condition2),x = "mRNA", y = "Normalized Reads Density") 
     
+    colnames(Df2)<-c("pos","Quantile","value","refer_ID2")
     pos <- Df2$pos
     value <- Df2$value
-    variable <- Df2$variable
-    p4 <- ggplot(Df2, aes(pos, value, colour = variable)) + geom_line() + 
-      facet_wrap(~refer_ID2) + theme(title = element_text(size = 10, 
-                                                          color = "black")) + labs(title = paste("refer_Input and Unified IP Reads Coverage within", 
-                                                                                                 condition2, "condition")) + ylab("normalized readscount") + 
-      annotate("text", x = 0.5, y = -0.4, label = "5'UTR", size = 4) + 
-      annotate("text", x = 1.5, y = -0.4, label = "CDS", size = 4) + 
-      annotate("text", x = 2.5, y = -0.4, label = "3'UTR", size = 4) + 
-      geom_vline(xintercept = 1:2, linetype = "dotted") + annotate("rect", 
-                                                                   xmin = 0.025, xmax = 0.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, 
-                                                                   colour = "black") + annotate("rect", xmin = 1.025, xmax = 1.975, 
-                                                                                                ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
-      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, 
-               alpha = 0.99, colour = "black") + xlim(0, 3) + theme(legend.position = "right")
+    Quantile <- Df2$Quantile
+    p4 <- ggplot(Df2, aes(pos, value, colour = Quantile)) +
+      geom_line() + 
+      facet_grid(refer_ID2~.) +
+      annotate("text", x = 0.5, y = -0.6, label = "5'UTR", size = 3) + 
+      annotate("text", x = 1.5, y = -0.6, label = "CDS", size = 3) + 
+      annotate("text", x = 2.5, y = -0.6, label = "3'UTR", size = 3) + 
+      geom_vline(xintercept = 1:2, linetype = "dotted") + 
+      annotate("rect", xmin = 0.025, xmax = 0.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      annotate("rect", xmin = 1.025, xmax = 1.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
+      theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
+            title = element_text(size = 9),
+            legend.key.height=unit(0.5,'cm'),
+            legend.key.width=unit(0.25,'cm'),
+            legend.text=element_text(size=9),
+            legend.title=element_text(size=9))+
+      labs(title = paste("refer_Input and Unified IP Reads Coverage within", condition2),x = "mRNA", y = "Normalized Reads Density")
+    
     .multiplot(p1, p2, p3, p4, cols = 2)
   }
 }
