@@ -1,0 +1,91 @@
+%\VignetteIndexEntry{Sample Trumpet workflow}
+%\VignetteKeywords{Trumpet,visualization,RNA methylation sequencing data, quality assessment}
+%\VignettePackage{Trumpet}
+\documentclass[]{article}
+
+\usepackage{times}
+\usepackage{hyperref}
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+\newcommand{\Rcode}[1]{{\texttt{#1}}}
+
+\newcommand{\software}[1]{\textsf{#1}}
+\newcommand{\R}{\software{R}}
+\newcommand{\bam}{\texttt{BAM}}
+
+
+\title{An Introduction to \Rpackage{Trumpet} Package}
+\author{Teng Zhang}
+\date{Modified: 2 April, 2017. Compiled: \today}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\maketitle
+
+<<options,echo=FALSE>>=
+options(width=60)
+@ 
+
+
+\section{Quick Start with Trumpet}
+This is a manual for Trumpet package. Trumpet is designed for visualization of quality assessment of methylated RNA immunoprecipitation sequencing data-\underline{\textbf{tr}}anscriptome-guided q\underline{\textbf{u}}ality assessment of \underline{\textbf{m}}ethylated RNA immunopreci\underline{\textbf{p}}itation sequencing da\underline{\textbf{t}}a. 
+
+The Trumpet package takes the aligned BAM files from m6A-seq data together with the annotation information as the input to generate a quality assessment report in HTML format, which covers a number of metrics that are relevant to the m6A-seq technique.The following commands code will show how to use this package and generate the assessment report in HTML format.
+
+Here is an examples to show how to use this package. Firstly, we need to import the RNA methylation sequencing data in \texttt{BAM} foramt for quality assessment. 
+<<Input the BAM files,eval=FALSE,echo=TRUE>>=
+library(Trumpet)
+# Input all the bam files of MeRIP-Seq data
+f1 <- system.file("extdata", "IP1.bam", package="Trumpet")
+f2 <- system.file("extdata", "IP2.bam", package="Trumpet")
+f3 <- system.file("extdata", "IP3.bam", package="Trumpet")
+f4 <- system.file("extdata", "IP4.bam", package="Trumpet")
+f5 <- system.file("extdata", "Input1.bam", package="Trumpet")
+f6 <- system.file("extdata", "Input2.bam", package="Trumpet")
+f7 <- system.file("extdata", "Input3.bam", package="Trumpet")
+f8 <- system.file("extdata", "treated_IP1.bam", package="Trumpet")
+f9 <- system.file("extdata", "treated_Input1.bam", package="Trumpet")
+ip_bam <- c(f1,f2,f3,f4)
+input_bam <- c(f5,f6,f7)
+contrast_ip_bam <- c(f8)
+contrast_input_bam <- c(f9)
+@ 
+
+
+Then, we also need to give the reference genome and annotation information in \texttt{GTF} files or annotation database like \texttt{TXDB} or download from UCSC.
+<<Give the annotation files,eval=FALSE,echo=TRUE>>=
+# Input the annotation file
+gtf <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
+@ 
+
+
+
+After importing the sequencing data and annotation inforamtion file, we can call the main function \Rfunction{Trumpet\_report} to generate the assessment report in HTML format. The following command will show how to use the main function.
+<<Generate the assessment report ,eval=FALSE,echo=TRUE>>=
+# Call the main function to generate the HTML report 
+trumpet_report <- Trumpet_report(IP_BAM = ip_bam,
+                                   Input_BAM = input_bam,
+                                   contrast_IP_BAM = contrast_ip_bam,
+                                   contrast_Input_BAM = contrast_input_bam,
+                                   condition1 = "untreated",
+                                   condition2 = "treated",
+                                   GENE_ANNO_GTF = gtf)
+# An HTML report will be generated under current working directory.
+# It can be opened with the following command.  
+browseURL("Trumpet_report.html")
+@ 
+
+
+
+\section{Session Information} 
+<<label=session,eval=TRUE>>=
+sessionInfo()
+@
+
+\end{document}
