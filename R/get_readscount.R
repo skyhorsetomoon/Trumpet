@@ -41,6 +41,7 @@
   result2 <- gc_info
   noFiles <- length(file)
   total_reads <- vector(length = noFiles)
+  exon_reads <- vector(length = noFiles)
   intron_reads <- vector(length = noFiles)
   percent_intron <- vector(length = noFiles)
   UTR5_reads <- vector(length = noFiles)
