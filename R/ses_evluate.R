@@ -159,7 +159,7 @@
     Sample <- newa$Sample
     p1 <- ggplot(data = newa, aes(x = pos, y = pro, colour = Sample )) + 
       geom_line() +
-      facet_wrap(~ID) +
+      facet_grid(ID~.) +
       geom_vline(aes(xintercept = pos), vline1) +
       theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
             title = element_text(size = 12),
@@ -184,7 +184,8 @@
             legend.title=element_text(size=10))+ 
       labs(x = "Percentage of Bins", y = "Percentage of Reads",title = paste("Cumulative percentage enrichment of Input within" , condition1))
     
-    .multiplot(p1, p2, Enrich_table, cols = 1)
+    .multiplot(p1, p2, cols = 1)
+    return(Enrich_table)
     
   } else if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                       0)) {
@@ -278,9 +279,8 @@
                 legend.key.width=unit(0.25,'cm'),
                 legend.text=element_text(size=9),
                 legend.title=element_text(size=9))+ 
-          labs(x = "Percentage of bins", y = "Percentage of tags", title = paste("Cumulative percentage enrichment of refer_Input within", condition2))
-    .multiplot(p1, p3, cols = 2)
-    .multiplot(p2, p4, cols = 2)
+          labs(x = "Percentage of bins", y = "Percentage of Reads", title = paste("Cumulative percentage enrichment of refer_Input within", condition2))
+    .multiplot(p1, p3,p2, p4, cols = 2)
     tab <- rbind(Enrich_table, refer_Enrich_table)
     return(tab)
   }
