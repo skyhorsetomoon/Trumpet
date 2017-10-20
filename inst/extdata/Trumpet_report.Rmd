@@ -103,7 +103,7 @@ read_coverage<-.read_distribute(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast
 
 This module will evaluate the IP biological replicates' enrichment signal strength to identify potentially failed experiments. This function works with reads count that has been normalized in IP and Input samples. ESES method that is based on order statistics estimates the percentage of the IP samples' enrichment signal and the strength of signal by comparing the unified Input sample. It can also detect abnormal Input control samples. The assessment result will return figures and a table.
 
-```{r  eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=6,fig.height=10}
+```{r  eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=10,fig.height=10}
 # Graphical summary of IP enrichment and the difference between Input samples using SES method
 out_SES<-.ses_evluate(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
 ## Tables show enrichment signal strength
