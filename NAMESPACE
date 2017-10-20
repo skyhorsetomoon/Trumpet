@@ -1,5 +1,4 @@
 export(Trumpet_report)
-export(get_readscount2)
 import(Guitar)
 import(ggplot2)
 import(reshape2)
