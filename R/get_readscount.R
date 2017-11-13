@@ -61,7 +61,7 @@
       result2 <- data.frame(result2, bin_count)
       exon <- exonsBy(txdb, by = "tx")
       exon_count <- countOverlaps(bam, exon)
-      exon_reads[i] <- paste0(round(sum(exon_count)/10^7, 2), 
+      exon_reads[i] <- paste0(round(sum(exon_count>0)/10^7, 2), 
                              "M")
       intron <- intronsByTranscript(txdb)
       intron_count <- countOverlaps(bam, intron)
