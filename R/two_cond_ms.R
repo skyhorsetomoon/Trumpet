@@ -61,7 +61,7 @@
   if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                0) & ((length(reference_IP_groupname) + length(reference_Input_groupname)) <= 
                                                      2 | (length(IP_groupname) + length(Input_groupname)) <= 2)) {
-    print("The number of samples in each condition should be more than three when using this function")
+    print("The number of samples in each condition should be larger than three when using this function")
   }
   if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                0) & ((length(reference_IP_groupname) + length(reference_Input_groupname)) > 
@@ -91,6 +91,8 @@
            geom_point(alpha = I(1/200), size = 0.002) + 
            theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
                   title = element_text(size = 9),
+                  legend.position = c(0.53,0.97),
+                  legend.justification = c(1,1),
                   legend.key.height=unit(0.5,'cm'),
                   legend.key.width=unit(0.5,'cm'),
                   legend.text=element_text(size=9),
@@ -107,6 +109,8 @@
       labs(x = "log10(Mean)", y = "log10(SD)", title = paste(" Input samples' Mean-SD relationship between", condition1, "and", condition2))+
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
+            legend.position = c(0.53,0.97),
+            legend.justification = c(1,1),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.5,'cm'),
             legend.text=element_text(size=9),
