@@ -1,7 +1,7 @@
 .Norm_bam <- function(bam, se, len, n) {
   s1 <- .singleBAMreads(bam, se, len, n)
   s3 <- .normalize_sample(s1)
-  bam <- s3
+  bam <- sapply(t(s3), unlist)
   return(bam)
 }  ##get IP
 
@@ -9,7 +9,7 @@
 .Unit_bam <- function(group,se,ind,len,n) {
   v <- .unified_sample(group,se,ind,len,n)
   Input1 <- .normalize_sample(v)
-  Input <- Input1
+  Input <- sapply(t(Input1), unlist)
   return(Input)
 }
 
@@ -24,13 +24,17 @@
     bam <- vector(mode = "numeric", length = 0)
     bam <- .Norm_bam(group_bam[, i], se, len, n)
     Input1 <- unit_bam
+    if(length(bam)==length(Input1)){
+      ip1 <- bam
+      InPut1 <- Input1
+    }
     M <- max(length(bam), length(Input1))
-    if(length(bam) < M){
+    if(length(bam) < M && length(Input1)==M){
       bam_sample <- sample(bam, size = (M-length(bam)),replace = TRUE)
       ip1 <- c(bam_sample, bam)
       InPut1 <-  Input1
     }
-    if(length(Input1) < M){
+    if(length(Input1) < M && length(bam)==M){
       Input1_sample <- sample(Input1, size = (M-length(Input1)),replace = TRUE)
       ip1 <- bam  
       InPut1 <- c(Input1_sample, Input1)
@@ -89,14 +93,18 @@
   for (i in seq_len(length(Input_group_name))) {
     bam <- vector(mode = "numeric", length = 0)
     bam <- .Norm_bam(group_Input[, i],se,len,n)
+    if(length(bam)==length(unit_IP)){
+      input1 <- bam
+      IP1 <- unit_IP
+    }
     M <- max(length(bam), length(unit_IP))
-    if(length(bam) < M){
-      bam_sample <- sample.int(bam, size = (M-length(bam)),replace = TRUE)
+    if(length(bam) < M && length(unit_IP)==M){
+      bam_sample <- sample(bam, size = (M-length(bam)),replace = TRUE)
       input1 <- c(bam_sample, bam)
       IP1 <-  unit_IP
     }
-    if(length(unit_IP) < M){
-      IP_sample <- sample.int(unit_IP, size = (M-length(unit_IP)),replace = TRUE)
+    if(length(unit_IP) < M && length(bam)==M){
+      IP_sample <- sample(unit_IP, size = (M-length(unit_IP)),replace = TRUE)
       input1 <- bam  
       IP1 <- c(IP_sample, unit_IP)
     }
@@ -128,7 +136,7 @@
   return(new)
 }
 
-.ses_evluate <- function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM, 
+.ESES_evaluate <- function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM, 
                          condition1, condition2) {
   s <- result[[1]]
   ind <- unique(s$pos)
@@ -175,6 +183,7 @@
       geom_vline(aes(xintercept = pos), vline1) +
       theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
             title = element_text(size = 12),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=10),
@@ -190,6 +199,7 @@
       geom_line() +
       theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
             title = element_text(size = 12),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=10),
@@ -197,6 +207,7 @@
       labs(x = "Percentage of Bins", y = "Percentage of Reads",title = paste("Cumulative percentage enrichment of Input within" , condition1))
     
     .multiplot(p1, p2, cols = 1)
+    colnames(Enrich_table) <- c("Sample ID", "Percent of Region Enriched with Signal", "Scale Factor")
     return(Enrich_table)
     
   } else if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
@@ -239,6 +250,7 @@
       geom_vline(aes(xintercept = pos), vline1) +
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
@@ -254,6 +266,7 @@
       geom_line() +
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
@@ -272,11 +285,12 @@
       geom_vline(aes(xintercept = pos), vline2) + 
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
             legend.title=element_text(size=9))+ 
-      labs(x = "Percentage of Bins", y = "Percentage of Reads", title = paste("Cumulative percentage enrichment of refer_IP within", 
+      labs(x = "Percentage of Bins", y = "Percentage of Reads", title = paste("Cumulative percentage enrichment of Refer_IP within", 
                                                                               condition2))
     colnames(new2)<-c("pos","Sample","pro")
     new2 <- as.data.frame(new2)
@@ -287,13 +301,15 @@
       geom_line() + 
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
             legend.title=element_text(size=9))+ 
-      labs(x = "Percentage of bins", y = "Percentage of Reads", title = paste("Cumulative percentage enrichment of refer_Input within", condition2))
+      labs(x = "Percentage of bins", y = "Percentage of Reads", title = paste("Cumulative percentage enrichment of Refer_Input within", condition2))
     .multiplot(p1, p3,p2, p4, cols = 2)
     tab <- rbind(Enrich_table, refer_Enrich_table)
+    colnames(tab) <- c("Sample ID", "Percent of Region Enriched with Signal", "Scale Factor")
     return(tab)
   }
 }
