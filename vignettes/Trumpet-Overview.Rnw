@@ -34,9 +34,9 @@ options(width=60)
 
 
 \section{Quick Start with Trumpet}
-This is a manual for Trumpet package. Trumpet is designed for visualization of quality assessment of methylated RNA immunoprecipitation sequencing data-\underline{\textbf{tr}}anscriptome-guided q\underline{\textbf{u}}ality assessment of \underline{\textbf{m}}ethylated RNA immunopreci\underline{\textbf{p}}itation sequencing da\underline{\textbf{t}}a. 
+This is a manual for Trumpet package, which stands for \underline{\textbf{tr}}anscriptome-guided q\underline{\textbf{u}}ality assessment of \underline{\textbf{m}}ethylated RNA immunopreci\underline{\textbf{p}}itation sequencing da\underline{\textbf{t}}a. Trumpet is designed for visualization of quality assessment of methylated RNA immunoprecipitation sequencing data.
 
-The Trumpet package takes the aligned BAM files from m6A-seq data together with the annotation information as the input to generate a quality assessment report in HTML format, which covers a number of metrics that are relevant to the m6A-seq technique.The following commands code will show how to use this package and generate the assessment report in HTML format.
+The Trumpet package takes the aligned BAM files from m6A-seq data together with the annotation information as the input to generate a quality assessment report in HTML format, which covers a number of metrics that are relevant to the m6A-seq technique. The following command codes will show how to use this package and generate the assessment report in HTML format.
 
 Here is an examples to show how to use this package. Firstly, we need to import the RNA methylation sequencing data in \texttt{BAM} foramt for quality assessment. 
 <<Input the BAM files,eval=FALSE,echo=TRUE>>=
