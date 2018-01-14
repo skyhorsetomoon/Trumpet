@@ -1,14 +1,14 @@
 .Unit_bam <- function(group, se,ind,len,n) {
   v <- .unified_sample(group,se,ind,len,n)
   Input1 <- .normalize_sample(v)
-  Input <- Input1
+  Input <- sapply(t(Input1), unlist)
   return(Input)
 }
 
 .Norm_bam <- function(bam, se, len, n) {
   s1 <- .singleBAMreads(bam, se, len, n)
   s3 <- .normalize_sample(s1)
-  bam <- s3
+  bam <- sapply(t(s3), unlist)
   return(bam)
 }  ##get IP
 
@@ -29,13 +29,17 @@
     vbam_read <- .trans_readsvector(group_bam[, i], se, len, n)
     nubin <- length(vbam_read)
     vbam_read <- sort(vbam_read)
+    if(length(bam)==length(Input1)){
+      ip1 <- bam
+      InPut1 <- Input1
+    }
     M <- max(length(bam), length(Input1))
-    if(length(bam) < M){
+    if(length(bam) < M && length(Input1)==M){
       bam_sample <- sample(bam, size = (M-length(bam)),replace = TRUE)
       ip1 <- c(bam_sample, bam)
       InPut1 <-  Input1
     }
-    if(length(Input1) < M){
+    if(length(Input1) < M && length(bam)==M){
       Input1_sample <- sample(Input1, size = (M-length(Input1)),replace = TRUE)
       ip1 <- bam  
       InPut1 <- c(Input1_sample, Input1)
@@ -76,7 +80,7 @@
   return(Enrichtable)
 }
 
-.SES_enrich_DF <- function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM){
+.ESES_enrich_DF <- function(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM){
   
   s <- result[[1]]
   ind <- unique(s$pos)
@@ -128,51 +132,66 @@
     refer_Enrichtable <- .SES_IPenrich (ref_group_IP, ref_unit_Input, reference_IP_groupname, se, len, n)
     ##get the user enrich data
     Enrichtable <- rbind(EnrichTable, refer_Enrichtable)
-    new_sample <- c(IP_groupname, reference_IP_groupname)
+    New_Sample <- c(IP_groupname, reference_IP_groupname)
   }
   dircs<-system.file("extdata", "experiment_data.Rdata", package="Trumpet")
   load(dircs)
   enrichtable <- experiment_data
-  old_sample <- rep("known data set",61)
-  IP_sample <- c(old_sample, new_sample)
-  enrichtable  <- cbind(old_sample,enrichtable)
+  Known_Sample <- rep("Known Samples",61)
+  IP_sample <- c(Known_Sample, New_Sample)
+  enrichtable  <- cbind(Known_Sample,enrichtable)
   enrich_region <- enrichtable[,1:2]
   enrich_region <- as.data.frame(enrich_region)
   
-  p1 <- ggplot(enrich_region, aes(x=Enrichment_region,fill=old_sample))+
+  p1 <- ggplot(enrich_region, aes(x=Enrichment_region,fill=Known_Sample))+
     geom_density(alpha = 0.6,adjust=1)+
-    geom_vline(data=Enrichtable, aes(xintercept=Enrichment_region,colour=new_sample), show.legend = TRUE, size=0.75)+
-    theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
-          title = element_text(size = 9),
-          legend.key.height=unit(0.5,'cm'),
-          legend.key.width=unit(0.5,'cm'),
-          legend.text=element_text(size=9),
-          legend.title=element_text(size=9))+
-    labs(x="Percentage of enrichment region(%)",  title="The distribution of IP samples' enrichment region ")
+    geom_vline(data=Enrichtable, aes(xintercept=Enrichment_region,colour=New_Sample), show.legend = TRUE, size=0.5)+
+    theme(axis.title.x =element_text(size=22), axis.title.y=element_text(size=22),
+          title = element_text(size = 22),
+          axis.text.x= element_text(size=15, color="black"),
+          axis.text.y= element_text(size=15, color="black"),
+          plot.title = element_text(hjust = 0.5),
+          legend.position = c(1,0.95),
+          legend.justification = c(1,1),
+          legend.key.height=unit(0.45,'cm'),
+          legend.key.width=unit(0.45,'cm'),
+          legend.text=element_text(size=18, color="black"),
+          legend.title=element_text(size=18, color="black"))+
+    labs(x="Percentage of enrichment region(%)",  title="The distribution of enrichment region")
   
   signalread <- enrichtable[,c(1,3)]
   signalread <- as.data.frame(signalread)
-  p2 <- ggplot(signalread, aes(x=Signal_readcount,fill=old_sample))+
+  p2 <- ggplot(signalread, aes(x=Signal_readcount,fill=Known_Sample))+
     geom_density(alpha = 0.6,adjust=1)+
-    geom_vline(data=Enrichtable, aes(xintercept=Signal_readcount,colour=new_sample), show.legend = TRUE, size=0.5)+
-    theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
-          title = element_text(size = 9),
+    geom_vline(data=Enrichtable, aes(xintercept=Signal_readcount,colour=New_Sample), show.legend = TRUE, size=0.5)+
+    theme(axis.title.x =element_text(size=22), axis.title.y=element_text(size=22),
+          title = element_text(size = 22),
+          axis.text.x= element_text(size=15, color="black"),
+          axis.text.y= element_text(size=15, color="black"),
+          plot.title = element_text(hjust = 0.5),
+          legend.position = c(0.4,0.95),
+          legend.justification = c(1,1),
           legend.key.height=unit(0.5,'cm'),
           legend.key.width=unit(0.5,'cm'),
-          legend.text=element_text(size=9),
-          legend.title=element_text(size=9))+
-    labs(x="Percentage of signal reads count(%)",  title="The distribution of IP samples' signal reads count ")
+          legend.text=element_text(size=18, color="black"),
+          legend.title=element_text(size=18, color="black"))+
+    labs(x="Percentage of signal reads count(%)",  title="The distribution of signal reads count ")
   scalefactor <- enrichtable[, c(1,4)]
-  p3 <- ggplot(scalefactor, aes(x=Scale_factor,fill=old_sample))+
+  p3 <- ggplot(scalefactor, aes(x=Scale_factor,fill=Known_Sample))+
     geom_density(alpha = 0.6,adjust=1)+
-    geom_vline(data=Enrichtable, aes(xintercept=Scale_factor,colour=new_sample), show.legend = TRUE, size=0.5)+
-    theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
-          title = element_text(size = 9),
+    geom_vline(data=Enrichtable, aes(xintercept=Scale_factor,colour=New_Sample), show.legend = TRUE, size=0.5)+
+    theme(axis.title.x =element_text(size=22), axis.title.y=element_text(size=22),
+          title = element_text(size = 22),
+          axis.text.x= element_text(size=15, color="black"),
+          axis.text.y= element_text(size=15, color="black"),
+          plot.title = element_text(hjust = 0.5),
+          legend.position = c(0.95,0.95),
+          legend.justification = c(1,1),
           legend.key.height=unit(0.5,'cm'),
           legend.key.width=unit(0.5,'cm'),
-          legend.text=element_text(size=9),
-          legend.title=element_text(size=9))+
-    labs(x="Scale factor",  title="The distribution of IP samples' scale factor")
-  .multiplot(p1, p2, p3, cols = 3)
+          legend.text=element_text(size=18, color="black"),
+          legend.title=element_text(size=18, color="black"))+
+    labs(x="Scale factor",  title="The distribution of scale factor")
+  .multiplot(p1, p2, p3, cols = 1)
   
 }
