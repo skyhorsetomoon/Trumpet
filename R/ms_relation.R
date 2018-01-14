@@ -60,9 +60,9 @@
                                                0)) {
     Group_IP <- sa[, (seq_len(length(IP_groupname)))]
     Group_Input <- sa[, -(seq_len(length(IP_groupname)))]
-    coma <- .ms(Group_IP, Group_Input, IP_groupname, "unified_Input", 
+    coma <- .ms(Group_IP, Group_Input, IP_groupname, "Unified_Input", 
                paste(condition1, "condition"),se,ind,len,n)
-    comb <- .ms(Group_Input, Group_IP, Input_groupname, "unified_IP", 
+    comb <- .ms(Group_Input, Group_IP, Input_groupname, "Unified_IP", 
                paste(condition1, "condition"),se,ind,len,n)
     coma <- as.data.frame(coma)
     colnames(coma) <- c("Mean","SD","Sample","Condition")
@@ -75,11 +75,12 @@
             geom_point(alpha = I(1/150), size = 0.2) + 
             theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
                   title = element_text(size = 12),
+                  plot.title = element_text(hjust = 0.5),
                   legend.key.height=unit(0.5,'cm'),
                   legend.key.width=unit(0.5,'cm'),
                   legend.text=element_text(size=10),
                   legend.title=element_text(size=10))+
-      labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within IP samles compared unified Input")
+      labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within IP samles compared Unified Input")
             
     comb <- as.data.frame(comb)
     colnames(comb) <- c("Mean","SD","Sample","Condition")
@@ -92,11 +93,12 @@
             geom_point(alpha = I(1/150), size = 0.2) + 
             theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
                    title = element_text(size = 12),
+                   plot.title = element_text(hjust = 0.5),
                    legend.key.height=unit(0.5,'cm'),
                    legend.key.width=unit(0.5,'cm'),
                    legend.text=element_text(size=10),
                    legend.title=element_text(size=10))+
-      labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within Input samles compared unified IP")
+      labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within Input samles compared Unified IP")
             
     .multiplot(m_p1, m_p2, cols = 1)
     
@@ -112,16 +114,16 @@
     ref_group_IP <- as.matrix(ref_group_IP)
     ref_group_Input <- ref_group[, -(seq_len(length(reference_IP_groupname)))]
     ref_group_Input <- as.matrix(ref_group_Input)
-    com1 <- .ms(group_IP, group_Input, IP_groupname, "unified_Input", 
+    com1 <- .ms(group_IP, group_Input, IP_groupname, "Unified_Input", 
                paste(condition1, "condition"),se,ind,len,n)
     com2 <- .ms(ref_group_IP, ref_group_Input, reference_IP_groupname, 
-               "unified_Input", paste(condition2, "condition"),se,ind,len,n)
+               "Unified_Input", paste(condition2, "condition"),se,ind,len,n)
     coma <- rbind(com1, com2)
     coma <- as.data.frame(coma)
-    com3 <- .ms(group_Input, group_IP, Input_groupname, "unified_IP", 
+    com3 <- .ms(group_Input, group_IP, Input_groupname, "Unified_IP", 
                paste(condition1, "condition"),se,ind,len,n)
     com4 <- .ms(ref_group_Input, ref_group_IP, reference_Input_groupname, 
-               "unified_IP", paste(condition2, "condition"),se,ind,len,n)
+               "Unified_IP", paste(condition2, "condition"),se,ind,len,n)
     
     comb <- rbind(com3, com4)
     comb <- as.data.frame(comb)
@@ -137,11 +139,12 @@
             geom_point(alpha = I(1/150), size = 0.2) + 
             theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
                   title = element_text(size = 9),
+                  plot.title = element_text(hjust = 0.5),
                   legend.key.height=unit(0.5,'cm'),
                   legend.key.width=unit(0.5,'cm'),
                   legend.text=element_text(size=9),
                   legend.title=element_text(size=9))+
-          labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within IP samles compared unified Input")
+          labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within IP samles compared Unified Input")
       
     colnames(comb) <- c("Mean","SD","Sample","Condition")
     Mean <- comb$Mean
@@ -153,11 +156,12 @@
             geom_point(alpha = I(1/150), size = 0.2) +
             theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
                   title = element_text(size = 9),
+                  plot.title = element_text(hjust = 0.5),
                   legend.key.height=unit(0.5,'cm'),
                   legend.key.width=unit(0.5,'cm'),
                   legend.text=element_text(size=9),
                   legend.title=element_text(size=9))+
-      labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within Input samles compared unified IP")
+      labs(x="log10(Mean)", y="log10(SD)", title = "Mean-SD relationship within Input samles compared Unified IP")
     .multiplot(m_p1, m_p2, cols = 2)
   }
 }
