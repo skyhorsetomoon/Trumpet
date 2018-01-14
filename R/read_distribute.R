@@ -18,7 +18,7 @@
   pos <- seq(0.025, 2.975, 0.05)
   dt <- cbind(pos, qv)
   dt <- as.data.frame(dt)
-  colnames(dt) <- c("pos", "quantile=25%", "quantile=50%", "quantile=75%")
+  colnames(dt) <- c("pos", "25%", "50%", "75%")
   df <- melt(dt, id = "pos")
   df <- data.frame(df)
   return(df)
@@ -70,9 +70,9 @@
     unit_Input <- .unified_sample(group_pt, se,ind,len,n)
     unified_IP <- .read_cover(unit_IP, ind)
     unified_Input <- .read_cover(unit_Input, ind)
-    id_name1 <- c(IP_groupname, "unified Input")
+    id_name1 <- c(IP_groupname, "Unified Input")
     ID1 <- rep(id_name1, rep(fr_num, length(id_name1)))
-    id_name2 <- c(Input_groupname, "unified IP")
+    id_name2 <- c(Input_groupname, "Unified IP")
     ID2 <- rep(id_name2, rep(fr_num, length(id_name2)))
     df1 <- rbind(Group_IP, unified_Input)
     df1 <- cbind(df1, ID1)
@@ -97,6 +97,7 @@
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
       theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
             title = element_text(size = 12),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=10),
@@ -119,6 +120,7 @@
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.2, ymax = -0.1, alpha = 0.99, colour = "black") + 
       theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12), 
             title = element_text(size = 12),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=10),
@@ -173,13 +175,13 @@
     unified_Input <- .read_cover(unit_Input, ind)
     refer_unified_IP <- .read_cover(refer_unit_IP, ind)
     refer_unified_Input <- .read_cover(refer_unit_pt, ind)
-    id_name1 <- c(IP_groupname, "unified Input")
+    id_name1 <- c(IP_groupname, "Unified Input")
     ID1 <- rep(id_name1, rep(fr_num1, length(id_name1)))
-    id_name2 <- c(Input_groupname, "unified IP")
+    id_name2 <- c(Input_groupname, "Unified IP")
     ID2 <- rep(id_name2, rep(fr_num1, length(id_name2)))
-    refer_id_name1 <- c(reference_IP_groupname, "unified Input")
+    refer_id_name1 <- c(reference_IP_groupname, "Unified Input")
     refer_ID1 <- rep(refer_id_name1, rep(fr_num2, length(refer_id_name1)))
-    refer_id_name2 <- c(reference_Input_groupname, "unified IP")
+    refer_id_name2 <- c(reference_Input_groupname, "Unified IP")
     refer_ID2 <- rep(refer_id_name2, rep(fr_num2, length(refer_id_name2)))
     df1 <- rbind(Group_IP, unified_Input)
     df1 <- cbind(df1, ID1)
@@ -210,6 +212,7 @@
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
@@ -232,6 +235,7 @@
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
@@ -254,11 +258,12 @@
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") +
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9), 
             title = element_text(size = 9),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
             legend.title=element_text(size=9))+
-      labs(title = paste("refer_IP and Unified Input Reads Coverage within", condition2),x = "mRNA", y = "Normalized Reads Density") 
+      labs(title = paste("Refer_IP and Unified Input Reads Coverage within", condition2),x = "mRNA", y = "Normalized Reads Density") 
     
     colnames(Df2)<-c("pos","Quantile","value","refer_ID2")
     pos <- Df2$pos
@@ -276,11 +281,12 @@
       annotate("rect", xmin = 2.025, xmax = 2.975, ymin = -0.3, ymax = -0.1, alpha = 0.99, colour = "black") + 
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
+            plot.title = element_text(hjust = 0.5),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
             legend.title=element_text(size=9))+
-      labs(title = paste("refer_Input and Unified IP Reads Coverage within", condition2),x = "mRNA", y = "Normalized Reads Density")
+      labs(title = paste("Refer_Input and Unified IP Reads Coverage within", condition2),x = "mRNA", y = "Normalized Reads Density")
     
     .multiplot(p1, p2, p3, p4, cols = 2)
   }
