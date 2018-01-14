@@ -53,6 +53,7 @@ The following commands code will show how to use this package and generate the a
 >                                   contrast\_Input\_BAM = contrast\_input\_bam,
 >                                   condition1 = "untreated",
 >                                   condition2 = "treated",
+>                                   sample\_size = 1*10^7,
 >                                   GENE\_ANNO\_GTF = gtf)
 
 ### An HTML report will be generated under current working directory, which can be opened with the following command                        
