@@ -37,13 +37,17 @@
   sample_name <- as.vector(sample_name)
   transform_table <- cbind(file, sample_name)
   transform_table <- as.data.frame(transform_table)
+  colnames(transform_table) <- c("files", "sample ID")
   # get reads count
   result2 <- gc_info
   noFiles <- length(file)
   total_reads <- vector(length = noFiles)
   exon_reads <- vector(length = noFiles)
   intron_reads <- vector(length = noFiles)
+  no_genic <- vector(length = noFiles)
+  percent_exon <- vector(length = noFiles)
   percent_intron <- vector(length = noFiles)
+  percent_nogenic <- vector(length = noFiles)
   UTR5_reads <- vector(length = noFiles)
   CDS_reads <- vector(length = noFiles)
   UTR3_reads <- vector(length = noFiles)
@@ -63,12 +67,20 @@
       exon_count <- countOverlaps(bam, exon)
       exon_reads[i] <- paste0(round(sum(exon_count>0)/10^7, 2), 
                              "M")
+      percent_exon[i] <- paste0(round((sum(exon_count>0)/(length(bam)))*100,2), "%")
+      percent_exon[i] <- paste0("(", percent_exon[i], ")")
+      
       intron <- intronsByTranscript(txdb)
       intron_count <- countOverlaps(bam, intron)
       intron_reads[i] <- paste0(round(sum(intron_count > 0)/10^7, 
                                      2), "M")
-      percent_intron[i] <- paste0(round((sum(intron_count > 0)/(sum(exon_count > 0)+sum(intron_count > 0)))*100,2), "%")
+      percent_intron[i] <- paste0(round((sum(intron_count > 0)/(length(bam)))*100,2), "%")
       percent_intron[i] <- paste0("(", percent_intron[i], ")")
+      
+      no_genic[i] <- paste0(round((length(bam)-sum(exon_count>0)-sum(intron_count>0))/10^7,2), "M")
+      percent_nogenic[i] <- paste0(round(((length(bam)-sum(exon_count>0)-sum(intron_count>0))/length(bam))*100,2), "%")
+      percent_nogenic[i] <- paste0("(", percent_nogenic[i], ")")
+      
       utr5 <- fiveUTRsByTranscript(txdb)
       utr5_count <- countOverlaps(bam, utr5)
       UTR5_reads[i] <- paste0(round(sum(utr5_count > 0)/10^7, 2), 
@@ -112,12 +124,20 @@
       exon_reads[i] <- paste0(round(sum(exon_count > 0)/10^7, 2), 
                              "M")
       
+      percent_exon[i] <- paste0(round((sum(exon_count>0)/(length(bam)))*100,2), "%")
+      percent_exon[i] <- paste0("(", percent_exon[i], ")")
+      
       intron <- intronsByTranscript(txdb)
       intron_count <- countOverlaps(bam, intron)
       intron_reads[i] <- paste0(round(sum(intron_count > 0)/10^7, 
-                                     2), "M")
-      percent_intron[i] <- paste0(round((sum(intron_count > 0)/(sum(exon_count > 0)+sum(intron_count > 0)))*100,2), "%")
+                                      2), "M")
+      percent_intron[i] <- paste0(round((sum(intron_count > 0)/(length(bam)))*100,2), "%")
       percent_intron[i] <- paste0("(", percent_intron[i], ")")
+      
+      no_genic[i] <- paste0(round((length(bam)-sum(exon_count>0)-sum(intron_count>0))/10^7,2), "M")
+      percent_nogenic[i] <- paste0(round(((length(bam)-sum(exon_count>0)-sum(intron_count>0))/length(bam))*100,2), "%")
+      percent_nogenic[i] <- paste0("(", percent_nogenic[i], ")")
+      
       utr5 <- fiveUTRsByTranscript(txdb)
       utr5_count <- countOverlaps(bam, utr5)
       UTR5_reads[i] <- paste0(round(sum(utr5_count > 0)/10^7, 2), 
@@ -144,13 +164,15 @@
     }
     
   }
+  reads_exon <- paste(exon_reads, percent_exon)
   reads_intron <- paste(intron_reads, percent_intron)
+  reads_nogenic <- paste(no_genic, percent_nogenic)
   reads_UTR5 <- paste(UTR5_reads, percent_UTR5)
   reads_CDS <- paste(CDS_reads, percent_CDS)
   reads_UTR3 <- paste(UTR3_reads, percent_UTR3)
-  read_alignment_summary <- cbind(sample_name, total_reads,exon_reads, reads_intron, reads_UTR5, reads_CDS, reads_UTR3)
+  read_alignment_summary <- cbind(sample_name, total_reads,reads_exon, reads_intron, reads_nogenic, reads_UTR5, reads_CDS, reads_UTR3)
   read_alignment_summary <- as.data.frame(read_alignment_summary)
-  colnames(read_alignment_summary) <- c("sample name","total reads#", "exon reads#", "intron reads", "5'UTR reads", "CDS reads", "3'UTR reads")
+  colnames(read_alignment_summary) <- c("sample ID","total reads#", "exon reads", "intron reads", "no genic reads", "5'UTR reads", "CDS reads", "3'UTR reads")
   # remove DNA regions
   i <- which(result2$comp == "Front")  # remove front DNA
   result2 <- result2[-i, ]
