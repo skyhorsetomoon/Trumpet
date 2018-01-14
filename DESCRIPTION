@@ -1,10 +1,10 @@
 Package: Trumpet
 Type: Package
 Title: Transcriptome-guided quality assessment of m6A-seq data
-Version: 0.2.7
-Date: 2017-10-20
+Version: 0.3.4
+Date: 2018-1-5
 Author: Teng Zhang
-Maintainer: Teng Zhang <2573552960@qq.com>
+Maintainer: Teng Zhang <tengzhagn156@126.com>
 Description: The package is designed for the quality assessment of methylated RNA immunoprecipitation sequencing data.
 License: GPL-2
 VignetteBuilder: knitr
@@ -15,5 +15,5 @@ Suggests: BiocStyle
 biocViews: Sequencing, SplicedAlignment, Alignment, DataImport,
     RNASeq,MethylSeq, QualityControl, Transcription, Coverage
 NeedsCompilation: no
-Packaged: 2017-10-20 22:30:05 UTC; bioinfo
+Packaged: 2018-1-6 22:30:05 UTC; bioinfo
 RoxygenNote: 5.0.0
