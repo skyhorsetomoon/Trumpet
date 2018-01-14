@@ -1,7 +1,7 @@
 # Trumpet: an R package for transcriptome-guided quality assessment of m6A-seq data
-Motivation: Methylated RNA immunoprecipitation sequencing (m6A-seq or MeRIP-seq) has been extensively used for profiling transcriptome-wide distribution of RNA N6-MethylAdenosine methyla-tion. However, due to the intrinsic properties of RNA molecule and the intricate procedures of this technique, m6A-seq data often suffers from various flaws. A convenient and comprehensive tool is solely needed to assess the quality of m6A-seq data to ensure it is suitable for subsequent analysis.
+Motivation: Methylated RNA immunoprecipitation sequencing (m6A-seq or MeRIP-seq) has been extensively used for profiling transcriptome-wide distribution of RNA N6-MethylAdenosine methylation. However, due to the intrinsic properties of RNA molecule and the intricate procedures of this technique, m6A-seq data often suffers from various flaws. A convenient and comprehensive tool is solely needed to assess the quality of m6A-seq data to ensure it is suitable for subsequent analysis.
 
-Results: From technical perspective, m6A-seq can be considered as a marriage of ChIP-seq and RNA-seq; hence, by effectively combing the data quality assessment metrics of the two techniques, we developed the Trumpet R package for evaluation of m6A-seq data quality. Trumpet package takes the aligned BAM files from m6A-seq data together with transcriptome information as the inputs to generate a quality assessment report in HTML format.
+Results: From a technical perspective, m6A-seq can be considered as a marriage of ChIP-seq and RNA-seq; hence, by effectively combing the data quality assessment metrics of the two techniques, we developed the Trumpet R package for evaluation of m6A-seq data quality. Trumpet package takes the aligned BAM files from m6A-seq data together with transcriptome information as inputs to generate a quality assessment report in HTML format.
 
 # Installation Instructions
 The Trumpet package can be installed by the following R commands:
@@ -10,12 +10,12 @@ The Trumpet package can be installed by the following R commands:
 > library(Trumpet)
 
 # Usage Example
-The following commands code will show how to use this package and generate the assessment report in HTML format.
+The following command code will show how to use this package and generate the assessment report in HTML format.
 
 
-## Input the samples to be evaluated in BAM files and generate the HTML report directly.
+## Input the samples to be evaluated in BAM files and generate the assessment report directly.
 
-### Give all the bam files of MeRIP-Seq data
+### Collect the path of all the aligned MeRIP-seq data files in BAM format.
 > f1 <- system.file("extdata", "IP1.bam", package="Trumpet")
 
 > f2 <- system.file("extdata", "IP2.bam", package="Trumpet")
@@ -42,19 +42,18 @@ The following commands code will show how to use this package and generate the a
 > 
 > contrast\_input\_bam <- c(f9)
 
-#### Input the annotation file
+#### We use GTF file in the following example.
 > gtf <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
 
-### Generate the assessment report 
+### We can call the main function to generate the assessment report under current working directory. 
 
 > trumpet\_report <- Trumpet_report(IP_BAM = ip_bam,
 >                                   Input\_BAM = input\_bam,
 >                                   contrast\_IP_BAM = contrast\_ip\_bam,
 >                                   contrast\_Input\_BAM = contrast\_input\_bam,
 >                                   condition1 = "untreated",
->                                   condition2 = "treated",
->                                   sample\_size = 1*10^7,
+>                                   condition2 = "treat,
 >                                   GENE\_ANNO\_GTF = gtf)
 
-### An HTML report will be generated under current working directory, which can be opened with the following command                        
+### It can be opened with a web browser or with the following R command.                        
 > browseURL("Trumpet_report.html")
