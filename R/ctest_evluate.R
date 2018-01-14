@@ -134,13 +134,14 @@
       geom_line(size=1) + 
       theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
             title = element_text(size = 12),
-            legend.position = c(1,1),
+            plot.title = element_text(hjust = 0.5),
+            legend.position = c(0.95,0.95),
             legend.justification = c(1,1),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=10),
             legend.title=element_text(size=10))+
-      labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with unified Input under", condition1))
+      labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with Unified Input within", condition1))
     
     com2 <- as.data.frame(com2)
     colnames(com2) <- c("fold","Sample","value")
@@ -152,13 +153,14 @@
       geom_line(size=1) + 
       theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
             title = element_text(size = 12),
-            legend.position = c(1,1),
+            plot.title = element_text(hjust = 0.5),
+            legend.position = c(0.95,0.95),
             legend.justification = c(1,1),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=10),
             legend.title=element_text(size=10))+
-      labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with unified IP under", condition1))
+      labs(x="Foldchange", y ="Percentgae of Bins",title=paste("Enrichment signal under different foldchange\n with Unified IP within", condition1))
     
     .multiplot(c_p1, c_p2, cols = 1)
     
@@ -217,13 +219,14 @@
       geom_line(size=1) + 
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
-            legend.position = c(1,1),
+            plot.title = element_text(hjust = 0.5),
+            legend.position = c(0.95,0.95),
             legend.justification = c(1,1),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
             legend.title=element_text(size=9))+
-      labs(x="Fold Enrichment", y ="Percentgae of Bins",title=paste("Enrichment signal under different fold enrichment\n with unified Input under", condition1))
+      labs(x="Fold Enrichment", y ="Percentgae of Bins",title=paste("Enrichment signal under different fold enrichment\n with Unified Input within", condition1))
     
     com2 <- as.data.frame(com2)
     colnames(com2) <- c("fold","Sample","value")
@@ -235,13 +238,14 @@
       geom_line(size=1) + 
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
-            legend.position = c(1,1),
+            plot.title = element_text(hjust = 0.5),
+            legend.position = c(0.95,0.95),
             legend.justification = c(1,1),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
             legend.title=element_text(size=9))+
-      labs(x="Fold Enrichment", y ="Percentgae of Bins",title=paste("Enrichment signal under different fold enrichment\n with unified IP under", condition1))
+      labs(x="Fold Enrichment", y ="Percentgae of Bins",title=paste("Enrichment signal under different fold enrichment\n with Unified IP within", condition1))
     
     
     refer_com1 <- as.data.frame(refer_com1)
@@ -254,13 +258,14 @@
       geom_line(size=1) + 
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
-            legend.position = c(1,1),
+            plot.title = element_text(hjust = 0.5),
+            legend.position = c(0.95,0.95),
             legend.justification = c(1,1),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
             legend.title=element_text(size=9))+
-      labs(x="Fold Enrichment", y ="Percentgae of Bins",title=paste("Enrichment signal under different fold enrichment\n with unified refer_Input under", condition2))
+      labs(x="Fold Enrichment", y ="Percentgae of Bins",title=paste("Enrichment signal under different fold enrichment\n with Unified Refer_Input within", condition2))
     
     refer_com2 <- as.data.frame(refer_com2)
     colnames(refer_com2) <- c("fold","Sample","value")
@@ -272,13 +277,14 @@
       geom_line(size=1) + 
       theme(axis.title.x =element_text(size=9), axis.title.y=element_text(size=9),
             title = element_text(size = 9),
-            legend.position = c(1,1),
+            plot.title = element_text(hjust = 0.5),
+            legend.position = c(0.95,0.95),
             legend.justification = c(1,1),
             legend.key.height=unit(0.5,'cm'),
             legend.key.width=unit(0.25,'cm'),
             legend.text=element_text(size=9),
             legend.title=element_text(size=9))+
-      labs(x="Fold Enrichment", y ="Percentgae of Bins",title=paste("Enrichment signal under different fold enrichment\n with unified refer_IP under", condition2))
+      labs(x="Fold Enrichment", y ="Percentgae of Bins",title=paste("Enrichment signal under different fold enrichment\n with Unified Refer_IP within", condition2))
     
     .multiplot(c_p1, c_p2, refer_p1, refer_p2, cols = 2)
   }
