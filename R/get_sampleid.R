@@ -13,8 +13,8 @@
     
     IP_name <- paste0("IP", seq_along(IP_BAM))
     Input_name <- paste0("Input", seq_along(Input_BAM))
-    referIP_name <- paste0("refer_IP", seq_along(contrast_IP_BAM))
-    referInput_name <- paste0("refer_Input", seq_along(contrast_Input_BAM))
+    referIP_name <- paste0("Refer_IP", seq_along(contrast_IP_BAM))
+    referInput_name <- paste0("Refer_Input", seq_along(contrast_Input_BAM))
   }
   sample_name <- list()
   sample_name$IP_name <- IP_name
