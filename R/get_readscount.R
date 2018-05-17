@@ -58,39 +58,39 @@
     for (i in seq_len(noFiles)) {
       print(paste("working on the ", i, "-th bam file ...", sep = ""))
       bam <- readGAlignments(file[i])
-      total_reads[i] <- paste0(round(length(bam)/10^7, 2), "M")
+      total_reads[i] <- paste0(round(length(bam)/10^6, 2), "M")
       bin_count <- countOverlaps(gc, bam)
       bin_count <- data.frame(bin_count)
       names(bin_count) <- sample_name[i]
       result2 <- data.frame(result2, bin_count)
       exon <- exonsBy(txdb, by = "tx")
       exon_count <- countOverlaps(bam, exon)
-      exon_reads[i] <- paste0(round(sum(exon_count>0)/10^7, 2), 
+      exon_reads[i] <- paste0(round(sum(exon_count>0)/10^6, 2), 
                              "M")
       percent_exon[i] <- paste0(round((sum(exon_count>0)/(length(bam)))*100,2), "%")
       percent_exon[i] <- paste0("(", percent_exon[i], ")")
       
       intron <- intronsByTranscript(txdb)
       intron_count <- countOverlaps(bam, intron)
-      intron_reads[i] <- paste0(round(sum(intron_count > 0)/10^7, 
+      intron_reads[i] <- paste0(round(sum(intron_count > 0)/10^6, 
                                      2), "M")
       percent_intron[i] <- paste0(round((sum(intron_count > 0)/(length(bam)))*100,2), "%")
       percent_intron[i] <- paste0("(", percent_intron[i], ")")
       
-      no_genic[i] <- paste0(round((length(bam)-sum(exon_count>0)-sum(intron_count>0))/10^7,2), "M")
+      no_genic[i] <- paste0(round((length(bam)-sum(exon_count>0)-sum(intron_count>0))/10^6,2), "M")
       percent_nogenic[i] <- paste0(round(((length(bam)-sum(exon_count>0)-sum(intron_count>0))/length(bam))*100,2), "%")
       percent_nogenic[i] <- paste0("(", percent_nogenic[i], ")")
       
       utr5 <- fiveUTRsByTranscript(txdb)
       utr5_count <- countOverlaps(bam, utr5)
-      UTR5_reads[i] <- paste0(round(sum(utr5_count > 0)/10^7, 2), 
+      UTR5_reads[i] <- paste0(round(sum(utr5_count > 0)/10^6, 2), 
                              "M")
       cds <- cdsBy(txdb, by = "tx")
       cds_count <- countOverlaps(bam, cds)
-      CDS_reads[i] <- paste0(round(sum(cds_count > 0)/10^7, 2), "M")
+      CDS_reads[i] <- paste0(round(sum(cds_count > 0)/10^6, 2), "M")
       utr3 <- threeUTRsByTranscript(txdb)
       utr3_count <- countOverlaps(bam, utr3)
-      UTR3_reads[i] <- paste0(round(sum(utr3_count > 0)/10^7, 2), 
+      UTR3_reads[i] <- paste0(round(sum(utr3_count > 0)/10^6, 2), 
                              "M")
       sum_component <- sum(utr5_count > 0) + sum(cds_count > 0) + 
         sum(utr3_count > 0)
@@ -114,14 +114,14 @@
       noR <- length(bam)
       id <- sample.int(noR, size = sample_size, replace = TRUE)
       bam <- bam[id]
-      total_reads[i] <- paste0(round(length(bam)/10^7, 2), "M")
+      total_reads[i] <- paste0(round(length(bam)/10^6, 2), "M")
       bin_count <- countOverlaps(gc, bam)
       bin_count <- data.frame(bin_count)
       names(bin_count) <- sample_name[i]
       result2 <- data.frame(result2, bin_count)
       exon <- exonsBy(txdb, by = "tx")
       exon_count <- countOverlaps(bam, exon)
-      exon_reads[i] <- paste0(round(sum(exon_count > 0)/10^7, 2), 
+      exon_reads[i] <- paste0(round(sum(exon_count > 0)/10^6, 2), 
                              "M")
       
       percent_exon[i] <- paste0(round((sum(exon_count>0)/(length(bam)))*100,2), "%")
@@ -129,7 +129,7 @@
       
       intron <- intronsByTranscript(txdb)
       intron_count <- countOverlaps(bam, intron)
-      intron_reads[i] <- paste0(round(sum(intron_count > 0)/10^7, 
+      intron_reads[i] <- paste0(round(sum(intron_count > 0)/10^6, 
                                       2), "M")
       percent_intron[i] <- paste0(round((sum(intron_count > 0)/(length(bam)))*100,2), "%")
       percent_intron[i] <- paste0("(", percent_intron[i], ")")
@@ -140,14 +140,14 @@
       
       utr5 <- fiveUTRsByTranscript(txdb)
       utr5_count <- countOverlaps(bam, utr5)
-      UTR5_reads[i] <- paste0(round(sum(utr5_count > 0)/10^7, 2), 
+      UTR5_reads[i] <- paste0(round(sum(utr5_count > 0)/10^6, 2), 
                              "M")
       cds <- cdsBy(txdb, by = "tx")
       cds_count <- countOverlaps(bam, cds)
-      CDS_reads[i] <- paste0(round(sum(cds_count > 0)/10^7, 2), "M")
+      CDS_reads[i] <- paste0(round(sum(cds_count > 0)/10^6, 2), "M")
       utr3 <- threeUTRsByTranscript(txdb)
       utr3_count <- countOverlaps(bam, utr3)
-      UTR3_reads[i] <- paste0(round(sum(utr3_count > 0)/10^7, 2), 
+      UTR3_reads[i] <- paste0(round(sum(utr3_count > 0)/10^6, 2), 
                              "M")
       sum_component <- sum(utr5_count > 0) + sum(cds_count > 0) + 
         sum(utr3_count > 0)
