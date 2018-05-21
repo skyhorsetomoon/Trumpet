@@ -85,7 +85,7 @@ kable(exonic_bin, caption='The percentage of bins with different reads coverage'
 
 * *$5'UTR\_reads^{\#}$*, *$CDS\_reads^{\#}$* and *$3'UTR\_reads^{\#}$* means the number of reads mapped into 5'UTR regions, CDS regions and 3'UTR regions.
 
-**3. Heterogeneity of reads coverage**
+**3. Whole-transcriptome heterogeneity of read coverage**
 
 * **0** : The percentage of genes (transcripts) or bins with 0 reads count over the total number of genes (transcripts) or bins in each BAM file.
 
@@ -125,15 +125,15 @@ out_chest<-.ctest_evluate(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input
 
 # 5 Comparison between different biological replicates
 
-## 5.1 Hierarchical clustering of samples
+## 5.1 Hierarchical clustering and PCA analysis of samples
 
-Hierarchical Clustering (HC) is applied to all the samples to identify possible outliers and to assess the relative similarity between samples and groups (if applicable). 
+Hierarchical clustering and PCA analysis are  applied to all the samples to identify possible outliers and to assess the relative similarity between samples and groups (if applicable). 
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=7,fig.height=7}
 hcluster<-.hcluster(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
 ```
 
-## 5.2 Heterogeneity of reads coverage
+## 5.2 Gene-specific heterogeneity of read coverage
 
 Compared with Input sample, the reads coverage is much more uneven in IP samples for the same gene, which may be due to  the enrichment signal around the true methylation sites as well as possible bias and artifacts. Thus, the heterogeneity of reads coverage is also assessed in **Trumpet** package with the mean and standard deviation (SD) of reads count in each gene of each sample. We then use local regression to fit a curve based on mean and SD for each gene. The value of mean and SD have been logarithm transformed.
 
