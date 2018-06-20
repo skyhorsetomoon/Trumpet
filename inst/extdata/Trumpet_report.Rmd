@@ -39,7 +39,7 @@ result<-.get_readscount(IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,GENE
 
 ## 3.1 Statistics of sequencing reads and Whole-transcriptome heterogeneity of reads coverage
 
-In this section, we mainly evaluate reads alignment and their distribution, with which, we can inspect the sequencing depth of the input files, the reads alignment mapped to different genomic regions, such as exon, intron, 5鈥橴TR, CDS and 3鈥橴TR. It aims to get global information of samples. In order to show the heterogeneity of read coverage in the entire transcriptome due to mainly different level of gene expression, PCR artifacts and randomness, we use bin-based approach to check the percentage of regions covered different number of reads. The results are shown in the following four tables.
+In this section, we mainly evaluate reads alignment and their distribution, with which, we can inspect the sequencing depth of the input files, the reads alignment mapped to different genomic regions, such as exon, intron, 5'UTR, CDS and 3'UTR. It aims to get global information of samples. In order to show the heterogeneity of read coverage in the entire transcriptome due to mainly different level of gene expression, PCR artifacts and randomness, we use bin-based approach to check the percentage of regions covered different number of reads. The results are shown in the following four tables.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
 stats_result<-.stats_readscount(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
