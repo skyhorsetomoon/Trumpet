@@ -34,10 +34,10 @@ the path of all contrast IP aligned MeRIP-seq data files in BAM format
 the path of all contrast Input aligned MeRIP-seq data files in BAM format
 }
   \item{condition1}{
-A character string is used to give the name of one condition. eg:condition1="untreated".
+A character string is used to give the name of one condition, e.g., condition1="untreated".
 }
   \item{condition2}{
-A character string is used to give the name of another condition. eg:condition2="treated".
+A character string is used to give the name of another condition. e.g., condition2="treated".
 }
   \item{GENE_ANNO_GTF}{
 A gene annotation file in GTF format if available
@@ -56,7 +56,7 @@ A string, which gives the gene annotation used from UCSC, default: "knownGene". 
 	Some tables may not be available for all genomes, and the "refGene" table does not work correctly due to multiple occuences of the same transcript on the same chromosome.
 }
   \item{OUTPUT_DIR}{
-A string, which specify the output directory, default: OUTPUT_DIR=NA, the output result will save in the current directory. Otherwise, Trumpet will output the assessment result to the directory of user specified.
+A string, which specify the output directory, default: OUTPUT_DIR=NA, the output result will save in the current directory. Otherwise, Trumpet will output the assessment report under the directory of user specified.
 }
 }
 \details{
@@ -79,12 +79,11 @@ f6 <- system.file("extdata", "Input2.bam", package="Trumpet")
 f7 <- system.file("extdata", "Input3.bam", package="Trumpet")
 f8 <- system.file("extdata", "treated_IP1.bam", package="Trumpet")
 f9 <- system.file("extdata", "treated_Input1.bam", package="Trumpet")
-# Group the files according to their experimental conditions and sample type.
 ip_bam <- c(f1,f2,f3,f4)
 input_bam <- c(f5,f6,f7)
 contrast_ip_bam <- c(f8)
 contrast_input_bam <- c(f9)
-# Give the annotation file
+# Input the transcriptome annotation file
 gtf <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
 # Generate the assessment report
 # An HTML report will be generated under current working directory
