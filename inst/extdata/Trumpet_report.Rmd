@@ -11,21 +11,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 1 Introduction to Trumpet
 
-MeRIP-seq can be considered as a marriage of ChIP-seq and RNA-seq, which is an enrichment-based approach that profiles the transcriptome-wide distribution of RNA modifications.
+MeRIP-seq can be considered as a combination of ChIP-seq and RNA-seq, which is an enrichment-based approach that profiles the transcriptome-wide distribution of RNA modifications.
 
-In MeRIP-seq, as in all other NGS applications, quality control is essential. However, to our knowledge, no metrics or software can be used to assess the MeRIP-seq experiment data recently. Thus, we developed an R package that come up with some metrics to assess the MeRIP-seq data quality easily. `Trumpet`, the R package for quality assessment of MeRIP-seq data, can also visualize the assessment result in HTML format. 
+In MeRIP-seq, as in all other NGS applications, quality control is essential. However, to our knowledge, no metrics or software can be used to assess the MeRIP-seq experiment data recently. Thus, we developed an R package named `Trumpet` that come up with some metrics to assess the MeRIP-seq data quality easily. `Trumpet`, the R package for quality assessment of MeRIP-seq data, can also visualize the assessment report in HTML format. 
 
-The quality of m6A-seq data is mainly assessed from mainly 3 perspectives by `Trumpet`, including (1) statistics of sequencing reads distribution with respect to different genomic regions; (2) the strength of immunoprecipitation signal evaluated by statistical approaches; (3) comparison between different biological replicates and identification of possible outliers.
+The quality of MeRIP-seq data is assessed by the `Trumpet` package from mainly 3 perspectives, including (1) statistics of sequencing reads distribution with respect to different genomic regions; (2) the strength of immunoprecipitation signal evaluated by exome signal extraction scaling (ESES) and other statistical approaches; (3) comparison between different biological replicates and identify possible outliers. 
 
 # 2 Start using Trumpet
 
-## 2.1 Input data for quality assessment
+## 2.1 Input the MeRIP-seq data for quality assessment
 
-The MeRIP-seq data for quality assessment should include the IP, Input samples(single condition) or IP, Input and contrast IP, contrast Input samples(different conditions). These samples should be BAM format files with alignment reads. Users also need to provide the transcriptome annotation file with a GTF file, a TxDb object or download this information from UCSC automatically. 
+The MeRIP-seq data for quality assessment should include the IP, Input samples(single condition) or IP, Input, contrast IP and contrast Input samples(different conditions). These samples should be BAM format files with alignment reads. Users also need to provide the transcriptome annotation file with a GTF file, a TxDb object or download the annotation file from UCSC automatically. 
 
-## 2.2 Get reads count from input samples
+## 2.2 Get sequencing reads from input samples
 
-The following part will extract the reads count from input samples for subsequent quality assessment. It must import the paths of input sample data paths(e.g. the location of `IP_BAM, Input_BAM`) and the location of the transcriptome annotation file like gtf or txdb object.
+The following part will extract the reads from input samples for subsequent analysis. It must import the paths of input sample data (e.g. the location of `IP_BAM, Input_BAM`) and the location of the transcriptome annotation file like gtf or txdb object.
 
 ```{r loadLibrary,message=FALSE,warning=FALSE,echo=FALSE}
 library(Trumpet)
@@ -37,9 +37,9 @@ result<-.get_readscount(IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,GENE
 
 # 3 Basic quality assessment module 
 
-## 3.1 Statistics of sequencing reads and heterogeneity of reads coverage
+## 3.1 Statistics of sequencing reads and Whole-transcriptome heterogeneity of reads coverage
 
-In this section, we mainly evaluate reads alignment and their distribution, with which, we can inspect the sequencing depth of the input files, the heterogeneity of reads coverage, the reads alignment mapped to different genomic regions, such as exon, intron, 5’UTR, CDS and 3’UTR. It aims to get global information of samples. The results are shown in the following four tables.
+In this section, we mainly evaluate reads alignment and their distribution, with which, we can inspect the sequencing depth of the input files, the reads alignment mapped to different genomic regions, such as exon, intron, 5鈥橴TR, CDS and 3鈥橴TR. It aims to get global information of samples. In order to show the heterogeneity of read coverage in the entire transcriptome due to mainly different level of gene expression, PCR artifacts and randomness, we use bin-based approach to check the percentage of regions covered different number of reads. The results are shown in the following four tables.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
 stats_result<-.stats_readscount(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
@@ -69,41 +69,41 @@ kable(exonic_bin, caption='The percentage of bins with different reads coverage'
 
 * **total reads#:** Total number of alignment reads in each BAM file
 
-* **exon reads:** Number of reads overlapped into exon regions and the percentage of reads count overlapped into exon regions calculated by $percent\_exon = \frac{exon\_reads^{\#}}{total\_reads^{\#}}$ in each BAM file.
+* **exon reads:** Number of reads overlapped into exon regions and the percentage of reads overlapped into exon regions calculated by $percent\_exon = \frac{exon\_reads^{\#}}{total\_reads^{\#}}$ in each BAM file.
 
-* **intron reads:** Number of reads overlapped into intron regions and the percentage of reads count overlapped into intron regions calculated by $percent\_intron = \frac{intron\_reads^{\#}}{total\_reads^{\#}}$ in each BAM file.
+* **intron reads:** Number of reads overlapped into intron regions and the percentage of reads overlapped into intron regions calculated by $percent\_intron = \frac{intron\_reads^{\#}}{total\_reads^{\#}}$ in each BAM file.
 
-* **nogenic reads:** Number of reads overlapped into non genic regions and the percentage of reads count overlapped into non genic regions calculated by $percent\_nogenic = \frac{nogenic\_reads^{\#}}{total\_reads^{\#}}$ in each BAM file.
+* **nogenic reads:** Number of reads overlapped into non genic regions and the percentage of reads overlapped into non genic regions calculated by $percent\_nogenic = \frac{nogenic\_reads^{\#}}{total\_reads^{\#}}$ in each BAM file.
 
-* *$intron\_reads^{\#}$*, *$exon\_reads^{\#}$* and *$nogenic\_reads^{\#}$* refers to the number of reads overlapped into intron regions, exon regions and non genic regions respectively.
+* *$intron\_reads^{\#}$*, *$exon\_reads^{\#}$* and *$nogenic\_reads^{\#}$* represent the number of reads overlapped into intron regions, exon regions and non genic regions respectively.
 
-* **5'UTR reads:** Number of reads overlapped into 5'UTR regions and the percentage of reads count overlapped into 5'UTR regions calculated by $percent\_5'UTR = \frac{5'UTR\_reads^{\#}}{5'UTR\_reads^{\#} + CDS\_reads^{\#} + 3'UTR\_reads^{\#}}$ in each BAM file.
+* **5'UTR reads:** Number of reads overlapped into 5'UTR regions and the percentage of reads overlapped into 5'UTR regions calculated by $percent\_5'UTR = \frac{5'UTR\_reads^{\#}}{5'UTR\_reads^{\#} + CDS\_reads^{\#} + 3'UTR\_reads^{\#}}$ in each BAM file.
 
-* **CDS reads:** Number of reads overlapped into CDS regions and the percentage of reads count overlapped into CDS regions calculated by $percent\_CDS = \frac{CDS\_reads^{\#}}{5'UTR\_reads^{\#} + CDS\_reads^{\#} + 3'UTR\_reads^{\#}}$  in each BAM file.
+* **CDS reads:** Number of reads overlapped into CDS regions and the percentage of reads overlapped into CDS regions calculated by $percent\_CDS = \frac{CDS\_reads^{\#}}{5'UTR\_reads^{\#} + CDS\_reads^{\#} + 3'UTR\_reads^{\#}}$  in each BAM file.
 
-* **3'UTR reads** : Number of reads overlaped into 3'UTR regions and the percentage of reads count overlapped into 3'UTR regions calculated by $percent\_3'UTR = \frac{3'UTR\_reads^{\#}}{5'UTR\_reads^{\#} + CDS\_reads^{\#} + 3'UTR\_reads^{\#}}$ in each BAM file.
+* **3'UTR reads** : Number of reads overlaped into 3'UTR regions and the percentage of reads overlapped into 3'UTR regions calculated by $percent\_3'UTR = \frac{3'UTR\_reads^{\#}}{5'UTR\_reads^{\#} + CDS\_reads^{\#} + 3'UTR\_reads^{\#}}$ in each BAM file.
 
-* *$5'UTR\_reads^{\#}$*, *$CDS\_reads^{\#}$* and *$3'UTR\_reads^{\#}$* means the number of reads mapped into 5'UTR regions, CDS regions and 3'UTR regions.
+* *$5'UTR\_reads^{\#}$*, *$CDS\_reads^{\#}$* and *$3'UTR\_reads^{\#}$* represent the number of reads mapped into 5'UTR regions, CDS regions and 3'UTR regions.
 
 **3. Whole-transcriptome heterogeneity of read coverage**
 
-* **0** : The percentage of genes (transcripts) or bins with 0 reads count over the total number of genes (transcripts) or bins in each BAM file.
+* **0** : The percentage of genes (transcripts) or bins with 0 read count over the total number of genes (transcripts) or bins in each BAM file.
 
-* **10~100** : The percentage of genes (transcripts) or bins with 10~100 reads count over the total number of genes (transcripts) or bins in each BAM file.
+* **10~100** : The percentage of genes (transcripts) or bins with 10~100 read counts over the total number of genes (transcripts) or bins in each BAM file.
 
-## 3.2 Read coverage distribution 
+## 3.2 Visualization of reads distribution 
 
-This part shows the reads coverage distribution over coding exons(CDS) region, 5'UTR region and 3'UTR region under different quantiles. It is known that, RNA m6A methylation is enriched near stop codon, and hopefully, consistent signal can be observed on aligned reads in IP samples. The quantiles (25%, 50% and 75%) of the standardized reads coverage at different genomic regions for genes detected are then plotted as shown in the following figures.
+This part shows the reads coverage distribution over coding exons(CDS) region, 5'UTR region and 3'UTR region under different quantiles. It is known that, RNA m6A methylation is enriched near stop codon, and hopefully, consistent signal can be observed on aligned reads in IP samples. The quantiles (25%, 50% and 75%) of the standardized read coverage at different genomic regions (CDS, 5'UTR and 3'UTR) for genes detected are then plotted as shown in the following figures.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=10,fig.height=12}
-read_coverage<-.read_distribute(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
+read_coverage<-.read_distribute(GENOME, UCSC_TABLE_NAME, GENE_ANNO_GTF, TXDB, result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM, condition1, condition2)
 ```
 
 # 4 Quality assessment for the enrichment signal strength
 
-## 4.1 Evaluate enrichment signal strength using ESES method
+## 4.1 Assessing immunoprecipitation efficiency with ESES
 
-This module evaluates the enrichment of m6A signal in IP samples and identifies potentially failed immunoprecipitation experiments. **Trumpet** package uses exome signal extraction scaling (ESES) metrics, which is modified based on the signal extraction scaling (SES) approach that previously used in assessing ChIP-seq data signals. ESES metrics can calculate the percent of region enriched with signal and the scale factor showing the  strength of signal by comparing the unified Input sample. It can also detect abnormal Input control samples. The assessment result will return figures and a table.
+This module evaluates the enrichment of m6A signal in IP samples and identifies potentially failed immunoprecipitation experiments. The **Trumpet** package uses exome signal extraction scaling (ESES) metrics, which is modified based on the signal extraction scaling (SES) approach that previously used in assessing ChIP-seq data signals. ESES metrics can calculate the percent of region enriched with m6A signal and the scale factor showing the degree of difference between the IP and Input samples. It can also detect abnormal Input control samples. The assessment result will return figures and a table.
 
 ```{r  eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=10,fig.height=10}
 # Graphical summary of IP enrichment and the difference between Input samples using SES method
@@ -112,11 +112,11 @@ out_SES<-.ESES_evaluate(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_B
 kable(out_SES)
 ```
 
-**Note: The x-axis denotes the percentages of bins with signal reads in the whole transcriptome, and the y-axis denotes the percentages of the normalized cumulative reads count. The black line divides the genome into two regions: the background region and the enrichment signal region. The point at which the distance of the percentage between the IP and Input is maximized shows the strength of enrichment signal in IP samples; the greater the separation between IP and Input at this point, the better the IP enrichment at appropriate sequencing depth, with parameter `Scale Factor` standing for it.**
+**Note: The x-axis denotes the fraction of bins with signal reads in the whole transcriptome, and the y-axis denotes the fraction of the normalized cumulative reads count. The black straight line divides IP sample into two parts: the background (the left-hand side) and the region enriched with immunoprecipitation signal (the right-hand side).The fraction of cumulated signal (`Faction of Reads`) shows the fraction of reads captured in the corresponding regions, and the difference in cumulated signals between the IP and Input samples (or the `Scale Factor`) is shown by the two cross-points between the two curves (IP curve and Input curve) and the black straight line.**
 
 ## 4.2 Assesse the enrichment of m6A signal with C-test
 
-**Trumpet** package also relies on C-test, which was used in the exomePeak package to predict RNA methylation sites. It compares two Poisson means to detect the regions enriched with m6A signal at different levels. The percentage of bins that enriched in the IP sample with m6A signal at different fold enrichment thresholds are counted and plotted. It is then possible to differ between different samples.
+**Trumpet** package also relies on C-test, which was used in the exomePeak package to predict RNA methylation sites. It compares two Poisson means to detect the regions enriched with m6A signal at different levels. The fraction of bins that enriched in the IP sample with m6A signal at different fold enrichment thresholds are counted and plotted. It is then possible to differ between different samples.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=8,fig.height=8}
 # Show the figures of c-test result
@@ -127,7 +127,7 @@ out_chest<-.ctest_evluate(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input
 
 ## 5.1 Hierarchical clustering and PCA analysis of samples
 
-Hierarchical clustering and PCA analysis are  applied to all the samples to identify possible outliers and to assess the relative similarity between samples and groups (if applicable). 
+Hierarchical clustering and PCA analysis are applied to all the samples to identify possible outliers and to assess the relative similarity between samples and groups (if applicable). 
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=7,fig.height=7}
 hcluster<-.hcluster(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
@@ -135,7 +135,7 @@ hcluster<-.hcluster(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM)
 
 ## 5.2 Gene-specific heterogeneity of read coverage
 
-Compared with Input sample, the reads coverage is much more uneven in IP samples for the same gene, which may be due to  the enrichment signal around the true methylation sites as well as possible bias and artifacts. Thus, the heterogeneity of reads coverage is also assessed in **Trumpet** package with the mean and standard deviation (SD) of reads count in each gene of each sample. We then use local regression to fit a curve based on mean and SD for each gene. The value of mean and SD have been logarithm transformed.
+Compared with Input sample, the aligned reads are not evenly distributed on the same gene in IP samples, which may be due to  the enrichment signal around the true methylation sites as well as possible bias and artifacts. Thus, the heterogeneity of read coverage is also assessed in **Trumpet** package with the mean and standard deviation (SD) of read count in each gene of each sample. We then use local regression to fit a curve based on mean and SD for each gene. The value of mean and SD have been logarithm transformed.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=8,fig.height=8}
 out_ms<-.ms_relation(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
@@ -143,18 +143,18 @@ out_ms<-.ms_relation(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,
 
 # 6 Sample consistency and reproducibility
 
-This metric is used to assess the degree of difference between multiple biological replicates.Firstly, the reads count should be eliminated the difference in sequencing depth between multiple biological replicates. Conveniently,the reads count can be normalized in this metrics automatically. Assume we have multiple biological replicates obtained from the same experimental condition, the mean and standard deviation of the reads count of the same bin across different samples can be calculated respectively. Then, it is possible to fit the two with a local regression curves to show the consistency between multiple samples, or compare the reproducibility of the samples obtained from different conditions. 
+This metric is used to assess the degree of difference between multiple biological replicates.In order to eliminate the difference in sequencing depth between theses biological replicates, we should first normalize the read count of the each bin in each sample. Conveniently,the read count can be normalized in this metrics automatically. Assume we have multiple biological replicates obtained from the same experimental condition, the mean and standard deviation of the read count of the same bin across different samples can be calculated respectively. Then, it is possible to fit the two with a local regression curves to show the consistency between multiple samples, or compare the reproducibility of the samples obtained from different conditions. 
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=7,fig.height=10}
 two_ms<-.two_cond_ms(result,IP_BAM,Input_BAM,contrast_IP_BAM,contrast_Input_BAM,condition1,condition2)
 ```
 
-# 7 Compare IP samples' enrichment signal to known data set.
+# 7 Typical metric values obtained on published datasets.
 
-In this part, we compare the strength of immunoprecipitation signal to the known experiment data set. We use the density plot to show the distribution of IP samples' signal strength including regions enriched with signal, the signal reads count as well as the scale factor. All the three density distribution curves are based on our known experiment data, with the vetical lines in each plot indicating unknown input samples (the data to be evaluated). The following plot will show the result.
+Due to the lack of a gold standard dataset and the variable m6A methylation level in different cell types, tissues and conditions, it is difficult to assert whether a dataset is of reasonable quality or not even provided with those metrics. To solve this dilemma, we collected 61 MeRIP-seq IP samples together with 59 corresponding Input samples from recent high impact studies and calculated three metrics that are the scale factor, enriched region and signal read count as the positive control for reference. So, users can compare their result caculated by these metric to the result of known 61 MeRIP-seq IP samples in the three density plots, with the vetical lines in each plot indicating users' IP samples (the data to be evaluated). It can been shown in the following plots.
 
 ```{r eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE,fig.width=22,fig.height=8}
 enrichmentdist <- .ESES_enrich_DF(result, IP_BAM, Input_BAM, contrast_IP_BAM, contrast_Input_BAM)
 ```
 
-**Note: In this part, we can give the reasonable range of IP samples' enrichment signal based on known experiment data set from different cell lines under different conditions. The percentage of regions enriched with signal of known data in the reasonable range is 15% ~ 25%. The percentage of signal reads count of known data in the reasonable range is 87% ~ 95%. The scale factor of known data in the reasonable range is 0.08 ~ 0.3.**
+**Note: In this part, we can give the reasonable range of IP samples' enrichment signal based on known experiment data set from different cell lines under different conditions. The reasonable ranges of the percentage of enriched region, scale factor and percentage of signal read count are 12%~25%, 0.08~0.3 and 87%~95%, respectively.**
