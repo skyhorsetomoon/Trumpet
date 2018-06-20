@@ -24,9 +24,75 @@
   return(df)
 }
 
-.read_distribute <- function(result, IP_BAM, Input_BAM, contrast_IP_BAM, 
+.read_distribute <- function(GENOME, UCSC_TABLE_NAME, GENE_ANNO_GTF, TXDB, result, IP_BAM, Input_BAM, contrast_IP_BAM, 
                              contrast_Input_BAM, condition1, condition2) {
+  
+  # download the annotation
+  if (suppressWarnings((!is.na(GENOME)) & (!is.na(UCSC_TABLE_NAME)) & 
+                       is.na(TXDB) & is.na(GENE_ANNO_GTF))) {
+    op <- options(warn = (-1))
+    txdb = makeTxDbFromUCSC(genome = GENOME, tablename = UCSC_TABLE_NAME)
+    options(op)
+  }
+  if (suppressWarnings(!is.na(GENE_ANNO_GTF) & is.na(TXDB))) {
+    op <- options(warn = (-1))
+    txdb <- makeTxDbFromGFF(GENE_ANNO_GTF, format = "gtf")
+    options(op)
+  }
+  
+  # use provided annotation data file
+  if (suppressWarnings(!is.na(TXDB))) {
+    txdb <- loadDb(TXDB)
+  }
+  
+  ## get component
+  utr5 <- fiveUTRsByTranscript(txdb, use.names=TRUE)
+  cds <- cdsBy(txdb, by = "tx",  use.names=TRUE)
+  utr3 <- threeUTRsByTranscript(txdb, use.names=TRUE)
+  
+  ## get componet name
+  utr5_name <- names(utr5)
+  utr5_name <- as.character(utr5_name)
+  cds_name <- names(cds)
+  cds_name <- as.character(cds_name)
+  utr3_name <- names(utr3)
+  utr3_name <- as.character(utr3_name)
+  ## Select tx 
   s <- result[[1]]
+  max_transcript_name <- as.character(unique(s$txid))
+  ## Select component
+  select_utr5_name <- as.numeric(match(utr5_name, max_transcript_name)) 
+  select_utr5_name <- select_utr5_name[-which(is.na(select_utr5_name))] 
+  select_utr5 <- utr5[select_utr5_name]
+  select_cds_name <- as.numeric(match( cds_name, max_transcript_name))
+  select_cds_name <- select_cds_name[-which(is.na(select_cds_name))] 
+  select_cds <- cds[select_cds_name]
+  select_utr3_name <- as.numeric(match(utr3_name, max_transcript_name))
+  select_utr3_name <- select_utr3_name[-which(is.na(select_utr3_name))]
+  select_utr3 <- utr3[select_utr3_name]
+  
+  select_name <- c(names(select_utr5), names(select_cds), names(select_utr3))
+  last_select_name <- rownames(as.data.frame( which(table(select_name)==3))) 
+  last_cds_num <- match(last_select_name, names(select_cds))
+  last_cds <- select_cds[last_cds_num ]                     
+  last_utr5_num <- match(last_select_name, names(select_utr5))
+  last_utr5 <- select_utr5[last_utr5_num]
+  last_utr3_num <- match(last_select_name, names(select_utr3))
+  last_utr3 <- select_utr3[last_utr3_num]
+  ## component size
+  .sum_comb <- function(i, component){
+    
+    sum_width <- sum(width(component[[i]]))
+    
+  }
+  
+  utr5_size <- unlist(lapply(1:length(last_utr5), .sum_comb, component=last_utr5)) 
+  cds_size <- unlist(lapply(1:length(last_cds), .sum_comb, component=last_cds)) 
+  utr3_size <- unlist(lapply(1:length(last_utr3), .sum_comb, component=last_utr3)) 
+  ## component size factor
+  utr5.SF <- round((median(utr5_size)/median(cds_size)), 2)
+  utr3.SF <- round((median(utr3_size)/median(cds_size)), 2) 
+  
   ind <- unique(s$pos)
   len <- length(ind)
   n <- nrow(s)
@@ -46,7 +112,7 @@
     reference_Input_groupname <- sample_name[[4]]
   }
   
-   if ((length(reference_IP_groupname) == 0) & (length(reference_Input_groupname) == 
+  if ((length(reference_IP_groupname) == 0) & (length(reference_Input_groupname) == 
                                                0)) {
     group <- sa[, seq_len(length(IP_groupname) + length(Input_groupname))]
     p <- data.frame()
@@ -88,8 +154,8 @@
     pos_utr5 <- unique(pos)[1:20]
     pos_cds <- unique(pos)[21:40]
     pos_utr3 <- unique(pos)[41:60]
-    rescale_utr5 <- rescale(pos_utr5, c(1-0.14,1), from = c(0,1))
-    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+0.52), from = c(2,3))
+    rescale_utr5 <- rescale(pos_utr5, c(1-utr5.SF,1), from = c(0,1))
+    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+utr3.SF), from = c(2,3))
     pos <- rep( c( rescale_utr5,  pos_cds, rescale_utr3), 3*length(unique(df1$ID1)))
     df1 <- cbind(pos, df1[,-1])
     
@@ -119,8 +185,8 @@
     pos_utr5 <- unique(pos)[1:20]
     pos_cds <- unique(pos)[21:40]
     pos_utr3 <- unique(pos)[41:60]
-    rescale_utr5 <- rescale(pos_utr5, c(1-0.14,1), from = c(0,1))
-    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+0.52), from = c(2,3))
+    rescale_utr5 <- rescale(pos_utr5, c(1-utr5.SF,1), from = c(0,1))
+    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+utr3.SF), from = c(2,3))
     pos <- rep( c( rescale_utr5,  pos_cds, rescale_utr3), 3*length(unique(df2$ID2)))
     df2 <- cbind(pos, df2[,-1])
     
@@ -219,8 +285,8 @@
     pos_utr5 <- unique(pos)[1:20]
     pos_cds <- unique(pos)[21:40]
     pos_utr3 <- unique(pos)[41:60]
-    rescale_utr5 <- rescale(pos_utr5, c(1-0.14,1), from = c(0,1))
-    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+0.52), from = c(2,3))
+    rescale_utr5 <- rescale(pos_utr5, c(1-utr5.SF,1), from = c(0,1))
+    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+utr3.SF), from = c(2,3))
     pos <- rep( c( rescale_utr5,  pos_cds, rescale_utr3), 3*length(unique(df1$ID1)))
     df1 <- cbind(pos, df1[,-1])
     
@@ -250,8 +316,8 @@
     pos_utr5 <- unique(pos)[1:20]
     pos_cds <- unique(pos)[21:40]
     pos_utr3 <- unique(pos)[41:60]
-    rescale_utr5 <- rescale(pos_utr5, c(1-0.14,1), from = c(0,1))
-    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+0.52), from = c(2,3))
+    rescale_utr5 <- rescale(pos_utr5, c(1-utr5.SF,1), from = c(0,1))
+    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+utr3.SF), from = c(2,3))
     pos <- rep( c( rescale_utr5,  pos_cds, rescale_utr3), 3*length(unique(df2$ID2)))
     df2 <- cbind(pos, df2[,-1])
     
@@ -281,8 +347,8 @@
     pos_utr5 <- unique(pos)[1:20]
     pos_cds <- unique(pos)[21:40]
     pos_utr3 <- unique(pos)[41:60]
-    rescale_utr5 <- rescale(pos_utr5, c(1-0.14,1), from = c(0,1))
-    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+0.52), from = c(2,3))
+    rescale_utr5 <- rescale(pos_utr5, c(1-utr5.SF,1), from = c(0,1))
+    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+utr3.SF), from = c(2,3))
     pos <- rep( c( rescale_utr5,  pos_cds, rescale_utr3), 3*length(unique(Df1$Refer_ID1)))
     Df1 <- cbind(pos, Df1[,-1])
     
@@ -312,8 +378,8 @@
     pos_utr5 <- unique(pos)[1:20]
     pos_cds <- unique(pos)[21:40]
     pos_utr3 <- unique(pos)[41:60]
-    rescale_utr5 <- rescale(pos_utr5, c(1-0.14,1), from = c(0,1))
-    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+0.52), from = c(2,3))
+    rescale_utr5 <- rescale(pos_utr5, c(1-utr5.SF,1), from = c(0,1))
+    rescale_utr3 <- rescale(pos_utr3, to=c(2,2+utr3.SF), from = c(2,3))
     pos <- rep( c( rescale_utr5,  pos_cds, rescale_utr3), 3*length(unique(Df2$Refer_ID2)))
     Df2 <- cbind(pos, Df2[,-1])
     
