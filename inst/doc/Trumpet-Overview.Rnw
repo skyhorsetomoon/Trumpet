@@ -42,7 +42,7 @@ The Trumpet package takes the aligned BAM files from m6A-seq data together with 
 <<Input the BAM files,eval=FALSE,echo=TRUE>>=
 library(Trumpet)
 
-# Collect the path of files of all the aligned MeRIP-seq data files in BAM format.
+# Input the path of all the aligned MeRIP-seq data files in BAM format.
 
 f1 <- system.file("extdata", "IP1.bam", package="Trumpet")
 
@@ -62,8 +62,6 @@ f8 <- system.file("extdata", "treated_IP1.bam", package="Trumpet")
 
 f9 <- system.file("extdata", "treated_Input1.bam", package="Trumpet")
 
-# Group the files according to their experimental conditions and sample type.
-
 ip_bam <- c(f1,f2,f3,f4)
 
 input_bam <- c(f5,f6,f7)
@@ -76,14 +74,14 @@ input_bam_treated <- c(f9)
 
 We then need to provide the transcriptome annotation with a \texttt{GTF}, a \texttt{TXDB} object, or let the package download this information from UCSC automatically.
 <<Give the annotation files,eval=FALSE,echo=TRUE>>=
-# We use GTF in the following example
+# We use GTF file as the transcriptome annotation information in the following example.
 
 gtf <- system.file("extdata", "hg19toy.gtf", package="Trumpet")
 @ 
 
 
 
-After preparing the sequencing data and annotation inforamtion, we can call the main function to generate the assessment report. 
+After input the MeRIP-seq data and annotation inforamtion file, we can call the main function to generate the assessment report in HTML format. 
 
 <<Generate the assessment report ,eval=FALSE,echo=TRUE>>=
 
