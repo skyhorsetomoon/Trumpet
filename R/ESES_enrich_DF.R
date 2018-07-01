@@ -111,7 +111,7 @@
     Unit_Input <- .Unit_bam(Group_Input, se,ind,len,n)
     ##get the user enrich data
     Enrichtable <- .SES_IPenrich(Group_IP, Unit_Input, IP_groupname, se, len, n)
-    new_sample <- c(IP_groupname)
+    New_Sample <- c(IP_groupname)
     
   } else if ((length(reference_IP_groupname) != 0) & (length(reference_Input_groupname) != 
                                                       0)) {
