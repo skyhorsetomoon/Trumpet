@@ -180,7 +180,7 @@
     p1 <- ggplot(data = newa, aes(x = pos, y = pro, colour = Sample )) + 
       geom_line() +
       facet_grid(ID~.) +
-      geom_vline(aes(xintercept = pos), vline1) +
+      geom_vline(aes(xintercept = pos), vline) +
       theme(axis.title.x =element_text(size=12), axis.title.y=element_text(size=12),
             title = element_text(size = 12),
             plot.title = element_text(hjust = 0.5),
